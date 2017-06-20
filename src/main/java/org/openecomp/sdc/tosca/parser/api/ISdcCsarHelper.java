@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.openecomp.sdc.tosca.parser.impl.SdcTypes;
 import org.openecomp.sdc.toscaparser.api.Group;
 import org.openecomp.sdc.toscaparser.api.NodeTemplate;
 import org.openecomp.sdc.toscaparser.api.elements.Metadata;
@@ -333,4 +334,21 @@ public interface ISdcCsarHelper {
 	 * @return customization UUID of a node template.
 	 */
 	public String getNodeTemplateCustomizationUuid(NodeTemplate nt);
+
+	/**
+	 * Get all node templates by sdcType for parent Node Template.
+	 *
+	 * @param parentNodeTemplate - parent node template
+	 * @param sdcType - the SDC type of the node.
+	 * @return node templates of this SDC type.
+	 */
+	List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType);
+
+	/**
+	 * Get all node templates by sdcType for this CSAR service.
+	 *
+	 * @param sdcType - the SDC type of the node.
+	 * @return service node templates of this SDC type.
+	 */
+	List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType);
 }

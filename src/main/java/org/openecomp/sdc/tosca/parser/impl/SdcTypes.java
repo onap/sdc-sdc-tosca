@@ -20,13 +20,8 @@
 
 package org.openecomp.sdc.tosca.parser.impl;
 
-public class Types {
-	public static String TYPE_VFMODULE = "org.openecomp.groups.VfModule";
-	
-    // types found under metadata, type property
-	public static String TYPE_CP = "CP";
-    public static String TYPE_VL = "VL";
-    public static String TYPE_VF = "VF";
-    public static String TYPE_VFC = "VFC";
-    public static String TYPE_SERVICE = "Service";
+public enum SdcTypes {
+
+        CP, VL, VF, VFC, PNF, SERVICE
+
 }

@@ -142,14 +142,14 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     @Override
     //Sunny flow - covered with UT
     public List<NodeTemplate> getServiceVlList() {
-        List<NodeTemplate> serviceVlList = getNodeTemplateBySdcType(toscaTemplate.getTopologyTemplate(), Types.TYPE_VL);
+        List<NodeTemplate> serviceVlList = getNodeTemplateBySdcType(toscaTemplate.getTopologyTemplate(), SdcTypes.VL);
         return serviceVlList;
     }
 
     @Override
     //Sunny flow - covered with UT
     public List<NodeTemplate> getServiceVfList() {
-        List<NodeTemplate> serviceVfList = getNodeTemplateBySdcType(toscaTemplate.getTopologyTemplate(), Types.TYPE_VF);
+        List<NodeTemplate> serviceVfList = getNodeTemplateBySdcType(toscaTemplate.getTopologyTemplate(), SdcTypes.VF);
         return serviceVfList;
     }
 
@@ -205,7 +205,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         List<NodeTemplate> serviceVfList = getServiceVfList();
         NodeTemplate vfInstance = getNodeTemplateByCustomizationUuid(serviceVfList, vfCustomizationId);
-        return getNodeTemplateBySdcType(vfInstance, Types.TYPE_VFC);
+        return getNodeTemplateBySdcType(vfInstance, SdcTypes.VFC);
     }
 
     @Override
@@ -417,7 +417,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             log.debug("getCpListByVf vf list is null");
             return cpList;
         }
-        cpList = getNodeTemplateBySdcType(vfInstance, Types.TYPE_CP);
+        cpList = getNodeTemplateBySdcType(vfInstance, SdcTypes.CP);
         if (cpList == null || cpList.size() == 0)
             log.debug("getCpListByVf cps not exist for vfCustomizationId {}", vfCustomizationId);
         return cpList;
@@ -551,24 +551,23 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 		return res;
 	}
 
-    /************************************* helper functions ***********************************/
-    private List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate nodeTemplate, String sdcType) {
-        if (nodeTemplate == null) {
+    public List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType) {
+        if (parentNodeTemplate == null) {
             log.error("getNodeTemplateBySdcType - nodeTemplate is null or empty");
             return new ArrayList<>();
         }
 
-        if (GeneralUtility.isEmptyString(sdcType)) {
+        if (sdcType == null) {
             log.error("getNodeTemplateBySdcType - sdcType is null or empty");
             return new ArrayList<>();
         }
 
-        SubstitutionMappings substitutionMappings = nodeTemplate.getSubMappingToscaTemplate();
+        SubstitutionMappings substitutionMappings = parentNodeTemplate.getSubMappingToscaTemplate();
 
         if (substitutionMappings != null) {
             List<NodeTemplate> nodeTemplates = substitutionMappings.getNodeTemplates();
             if (nodeTemplates != null && nodeTemplates.size() > 0)
-                return nodeTemplates.stream().filter(x -> (x.getMetaData() != null && sdcType.equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)))).collect(Collectors.toList());
+                return nodeTemplates.stream().filter(x -> (x.getMetaData() != null && sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)))).collect(Collectors.toList());
             else
                 log.debug("getNodeTemplateBySdcType - SubstitutionMappings' node Templates not exist");
         } else
@@ -577,8 +576,19 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return new ArrayList<>();
     }
 
-    private List<NodeTemplate> getNodeTemplateBySdcType(TopologyTemplate topologyTemplate, String sdcType) {
-        if (GeneralUtility.isEmptyString(sdcType)) {
+    public List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType) {
+        if (sdcType == null) {
+            log.error("getServiceNodeTemplateBySdcType - sdcType is null or empty");
+            return new ArrayList<>();
+        }
+
+        TopologyTemplate topologyTemplate = toscaTemplate.getTopologyTemplate();
+        return getNodeTemplateBySdcType(topologyTemplate, sdcType);
+    }
+
+    /************************************* helper functions ***********************************/
+    private List<NodeTemplate> getNodeTemplateBySdcType(TopologyTemplate topologyTemplate, SdcTypes sdcType) {
+        if (sdcType == null) {
             log.error("getNodeTemplateBySdcType - sdcType is null or empty");
             return new ArrayList<>();
         }
@@ -591,7 +601,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         List<NodeTemplate> nodeTemplates = topologyTemplate.getNodeTemplates();
 
         if (nodeTemplates != null && nodeTemplates.size() > 0)
-            return nodeTemplates.stream().filter(x -> (x.getMetaData() != null && sdcType.equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)))).collect(Collectors.toList());
+            return nodeTemplates.stream().filter(x -> (x.getMetaData() != null && sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)))).collect(Collectors.toList());
 
         log.debug("getNodeTemplateBySdcType - topologyTemplate's nodeTemplates not exist");
         return new ArrayList<>();

@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
+import org.openecomp.sdc.tosca.parser.impl.SdcTypes;
 import org.openecomp.sdc.toscaparser.api.Group;
 import org.openecomp.sdc.toscaparser.api.NodeTemplate;
 import org.testng.annotations.Test;
@@ -394,4 +395,46 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	}
 	//endregion
 
+	//region getServiceNodeTemplateBySdcType
+	@Test
+	public void testServiceNodeTemplateBySdcType() {
+		List<NodeTemplate> serviceVfList = fdntCsarHelper.getServiceNodeTemplateBySdcType(SdcTypes.VF);
+		assertNotNull(serviceVfList);
+		assertEquals(2, serviceVfList.size());
+		assertEquals(serviceVfList.get(0).getName(), "FDNT 1");
+	}
+
+	@Test
+	public void testServiceNodeTemplateByNullSdcType() {
+		List<NodeTemplate> serviceVfList = fdntCsarHelper.getServiceNodeTemplateBySdcType(null);
+		assertNotNull(serviceVfList);
+		assertEquals(serviceVfList.size(), 0);
+	}
+	//endregion
+
+	//region getNodeTemplateBySdcType
+	@Test
+	public void testNodeTemplateBySdcType() {
+		List<NodeTemplate> vfList = fdntCsarHelper.getServiceVfList();
+		List<NodeTemplate> vfcList = fdntCsarHelper.getNodeTemplateBySdcType(vfList.get(0), SdcTypes.VFC);
+		assertNotNull(vfcList);
+		assertEquals(2, vfcList.size());
+		assertEquals("DNT_FW_RSG_SI_1", vfcList.get(0).getName());
+	}
+
+	@Test
+	public void testNodeTemplateByNullSdcType() {
+		List<NodeTemplate> vfList = fdntCsarHelper.getServiceVfList();
+		List<NodeTemplate> vfcList = fdntCsarHelper.getNodeTemplateBySdcType(vfList.get(0), null);
+		assertNotNull(vfcList);
+		assertEquals(0, vfcList.size());
+	}
+
+	@Test
+	public void testNodeTemplateBySdcTypeNullNT() {
+		List<NodeTemplate> vfcList = fdntCsarHelper.getNodeTemplateBySdcType(null, SdcTypes.VFC);
+		assertNotNull(vfcList);
+		assertEquals(0, vfcList.size());
+	}
+	//endregion
 }
