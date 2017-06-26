@@ -337,13 +337,13 @@ public interface ISdcCsarHelper {
 	public String getNodeTemplateCustomizationUuid(NodeTemplate nt);
 
     /**
-     * Filter Node Template properties equals/contains specific pattern
+     * Filter Node Template property values by equals/contains operator and a pattern
      * @param nodeTemplate Node Template to filter its properties
-     * @param filterType filter by equals/contains
+     * @param filterType filter type - equals or contains
      * @param pattern value to filter with it
-     * @return Map <b>full path to a property</b> mapped to <b>property value<b/> filtered by type & pattern
+     * @return Map <b>full path to a property</b> mapped to <b>property value</b> filtered by type and pattern
      */
-    	public Map<String, Object> filterNodeTemplatePropertiesByValue(NodeTemplate nodeTemplate, FilterType filterType, String pattern);
+    public Map<String, Object> filterNodeTemplatePropertiesByValue(NodeTemplate nodeTemplate, FilterType filterType, String pattern);
     
 	/**
 	 * Get all node templates by sdcType for parent Node Template.
