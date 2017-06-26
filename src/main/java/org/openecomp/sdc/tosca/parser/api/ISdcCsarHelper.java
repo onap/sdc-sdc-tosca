@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.openecomp.sdc.tosca.parser.impl.FilterType;
 import org.openecomp.sdc.tosca.parser.impl.SdcTypes;
 import org.openecomp.sdc.toscaparser.api.Group;
 import org.openecomp.sdc.toscaparser.api.NodeTemplate;
@@ -335,6 +336,15 @@ public interface ISdcCsarHelper {
 	 */
 	public String getNodeTemplateCustomizationUuid(NodeTemplate nt);
 
+    /**
+     * Filter Node Template properties equals/contains specific pattern
+     * @param nodeTemplate Node Template to filter its properties
+     * @param filterType filter by equals/contains
+     * @param pattern value to filter with it
+     * @return Map <b>full path to a property</b> mapped to <b>property value<b/> filtered by type & pattern
+     */
+    	public Map<String, Object> filterNodeTemplatePropertiesByValue(NodeTemplate nodeTemplate, FilterType filterType, String pattern);
+    
 	/**
 	 * Get all node templates by sdcType for parent Node Template.
 	 *
@@ -342,7 +352,7 @@ public interface ISdcCsarHelper {
 	 * @param sdcType - the SDC type of the node.
 	 * @return node templates of this SDC type.
 	 */
-	List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType);
+	public List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType);
 
 	/**
 	 * Get all node templates by sdcType for this CSAR service.
@@ -350,5 +360,5 @@ public interface ISdcCsarHelper {
 	 * @param sdcType - the SDC type of the node.
 	 * @return service node templates of this SDC type.
 	 */
-	List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType);
+	public List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType);
 }
