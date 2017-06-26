@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
+import org.openecomp.sdc.tosca.parser.impl.FilterType;
 import org.openecomp.sdc.tosca.parser.impl.SdcTypes;
 import org.openecomp.sdc.toscaparser.api.Group;
 import org.openecomp.sdc.toscaparser.api.NodeTemplate;
@@ -395,6 +396,56 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	}
 	//endregion
 
+    //region filterNodeTemplatePropertiesByValue
+    @Test
+    public void testFilterNodeTemplatePropertiesByContains() {
+        List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+        boolean isChecked = false;
+        for (NodeTemplate vfc: vfcs) {
+            if(vfc.getName().equalsIgnoreCase("abstract_ddc"))
+            {
+                isChecked = true;
+                Map<String, Object> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfc, FilterType.CONTAINS, "get_input");
+
+                assertEquals(16, filteredInputs.size());
+                assertEquals("get_input:vnf_id", filteredInputs.get("compute_ddc_metadata#vf_module_id#vnf_id"));
+				assertEquals("get_input:[ddc_int_imbl_v6_ips, 3]", filteredInputs.get("port_ddc_int_imbl__port_fixed_ips#ip_address"));
+
+                break;
+            }
+
+        }
+        assertTrue(isChecked);
+    }
+
+    @Test
+    public void testFilterNodeTemplatePropertiesByDummyContains() {
+        List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+        Map<String, Object> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfcs.get(0), FilterType.CONTAINS, "dummy");
+        assertNotNull(filteredInputs);
+        assertEquals(0, filteredInputs.size());
+    }
+
+    @Test
+    public void testFilterNodeTemplatePropertiesByEquals() {
+        List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+        boolean isChecked = false;
+        for (NodeTemplate vfc: vfcs) {
+            if(vfc.getName().equalsIgnoreCase("abstract_ddc"))
+            {
+                isChecked = true;
+                Map<String, Object> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfc, FilterType.EQUALS, "ddc");
+
+                assertEquals(2, filteredInputs.size());
+                assertEquals("ddc", filteredInputs.get("vm_type_tag"));
+                assertEquals("ddc", filteredInputs.get("nfc_naming_code"));
+                break;
+            }
+
+        }
+        assertTrue(isChecked);
+    }
+    
 	//region getServiceNodeTemplateBySdcType
 	@Test
 	public void testServiceNodeTemplateBySdcType() {
@@ -437,4 +488,37 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertEquals(0, vfcList.size());
 	}
 	//endregion
+           
+
+    @Test
+    public void testFilterNodeTemplatePropertiesByDummyEquals() {
+        List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+        Map<String, Object> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfcs.get(0), FilterType.EQUALS, "dummy");
+        assertNotNull(filteredInputs);
+        assertEquals(0, filteredInputs.size());
+    }
+
+    @Test
+    public void testFilterNodeTemplatePropertiesByNullFilterType() {
+        List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+        Map<String, Object> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfcs.get(11), null, "ddc");
+        assertNotNull(filteredInputs);
+        assertEquals(0, filteredInputs.size());
+    }
+
+    @Test
+    public void testFilterNodeTemplatePropertiesByNullPattern() {
+        List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+        Map<String, Object> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfcs.get(11), FilterType.EQUALS, null);
+        assertNotNull(filteredInputs);
+        assertEquals(0, filteredInputs.size());
+    }
+
+    @Test
+    public void testFilterNodeTemplatePropertiesByNullVfc() {
+        Map<String, Object> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(null, FilterType.EQUALS, "ddc");
+        assertNotNull(filteredInputs);
+        assertEquals(0, filteredInputs.size());
+    }
+    //endregion
 }

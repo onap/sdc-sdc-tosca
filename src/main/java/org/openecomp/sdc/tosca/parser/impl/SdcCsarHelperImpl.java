@@ -42,6 +42,7 @@ import org.openecomp.sdc.toscaparser.api.ToscaTemplate;
 import org.openecomp.sdc.toscaparser.api.elements.Metadata;
 import org.openecomp.sdc.toscaparser.api.elements.NodeType;
 import org.openecomp.sdc.toscaparser.api.functions.Function;
+import org.openecomp.sdc.toscaparser.api.functions.GetInput;
 import org.openecomp.sdc.toscaparser.api.parameters.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -574,6 +575,68 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             log.debug("getNodeTemplateBySdcType - SubstitutionMappings not exist");
 
         return new ArrayList<>();
+    }
+
+    public Map<String, Object> filterNodeTemplatePropertiesByValue(NodeTemplate nodeTemplate, FilterType filterType, String pattern) {
+        Map<String, Object> filterMap = new HashMap<>();
+
+        if (nodeTemplate == null) {
+            log.error("filterNodeTemplatePropertiesByValue nodeTemplate is null");
+            return filterMap;
+        }
+
+        if (filterType == null) {
+            log.error("filterNodeTemplatePropertiesByValue filterType is null");
+            return filterMap;
+        }
+
+        if (GeneralUtility.isEmptyString(pattern)) {
+            log.error("filterNodeTemplatePropertiesByValue pattern string is empty");
+            return filterMap;
+        }
+
+        Map<String, Property> ntProperties = nodeTemplate.getProperties();
+
+        if (ntProperties != null && ntProperties.size() > 0) {
+
+            for (Property current : ntProperties.values()) {
+                filterProperties(current.getValue(), current.getName(), filterType, pattern, filterMap);
+            }
+        }
+
+        log.trace("filterNodeTemplatePropertiesByValue - filterMap value: {}", filterMap);
+
+        return filterMap;
+    }
+
+    /************************************* helper functions ***********************************/
+    private Map<String, Object> filterProperties(Object property, String path, FilterType filterType, String pattern, Map<String, Object> filterMap) {
+
+        if (property instanceof Map) {
+            for (Map.Entry<String, Object> item: ((Map<String, Object>) property).entrySet()) {
+                if (item.getKey().equals("get_input")) {
+                    String itemToStr = item.getKey() + ":" + item.getValue().toString();
+                    filterProperties(itemToStr, path, filterType, pattern, filterMap);
+                } else {
+                    path += PATH_DELIMITER + item.getKey();
+                    filterProperties(item.getValue(), path, filterType, pattern, filterMap);
+                }
+            }
+        } else if (property instanceof List) {
+            for (Object item: (List<Object>)property) {
+                filterProperties(item, path, filterType, pattern, filterMap);
+            }
+        } else if (property instanceof Function) {
+            if (filterType.isMatch(property.toString(), pattern)) {
+                filterMap.put(path, property);
+            }
+        } else {
+            if (filterType.isMatch(property.toString(), pattern)) {
+                filterMap.put(path, property);
+            }
+        }
+
+        return filterMap;
     }
 
     public List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType) {
