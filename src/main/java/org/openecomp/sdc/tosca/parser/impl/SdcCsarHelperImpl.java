@@ -577,8 +577,8 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return new ArrayList<>();
     }
 
-    public Map<String, Object> filterNodeTemplatePropertiesByValue(NodeTemplate nodeTemplate, FilterType filterType, String pattern) {
-        Map<String, Object> filterMap = new HashMap<>();
+    public Map<String, String> filterNodeTemplatePropertiesByValue(NodeTemplate nodeTemplate, FilterType filterType, String pattern) {
+        Map<String, String> filterMap = new HashMap<>();
 
         if (nodeTemplate == null) {
             log.error("filterNodeTemplatePropertiesByValue nodeTemplate is null");
@@ -610,7 +610,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     }
 
     /************************************* helper functions ***********************************/
-    private Map<String, Object> filterProperties(Object property, String path, FilterType filterType, String pattern, Map<String, Object> filterMap) {
+    private Map<String, String> filterProperties(Object property, String path, FilterType filterType, String pattern, Map<String, String> filterMap) {
 
         if (property instanceof Map) {
             for (Map.Entry<String, Object> item: ((Map<String, Object>) property).entrySet()) {
@@ -628,11 +628,11 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             }
         } else if (property instanceof Function) {
             if (filterType.isMatch(property.toString(), pattern)) {
-                filterMap.put(path, property);
+                filterMap.put(path, property.toString());
             }
         } else {
             if (filterType.isMatch(property.toString(), pattern)) {
-                filterMap.put(path, property);
+                filterMap.put(path, property.toString());
             }
         }
 

@@ -343,7 +343,7 @@ public interface ISdcCsarHelper {
      * @param pattern value to filter with it
      * @return Map <b>full path to a property</b> mapped to <b>property value</b> filtered by type and pattern
      */
-    public Map<String, Object> filterNodeTemplatePropertiesByValue(NodeTemplate nodeTemplate, FilterType filterType, String pattern);
+    public Map<String, String> filterNodeTemplatePropertiesByValue(NodeTemplate nodeTemplate, FilterType filterType, String pattern);
     
 	/**
 	 * Get all node templates by sdcType for parent Node Template.
