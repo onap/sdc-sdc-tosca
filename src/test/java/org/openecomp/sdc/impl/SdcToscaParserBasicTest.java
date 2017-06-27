@@ -32,10 +32,10 @@ public abstract class SdcToscaParserBasicTest {
     public static void init() throws SdcToscaParserException, JToscaException, IOException {
 
         factory = SdcToscaParserFactory.getInstance();
-        fdntCsarHelper = getCsarHelper("csars/service-ServiceFdnt-with-allotted.csar");
+        fdntCsarHelper = getCsarHelper("csars/service-sunny-flow.csar");
         rainyCsarHelperMultiVfs = getCsarHelper("csars/service-ServiceFdnt-csar-rainy.csar");
         rainyCsarHelperSingleVf = getCsarHelper("csars/service-ServiceFdnt-csar.csar");
-        complexCps = getCsarHelper("csars/service-Renanatst2-csar.csar");
+        complexCps = getCsarHelper("csars/service-consolidated-props-csar.csar");
 		fdntCsarHelperWithInputs = getCsarHelper("csars/service-ServiceFdnt-with-get-input.csar");
 
         fdntCsarHelper_Data = new HashMap<String, HashMap<String, List<String>>>(){
