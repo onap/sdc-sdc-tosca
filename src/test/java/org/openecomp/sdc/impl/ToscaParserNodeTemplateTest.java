@@ -523,4 +523,37 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
            
 
 
+    
+    @Test
+    public void testGetVnfConfig() {
+    	NodeTemplate vnfConfig = nfodCsarHlper.getVnfConfig("9bb2ef82-f8f6-4391-bc71-db063f15bf57");
+    	assertNotNull(vnfConfig);
+    	assertEquals("vnfConfiguration", vnfConfig.getMetaData().getValue("name"));
+    }
+    
+    @Test
+    public void testGetVnfConfigByNonFoundVNF() {
+    	NodeTemplate vnfConfig = complexCps.getVnfConfig("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+    	assertNull(vnfConfig);
+    }
+    
+    @Test
+    public void testGetVnfConfigByDummyUUID() {
+    	NodeTemplate vnfConfig = nfodCsarHlper.getVnfConfig("XXX");
+    	assertNull(vnfConfig);
+    }
+    
+    @Test
+    public void testGetVnfConfigByNullUUID() {
+    	NodeTemplate vnfConfig = nfodCsarHlper.getVnfConfig(null);
+    	assertNull(vnfConfig);
+    }
+    
+    @Test
+    public void testGetVfcTypWithoutVnf() {
+    	List<NodeTemplate> vfcList = nfodCsarHlper.getVfcListByVf("9bb2ef82-f8f6-4391-bc71-db063f15bf57");
+    	assertNotNull(vfcList);
+    	assertEquals(2, vfcList.size());
+    }
+    
 }

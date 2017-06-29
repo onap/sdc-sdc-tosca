@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -553,7 +554,12 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 	}
 
     public List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType) {
-        if (parentNodeTemplate == null) {
+    	return getNodeTemplateBySdcType(parentNodeTemplate, sdcType, false); 
+    }
+    
+    private List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType, boolean isVNF)  {
+    	
+    	if (parentNodeTemplate == null) {
             log.error("getNodeTemplateBySdcType - nodeTemplate is null or empty");
             return new ArrayList<>();
         }
@@ -567,10 +573,23 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         if (substitutionMappings != null) {
             List<NodeTemplate> nodeTemplates = substitutionMappings.getNodeTemplates();
-            if (nodeTemplates != null && nodeTemplates.size() > 0)
-                return nodeTemplates.stream().filter(x -> (x.getMetaData() != null && sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)))).collect(Collectors.toList());
-            else
+            if (nodeTemplates != null && nodeTemplates.size() > 0) {
+            	if (sdcType.equals(SdcTypes.VFC) && isVNF)  {
+            		return nodeTemplates.stream()
+                    		.filter(x -> (x.getMetaData() != null &&
+                    			sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  (x.getType().endsWith("VnfConfiguration")))
+                    		.collect(Collectors.toList());
+            	}
+            	else {
+                    return nodeTemplates.stream()
+                    		.filter(x -> (x.getMetaData() != null &&
+                    			sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  !(x.getType().endsWith("VnfConfiguration")))
+                    		.collect(Collectors.toList());
+            	}
+            }
+            else {
                 log.debug("getNodeTemplateBySdcType - SubstitutionMappings' node Templates not exist");
+            }
         } else
             log.debug("getNodeTemplateBySdcType - SubstitutionMappings not exist");
 
@@ -608,6 +627,19 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         return filterMap;
     }
+    
+	public NodeTemplate getVnfConfig(String vfCustomizationUuid) {
+		
+		if (GeneralUtility.isEmptyString(vfCustomizationUuid)) {
+            log.error("getVnfConfig - vfCustomizationId - is null or empty");
+            return null;
+        }
+
+        List<NodeTemplate> serviceVfList = getServiceVfList();
+        NodeTemplate vfInstance = getNodeTemplateByCustomizationUuid(serviceVfList, vfCustomizationUuid);
+        NodeTemplate vnfConfig = getNodeTemplateBySdcType(vfInstance, SdcTypes.VFC, true).stream().findAny().orElse(null);
+		return vnfConfig;
+	}
 
     /************************************* helper functions ***********************************/
     private Map<String, String> filterProperties(Object property, String path, FilterType filterType, String pattern, Map<String, String> filterMap) {
@@ -648,6 +680,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         TopologyTemplate topologyTemplate = toscaTemplate.getTopologyTemplate();
         return getNodeTemplateBySdcType(topologyTemplate, sdcType);
     }
+ 
 
     /************************************* helper functions ***********************************/
     private List<NodeTemplate> getNodeTemplateBySdcType(TopologyTemplate topologyTemplate, SdcTypes sdcType) {
@@ -687,6 +720,8 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         log.error("processProperties - property {} not found", propName);
         return null;
     }
+
+	
 
     
     
