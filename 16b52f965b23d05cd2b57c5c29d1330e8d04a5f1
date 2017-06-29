@@ -1,0 +1,7 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Michael Lando <ml636r@att.com>
+Submitted-by: Michael Lando <ml636r@att.com>
+Submitted-at: Thu, 29 Jun 2017 16:30:42 +0000
+Reviewed-on: http://gerrit.onap.org/r/5599
+Project: sdc/sdc-tosca
+Branch: refs/heads/master
