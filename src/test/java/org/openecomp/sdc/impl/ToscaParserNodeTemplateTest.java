@@ -343,22 +343,21 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 
 				assertEquals(3,cps.size());
 
-				assertEquals(new Integer(1), cps.get("ddc_int_imbl__port").get("ip_requirements#ip_count_required#count"));
-				assertEquals(new Boolean(true), cps.get("ddc_int_imbl__port").get("ip_requirements#dhcp_enabled"));			
-				assertEquals(new Integer(6), cps.get("ddc_int_imbl__port").get("ip_requirements#ip_version"));
-				assertEquals(null, cps.get("ddc_int_imbl__port").get("subnetpoolid"));
-
-				//assertEquals("\"int_imsp\"", cps.get("mon_ist_imsp__port").get("network_role_tag"));
+				assertEquals(new Integer(1), cps.get("port_ddc_int_imbl__port").get("ip_requirements#ip_count_required#count"));
+				assertEquals(new Boolean(true), cps.get("port_ddc_int_imbl__port").get("ip_requirements#dhcp_enabled"));
+				assertEquals(new Integer(6), cps.get("port_ddc_int_imbl__port").get("ip_requirements#ip_version"));
+				assertEquals("subnetpoolid_test", cps.get("port_ddc_int_imbl__port").get("subnetpoolid"));
+				assertEquals("int_imbl", cps.get("port_ddc_int_imbl__port").get("network_role_tag"));
 
 			}
 			
 			if(vfcs.get(i).getName().equalsIgnoreCase("abstract_mda"))
 			{
 				isChecked1 = true;
-				Map<String, Map<String, Object>> cps1 = complexCps.getCpPropertiesFromVfc(vfcs.get(i));			
+				Map<String, Map<String, Object>> cps1 = complexCps.getCpPropertiesFromVfc(vfcs.get(i));
 
-				assertEquals(new Integer(4), cps1.get("mda_int_imsp__port").get("ip_requirements#ip_version"));
-				assertEquals(null, cps1.get("mda_int_imsp__port").get("ip_requirements#ip_count_required#count"));
+				assertEquals(new Integer(4), cps1.get("port_mda_int_imsp__port").get("ip_requirements#ip_version"));
+				assertEquals(null, cps1.get("port_mda_int_imsp__port").get("ip_requirements#ip_count_required#count"));
 
 			}
 

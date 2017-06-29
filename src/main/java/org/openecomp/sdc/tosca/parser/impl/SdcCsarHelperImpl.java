@@ -22,11 +22,9 @@ package org.openecomp.sdc.tosca.parser.impl;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 //import org.json.JSONObject;
@@ -52,9 +50,7 @@ import static org.openecomp.sdc.tosca.parser.impl.SdcPropertyNames.PROPERTY_NAME
 public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     private static final String PATH_DELIMITER = "#";
-    private static final String PREFIX = "port_";
     private static final String CUSTOMIZATION_UUID = "customizationUUID";
-    private static Pattern SUFFIX = Pattern.compile("(_network_role_tag|_ip_requirements|_subnetpoolid)$");
     private ToscaTemplate toscaTemplate;
     private static Logger log = LoggerFactory.getLogger(SdcCsarHelperImpl.class.getName());
 
@@ -101,43 +97,55 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             return new HashMap<>();
         }
 
-        List<String> paths = new ArrayList<>();
-        paths.add("network_role_tag");
-        paths.add("ip_requirements#ip_count_required#count");
-        paths.add("ip_requirements#dhcp_enabled");
-        paths.add("ip_requirements#ip_version");
-        paths.add("subnetpoolid");
-
-        Map<String, Property> props = vfc.getProperties();
-
+        String presetProperty = "_ip_requirements";
         Map<String, Map<String, Object>> cps = new HashMap<>();
 
+        Map<String, Property> props = vfc.getProperties();
         if (props != null) {
+            // find all port names by pre-set property (ip_requirements)
             for (Map.Entry<String, Property> entry : props.entrySet()) {
-                String fullCpName = entry.getKey();
-                Matcher matcher = SUFFIX.matcher(fullCpName);
+                if (entry.getKey().endsWith(presetProperty)) {
+                    String portName = entry.getKey().replaceAll(presetProperty, "");
+                    cps.put(portName, new HashMap<>());
+                }
+            }
 
-                if (fullCpName.startsWith(PREFIX) && matcher.find()) {
-                    //this is CP - get all it's properties according to paths list
-                    String cpName = fullCpName.replaceAll("^(" + PREFIX + ")", "").replaceAll(matcher.group(1), "");
+            if (cps.size() > 0) {
+                // ports found - find all their properties
+                for (String portName : cps.keySet()) {
+                    for (Map.Entry<String, Property> property: props.entrySet()) {
+                        if (property.getKey().startsWith(portName)) {
+                            Map<String, Object> portPaths = new HashMap<>();
+                            String portProperty = property.getKey().replaceFirst(portName + "_", "");
+                            buildPathMappedToValue(portProperty, property.getValue().getValue(), portPaths);
 
-                    List<String> propertiesToSearch = paths.stream().filter(i -> i.contains(StringUtils.stripStart(matcher.group(1), "_"))).collect(Collectors.toList());
-                    for (String item : propertiesToSearch) {
-                        String fullPathToSearch = PREFIX + cpName + "_" + item;
-                        Object value = getNodeTemplatePropertyAsObject(vfc, fullPathToSearch);
-                        if (value != null) {
-                            if (!cps.containsKey(cpName)){
-                                cps.put(cpName, new HashMap<>());
-                            }
-                            cps.get(cpName).put(item, value);
+                            cps.get(portName).putAll(portPaths);
                         }
-
                     }
                 }
             }
         }
 
         return cps;
+    }
+
+    private void buildPathMappedToValue(String path, Object property, Map<String, Object> pathsMap) {
+        if (property instanceof Map) {
+            for (Map.Entry<String, Object> item : ((Map<String, Object>) property).entrySet()) {
+                if (item.getValue() instanceof Map || item.getValue() instanceof List) {
+                    buildPathMappedToValue(path + PATH_DELIMITER + item.getKey(), item.getValue(), pathsMap);
+                } else {
+                    pathsMap.put(path + PATH_DELIMITER + item.getKey(), item.getValue());
+                }
+            }
+        } else if (property instanceof List) {
+            for (Object item: (List<Object>)property) {
+                buildPathMappedToValue(path, item, pathsMap);
+            }
+        } else {
+            pathsMap.put(path, property);
+        }
+
     }
 
     @Override
