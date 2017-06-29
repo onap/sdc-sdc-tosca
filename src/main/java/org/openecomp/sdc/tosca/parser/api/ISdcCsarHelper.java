@@ -361,4 +361,13 @@ public interface ISdcCsarHelper {
 	 * @return service node templates of this SDC type.
 	 */
 	public List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType);
+	
+	/**
+	 * Get all node templates  for this CSAR service.
+	 * @param vfCustomizationUuid - the Customization UUID of the node.
+	 * @return VNF Configuration Node Template.
+	 */
+	public NodeTemplate getVnfConfig(String vfCustomizationUuid);
+	
+	
 }
