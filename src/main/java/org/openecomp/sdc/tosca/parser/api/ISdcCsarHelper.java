@@ -368,6 +368,11 @@ public interface ISdcCsarHelper {
 	 * @return VNF Configuration Node Template.
 	 */
 	public NodeTemplate getVnfConfig(String vfCustomizationUuid);
-	
-	
+
+	/**
+	 * Check if Node Template has Topology Template
+	 * @param nodeTemplate - Node Template to check
+	 * @return true if node template has topology template, false if not.
+	 */
+	public boolean hasTopology(NodeTemplate nodeTemplate);
 }

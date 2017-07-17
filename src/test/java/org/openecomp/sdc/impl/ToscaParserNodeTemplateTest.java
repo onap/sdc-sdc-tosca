@@ -520,9 +520,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	}
 	//endregion
            
-
-
-    
+	//region getVnfConfig
     @Test
     public void testGetVnfConfig() {
     	NodeTemplate vnfConfig = nfodCsarHlper.getVnfConfig("9bb2ef82-f8f6-4391-bc71-db063f15bf57");
@@ -554,5 +552,59 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
     	assertNotNull(vfcList);
     	assertEquals(2, vfcList.size());
     }
-    
+    //endregion
+
+	//region nested vfc
+	@Test
+	public void testNestedVfcByExistCvfc() {
+		List<NodeTemplate> vfcList = nestedVfcCsarHlper.getVfcListByVf("71389f8b-8671-4a43-a991-59fb621d3615");
+		assertNotNull(vfcList);
+		assertEquals(1, vfcList.size());
+		assertEquals("VF_VNF", vfcList.get(0).getName());
+	}
+
+	@Test
+	public void testNestedVfcByNullVf() {
+		List<NodeTemplate> vfcList = nestedVfcCsarHlper.getVfcListByVf(null);
+		assertNotNull(vfcList);
+		assertEquals(0, vfcList.size());
+	}
+
+	@Test
+	public void testNestedVfcByDummyVf() {
+		List<NodeTemplate> vfcList = nestedVfcCsarHlper.getVfcListByVf("dummy");
+		assertNotNull(vfcList);
+		assertEquals(0, vfcList.size());
+	}
+	//endregion
+
+	//region hasTopology
+	@Test
+	public void testHasTopologyByVF() {
+		List<NodeTemplate> vfList = nestedVfcCsarHlper.getServiceVfList();
+		boolean hasTopology = nestedVfcCsarHlper.hasTopology(vfList.get(0));
+		assertEquals(true, hasTopology);
+	}
+
+	@Test
+	public void testHasTopologyByCVFC() {
+		List<NodeTemplate> vfcList = nestedVfcCsarHlper.getVfcListByVf("71389f8b-8671-4a43-a991-59fb621d3615");
+		boolean hasTopology = nestedVfcCsarHlper.hasTopology(vfcList.get(0));
+		assertEquals(true, hasTopology);
+	}
+
+	@Test
+	public void testHasTopologyByVL() {
+		List<NodeTemplate> serviceVlList = fdntCsarHelper.getServiceVlList();
+		boolean hasTopology = fdntCsarHelper.hasTopology(serviceVlList.get(0));
+		assertEquals(false, hasTopology);
+	}
+
+	@Test
+	public void testHasTopologyByNull() {
+		boolean hasTopology = fdntCsarHelper.hasTopology(null);
+		assertEquals(false, hasTopology);
+	}
+	//endregion
+
 }

@@ -215,7 +215,10 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         List<NodeTemplate> serviceVfList = getServiceVfList();
         NodeTemplate vfInstance = getNodeTemplateByCustomizationUuid(serviceVfList, vfCustomizationId);
-        return getNodeTemplateBySdcType(vfInstance, SdcTypes.VFC);
+        List<NodeTemplate> vfcs = getNodeTemplateBySdcType(vfInstance, SdcTypes.VFC);
+        vfcs.addAll(getNodeTemplateBySdcType(vfInstance, SdcTypes.CVFC));
+
+        return vfcs;
     }
 
     @Override
@@ -648,6 +651,22 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         NodeTemplate vnfConfig = getNodeTemplateBySdcType(vfInstance, SdcTypes.VFC, true).stream().findAny().orElse(null);
 		return vnfConfig;
 	}
+
+    @Override
+    public boolean hasTopology(NodeTemplate nodeTemplate) {
+        if (nodeTemplate == null) {
+            log.error("hasTopology - nodeTemplate - is null");
+            return false;
+        }
+
+        if (nodeTemplate.getMetaData() != null) {
+            String type = nodeTemplate.getMetaData().getValue("type");
+            log.debug("hasTopology - node template {} is a {} type", nodeTemplate.getName(), type);
+            return SdcTypes.isComplex(SdcTypes.valueOf(type));
+        }
+
+        return false;
+    }
 
     /************************************* helper functions ***********************************/
     private Map<String, String> filterProperties(Object property, String path, FilterType filterType, String pattern, Map<String, String> filterMap) {

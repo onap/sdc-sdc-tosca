@@ -20,8 +20,16 @@
 
 package org.openecomp.sdc.tosca.parser.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum SdcTypes {
 
-        CP, VL, VF, VFC, PNF, SERVICE
+    CP, VL, VF, VFC, PNF, SERVICE, CVFC;
 
+    public static List<SdcTypes> complexTypes = Arrays.asList(VF, PNF, SERVICE, CVFC);
+
+    public static boolean isComplex(SdcTypes sdcType) {
+        return complexTypes.contains(sdcType);
+    }
 }
