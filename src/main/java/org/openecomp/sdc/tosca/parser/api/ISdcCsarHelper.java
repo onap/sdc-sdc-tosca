@@ -326,8 +326,20 @@ public interface ISdcCsarHelper {
 	 *  port_fe_oam={ip_requirements#ip_count_required#count=2, ip_requirements#dhcp_enabled=true, ip_requirements#ip_version=4, subnetpoolid="subnet_2", network_role_tag="Mobility_OAM_protected"}}<br><br>
 	 * @param vfc - VFC node template to look for CP-related props.
 	 * @return map <b>CP node template name</b>  to a map of <b>full path to a property on this CP</b> - <b> value of this property on this CP</b>.
+	 * @deprecated This function is deprecated since its flattened form doesn't provide solution for cp properties of type List. 
 	 */
+	@Deprecated 
 	public Map<String, Map<String, Object>> getCpPropertiesFromVfc(NodeTemplate vfc);
+	
+    /**
+    * Get the map of CP-related props from a VFC node template. <br>
+    * Let's say there are 2 CPs (ports) related to this VFC. Then the output will look like this: <br><br>
+    * {port_fe_sigtran={ip_requirements={ip_count_required: {count: 1}, dhcp_enabled: true, ip_version: 4}, subnetpoolid: "subnet_1", network_role_tag: "SIGNET_vrf_B1_direct"}<br>
+    *  port_fe_cluster={ip_requirements={ip_count_required: {count: 2}, dhcp_enabled: true, ip_version: 4}}<br>
+    * @param vfc - VFC node template to look for CP-related props.
+    * @return map <b>CP node template name</b>  to a map of <b>property name</b> - <b> property value as object</b>.
+    */
+    public Map<String, Map<String, Object>> getCpPropertiesFromVfcAsObject(NodeTemplate vfc);
 	
 	/**
 	 * Get customization UUID of a node template

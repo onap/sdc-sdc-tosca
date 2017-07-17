@@ -331,45 +331,41 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	//region getCpPropertiesFromVfc
 	@Test
 	public void testGetCpPropertiesFromVfc() {
-		List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+		List<NodeTemplate> vfcs = ipAssignCsarHelper.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
 		boolean isChecked = false;
-		boolean isChecked1 = false;
-		for (int i = 0; i < vfcs.size(); i++) {
 
-			if(vfcs.get(i).getName().equalsIgnoreCase("abstract_ddc"))
+		for (NodeTemplate vfc: vfcs) {
+
+			if(vfc.getName().equalsIgnoreCase("abstract_pd_server"))
 			{
 				isChecked = true;
-				Map<String, Map<String, Object>> cps = complexCps.getCpPropertiesFromVfc(vfcs.get(i));
+				Map<String, Map<String, Object>> cps = ipAssignCsarHelper.getCpPropertiesFromVfcAsObject(vfc);
 
-				assertEquals(3,cps.size());
-
-				assertEquals(new Integer(1), cps.get("port_ddc_int_imbl__port").get("ip_requirements#ip_count_required#count"));
-				assertEquals(new Boolean(true), cps.get("port_ddc_int_imbl__port").get("ip_requirements#dhcp_enabled"));
-				assertEquals(new Integer(6), cps.get("port_ddc_int_imbl__port").get("ip_requirements#ip_version"));
-				assertEquals("subnetpoolid_test", cps.get("port_ddc_int_imbl__port").get("subnetpoolid"));
-				assertEquals("int_imbl", cps.get("port_ddc_int_imbl__port").get("network_role_tag"));
-
-			}
-			
-			if(vfcs.get(i).getName().equalsIgnoreCase("abstract_mda"))
-			{
-				isChecked1 = true;
-				Map<String, Map<String, Object>> cps1 = complexCps.getCpPropertiesFromVfc(vfcs.get(i));
-
-				assertEquals(new Integer(4), cps1.get("port_mda_int_imsp__port").get("ip_requirements#ip_version"));
-				assertEquals(null, cps1.get("port_mda_int_imsp__port").get("ip_requirements#ip_count_required#count"));
-
-			}
+				assertEquals(2,cps.size());
+				Map<String, Object> pd01 = cps.get("port_pd01_port"); 
+				assertEquals(5, pd01.size());
+				
+				Map<String, Object> firstIpRequirements = (Map<String, Object>) ((List<Object>)pd01.get("ip_requirements")).get(0);
+				Map<String, Object> secondIpRequirements = (Map<String, Object>) ((List<Object>)pd01.get("ip_requirements")).get(1);
+				
+				assertEquals("subnet_role_4", firstIpRequirements.get("subnet_role"));
+				assertEquals(4, firstIpRequirements.get("ip_version"));
+				assertEquals(true, ((Map<String, Object>) firstIpRequirements.get("ip_count_required")).get("is_required"));
+				assertEquals(4, ((Map<String, Object>) firstIpRequirements.get("ip_count_required")).get("count"));
+				assertEquals(false, ((Map<String, Object>)((Map<String, Object>)pd01.get("mac_requirements")).get("mac_count_required")).get("is_required"));
+				assertEquals("test_subnetpoolid", pd01.get("subnetpoolid"));
+				assertEquals("oam", pd01.get("network_role_tag"));
+				assertEquals(6, secondIpRequirements.get("ip_version"));
+			}			
 
 		}
 		assertTrue(isChecked);
-		assertTrue(isChecked1);
 	}
 
 
 	@Test
 	public void testGetCpPropertiesFromVfcForNullVFC() {
-		Map<String, Map<String, Object>> cps = complexCps.getCpPropertiesFromVfc(null);
+		Map<String, Map<String, Object>> cps = ipAssignCsarHelper.getCpPropertiesFromVfcAsObject(null);
 		assertNotNull(cps);
 		assertEquals(0, cps.size());
 	}

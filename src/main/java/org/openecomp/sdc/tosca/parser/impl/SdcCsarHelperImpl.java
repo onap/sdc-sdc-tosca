@@ -90,6 +90,43 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         LinkedHashMap<String, Property> properties = nodeTemplate.getProperties();
         return processProperties(split, properties);
     }
+    
+    public Map<String, Map<String, Object>> getCpPropertiesFromVfcAsObject(NodeTemplate vfc) {
+        if (vfc == null) {
+            log.error("getCpPropertiesFromVfc - vfc is null");
+            return new HashMap<>();
+        }
+
+        String presetProperty = "_ip_requirements";
+        Map<String, Map<String, Object>> cps = new HashMap<>();
+
+        Map<String, Property> props = vfc.getProperties();
+        if (props != null) {
+            // find all port names by pre-set property (ip_requirements)
+            for (Map.Entry<String, Property> entry : props.entrySet()) {
+                if (entry.getKey().endsWith(presetProperty)) {
+                    String portName = entry.getKey().replaceAll(presetProperty, "");
+                    cps.put(portName, new HashMap<>());
+                }
+            }
+
+            if (cps.size() > 0) {
+                // ports found - find all their properties
+                for (String portName : cps.keySet()) {
+                    for (Map.Entry<String, Property> property: props.entrySet()) {
+                        if (property.getKey().startsWith(portName)) {
+                            String portProperty = property.getKey().replaceFirst(portName + "_", "");
+                            if (property.getValue() != null) {
+                                cps.get(portName).put(portProperty, property.getValue().getValue());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return cps;
+    }
 
     public Map<String, Map<String, Object>> getCpPropertiesFromVfc(NodeTemplate vfc) {
 
