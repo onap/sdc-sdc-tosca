@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-//import org.json.JSONObject;
 import org.openecomp.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.openecomp.sdc.tosca.parser.utils.GeneralUtility;
 import org.openecomp.sdc.tosca.parser.utils.SdcToscaUtility;
@@ -167,6 +166,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return cps;
     }
 
+    @SuppressWarnings("unchecked")
     private void buildPathMappedToValue(String path, Object property, Map<String, Object> pathsMap) {
         if (property instanceof Map) {
             for (Map.Entry<String, Object> item : ((Map<String, Object>) property).entrySet()) {
@@ -342,6 +342,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return null;
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Object iterateProcessPath(Integer index, Object current, String[] split) {
         if (current == null) {
             log.error("iterateProcessPath - this input has no default");
@@ -508,6 +509,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     @Override
     //Sunny flow - covered with UT
+    @SuppressWarnings("unchecked")
     public List<Pair<NodeTemplate, NodeTemplate>> getNodeTemplatePairsByReqName(
             List<NodeTemplate> listOfReqNodeTemplates, List<NodeTemplate> listOfCapNodeTemplates, String reqName) {
         if (listOfReqNodeTemplates == null || listOfCapNodeTemplates == null || reqName == null) {
@@ -706,6 +708,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     }
 
     /************************************* helper functions ***********************************/
+    @SuppressWarnings("unchecked")
     private Map<String, String> filterProperties(Object property, String path, FilterType filterType, String pattern, Map<String, String> filterMap) {
 
         if (property instanceof Map) {
