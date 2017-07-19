@@ -798,8 +798,14 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     //Assumed to be unique property for the list
     private NodeTemplate getNodeTemplateByCustomizationUuid(List<NodeTemplate> nodeTemplates, String customizationId) {
-        Optional<NodeTemplate> findFirst = nodeTemplates.stream().filter(x -> (x.getMetaData() != null && customizationId.equals(x.getMetaData().getValue(PROPERTY_NAME_CUSTOMIZATIONUUID)))).findFirst();
-        return findFirst.isPresent() ? findFirst.get() : null;
+       if (customizationId != null) {
+            Optional<NodeTemplate> findFirst = nodeTemplates.stream().filter(x -> (x.getMetaData() != null && customizationId.equals(x.getMetaData().getValue(PROPERTY_NAME_CUSTOMIZATIONUUID)))).findFirst();
+            return findFirst.isPresent() ? findFirst.get() : null;
+        }
+        else {
+            log.error("getNodeTemplateByCustomizationUuid - customizationId is null");
+            return null;
+        }
     }
 
     private Object processProperties(String[] split, LinkedHashMap<String, Property> properties) {
