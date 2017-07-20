@@ -22,9 +22,7 @@ package org.openecomp.sdc.tosca.parser.impl;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -41,7 +39,6 @@ import org.openecomp.sdc.toscaparser.api.ToscaTemplate;
 import org.openecomp.sdc.toscaparser.api.elements.Metadata;
 import org.openecomp.sdc.toscaparser.api.elements.NodeType;
 import org.openecomp.sdc.toscaparser.api.functions.Function;
-import org.openecomp.sdc.toscaparser.api.functions.GetInput;
 import org.openecomp.sdc.toscaparser.api.parameters.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -625,13 +622,13 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             	if (sdcType.equals(SdcTypes.VFC) && isVNF)  {
             		return nodeTemplates.stream()
                     		.filter(x -> (x.getMetaData() != null &&
-                    			sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  (x.getType().endsWith("VnfConfiguration")))
+                    			sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  isVNFType(x))
                     		.collect(Collectors.toList());
             	}
             	else {
                     return nodeTemplates.stream()
                     		.filter(x -> (x.getMetaData() != null &&
-                    			sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  !(x.getType().endsWith("VnfConfiguration")))
+                    			sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  !isVNFType(x))
                     		.collect(Collectors.toList());
             	}
             }
@@ -705,7 +702,36 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return false;
     }
 
+    @Override
+    public List<NodeTemplate> getNodeTemplateChildren(NodeTemplate nodeTemplate) {
+        if (nodeTemplate == null) {
+            log.error("getNodeTemplateChildren - nodeTemplate - is null");
+            return new ArrayList<>();
+        }
+
+        SubstitutionMappings substitutionMappings = nodeTemplate.getSubMappingToscaTemplate();
+        if (substitutionMappings != null) {
+            List<NodeTemplate> nodeTemplates = substitutionMappings.getNodeTemplates();
+            if (nodeTemplates != null && nodeTemplates.size() > 0) {
+
+                return nodeTemplates.stream()
+                        .filter(x -> !isVNFType(x))
+                        .collect(Collectors.toList());
+            }
+            else {
+                log.debug("getNodeTemplateChildren - SubstitutionMappings' node Templates not exist");
+            }
+        } else
+            log.debug("getNodeTemplateChildren - SubstitutionMappings not exist");
+
+        return new ArrayList<>();
+    }
+
     /************************************* helper functions ***********************************/
+    private boolean isVNFType(NodeTemplate nt) {
+        return nt.getType().endsWith("VnfConfiguration");
+    }
+
     private Map<String, String> filterProperties(Object property, String path, FilterType filterType, String pattern, Map<String, String> filterMap) {
 
         if (property instanceof Map) {

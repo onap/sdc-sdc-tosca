@@ -387,4 +387,11 @@ public interface ISdcCsarHelper {
 	 * @return true if node template has topology template, false if not.
 	 */
 	public boolean hasTopology(NodeTemplate nodeTemplate);
+
+	/**
+	 * Get children node templates for node template.
+	 * @param nodeTemplate - Node Template to get its children
+	 * @return return list of children node templates for node template.
+	 */
+	public List<NodeTemplate> getNodeTemplateChildren(NodeTemplate nodeTemplate);
 }

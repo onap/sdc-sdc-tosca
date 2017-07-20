@@ -7,6 +7,7 @@ import static org.testng.Assert.assertTrue;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -555,8 +556,9 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	public void testNestedVfcByExistCvfc() {
 		List<NodeTemplate> vfcList = nestedVfcCsarHlper.getVfcListByVf("71389f8b-8671-4a43-a991-59fb621d3615");
 		assertNotNull(vfcList);
-		assertEquals(1, vfcList.size());
-		assertEquals("VF_VNF", vfcList.get(0).getName());
+		assertEquals(vfcList.size(), 2);
+		assertEquals("VFC1 DUMMY", vfcList.get(0).getName());
+		assertEquals("VF_VNF", vfcList.get(1).getName());
 	}
 
 	@Test
@@ -585,7 +587,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	@Test
 	public void testHasTopologyByCVFC() {
 		List<NodeTemplate> vfcList = nestedVfcCsarHlper.getVfcListByVf("71389f8b-8671-4a43-a991-59fb621d3615");
-		boolean hasTopology = nestedVfcCsarHlper.hasTopology(vfcList.get(0));
+		boolean hasTopology = nestedVfcCsarHlper.hasTopology(vfcList.get(1));
 		assertEquals(true, hasTopology);
 	}
 
@@ -603,4 +605,48 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	}
 	//endregion
 
+	//region getNodeTemplateChildren
+	@Test
+	public void testGetNodeTemplatesListOfNodeTemplateByVF() {
+		List<NodeTemplate> vfList = fdntCsarHelper.getServiceVfList();
+		List<NodeTemplate> children = fdntCsarHelper.getNodeTemplateChildren(vfList.get(0));
+		assertNotNull(children);
+		assertEquals(3, children.size());
+
+		children.sort(Comparator.comparing(NodeTemplate::getName));
+
+		assertEquals("DNT_FW_RSG_SI_1", children.get(1).getName());
+		assertEquals("VFC", children.get(1).getMetaData().getValue("type"));
+		assertEquals("DNT_PORT", children.get(2).getName());
+		assertEquals("CP", children.get(2).getMetaData().getValue("type"));
+	}
+
+	@Test
+	public void testGetNodeTemplatesListOfNodeTemplateByVFC() {
+		List<NodeTemplate> vfList = nestedVfcCsarHlper.getServiceVfList();
+		List<NodeTemplate> vfChildren = nestedVfcCsarHlper.getNodeTemplateChildren(vfList.get(0));
+		assertNotNull(vfChildren);
+		assertEquals(vfChildren.size(), 2);
+		vfChildren.sort(Comparator.comparing(NodeTemplate::getName));
+		assertEquals("VFC1 DUMMY", vfChildren.get(0).getName());
+		assertEquals("VF_VNF", vfChildren.get(1).getName());
+		assertEquals("CVFC", vfChildren.get(1).getMetaData().getValue("type"));
+
+
+		List<NodeTemplate> vfcChildren = nestedVfcCsarHlper.getNodeTemplateChildren(vfChildren.get(1));
+		assertNotNull(vfcChildren);
+		assertEquals(vfcChildren.size(), 3);
+		vfcChildren.sort(Comparator.comparing(NodeTemplate::getName));
+		assertEquals("Test NIC 02_wan_port", vfcChildren.get(0).getName());
+		assertEquals("Test NIC_wan_port", vfcChildren.get(1).getName());
+		assertEquals("VF", vfcChildren.get(2).getName());
+	}
+
+	@Test
+	public void testGetNodeTemplatesListOfNodeTemplateByNull() {
+		List<NodeTemplate> children = fdntCsarHelper.getNodeTemplateChildren(null);
+		assertNotNull(children);
+		assertEquals(0, children.size());
+	}
+	//endregion
 }
