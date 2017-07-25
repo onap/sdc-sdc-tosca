@@ -8,8 +8,10 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
@@ -17,7 +19,10 @@ import org.openecomp.sdc.tosca.parser.impl.FilterType;
 import org.openecomp.sdc.tosca.parser.impl.SdcTypes;
 import org.openecomp.sdc.toscaparser.api.Group;
 import org.openecomp.sdc.toscaparser.api.NodeTemplate;
+import org.openecomp.sdc.toscaparser.api.Property;
 import org.testng.annotations.Test;
+
+import fj.data.fingertrees.Node;
 
 public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 
@@ -649,4 +654,78 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertEquals(0, children.size());
 	}
 	//endregion
+    
+    // added by QA
+    // Get specific VNF properties
+    @Test
+    public void testGetVnfConfigGetProperties() {
+    	NodeTemplate vnfConfig = nfodCsarHlper.getVnfConfig("9bb2ef82-f8f6-4391-bc71-db063f15bf57");
+    	assertNotNull(vnfConfig);
+    	assertEquals("vnfConfiguration", vnfConfig.getMetaData().getValue("name"));
+    	
+    	String manufacturer_reference_number = nfodCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#ATT_part_12345_for_FortiGate-VM00#vendor_info#manufacturer_reference_number");
+    	String num_cpus = nfodCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#ATT_part_67890_for_FortiGate-VM01#compute_flavor#num_cpus");
+    	String sp_part_number = nfodCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#ATT_part_67890_for_FortiGate-VM01#sp_part_number");
+    	    	
+    	assertEquals("FortiGate-VM00",manufacturer_reference_number);
+    	assertEquals("10",num_cpus);
+    	assertEquals("ATT_part_67890_for_FortiGate-VM01",sp_part_number);
+    }
+
+    // added by QA
+    // Check that get vnfconfiguration not return as VFC    
+    @Test
+    public void testGetVfcTypWithoutVnfCheckNames() {
+    	List<NodeTemplate> vfcList = nfodCsarHlper.getVfcListByVf("9bb2ef82-f8f6-4391-bc71-db063f15bf57");
+    	assertNotNull(vfcList);
+    	assertEquals(2, vfcList.size());
+    	for (int i = 0; i < vfcList.size(); i++) {
+    		
+    		String Name= vfcList.get(i).getName();
+    		
+    		assertEquals(false, Name.equals("vFW_VNF_Configuration"));
+    		
+		}
+    }
+    
+    @Test
+    public void testNewGetVnfConfigGetProperties() {
+    	NodeTemplate vnfConfig = nfodNEWCsarHlper.getVnfConfig("a6587663-b27f-4e88-8a86-604604302ce6");
+    	assertNotNull(vnfConfig);
+    	assertEquals("vnfConfiguration", vnfConfig.getMetaData().getValue("name"));
+    	
+    	//Deployment flavor 1
+    	String manufacturer_reference_number = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#123456#vendor_info#manufacturer_reference_number");
+    	String num_cpus = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#123456#compute_flavor#num_cpus");
+    	String sp_part_number = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#123456#sp_part_number");
+    	    	
+    	assertEquals("234567",manufacturer_reference_number);
+    	assertEquals("2",num_cpus);
+    	assertEquals("123456",sp_part_number);
+
+    	//Deployment flavor 2
+    	manufacturer_reference_number = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#FG_partNumbereJqQjUkteF1#vendor_info#manufacturer_reference_number");
+    	num_cpus = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#FG_partNumbereJqQjUkteF1#compute_flavor#num_cpus");
+    	sp_part_number = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#FG_partNumbereJqQjUkteF1#sp_part_number");
+    	    	
+    	assertEquals("EP_manufacturerReferenceNumberkbAiqZZNzx1",manufacturer_reference_number);
+    	assertEquals("1",num_cpus);
+    	assertEquals("FG_partNumbereJqQjUkteF1",sp_part_number);
+    }
+
+    // added by QA
+    // Check that get vnfconfiguration not return as VFC    
+    @Test
+    public void testNewGetVfcTypWithoutVnfCheckNames() {
+    	List<NodeTemplate> vfcList = nfodNEWCsarHlper.getVfcListByVf("a6587663-b27f-4e88-8a86-604604302ce6");
+    	assertNotNull(vfcList);
+    	assertEquals(1, vfcList.size());
+    	for (int i = 0; i < vfcList.size(); i++) {
+    		
+    		String Name= vfcList.get(i).getName();
+    		
+    		assertEquals(false, Name.equals("name_6GkVrOjnGp1_VNF_Configuration"));
+		}
+    }
+    
 }

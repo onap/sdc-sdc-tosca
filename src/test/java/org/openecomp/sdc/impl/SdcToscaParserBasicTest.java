@@ -29,6 +29,9 @@ public abstract class SdcToscaParserBasicTest {
     static ISdcCsarHelper nfodCsarHlper;
     static ISdcCsarHelper ipAssignCsarHelper;
     static ISdcCsarHelper nestedVfcCsarHlper;
+    static ISdcCsarHelper nfodNEWCsarHlper;    
+
+
     static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
     
     @BeforeClass
@@ -43,6 +46,8 @@ public abstract class SdcToscaParserBasicTest {
 		nfodCsarHlper =  getCsarHelper("csars/service-NfodService-csar.csar");
 		ipAssignCsarHelper =  getCsarHelper("csars/service-Ipassignservice-csar.csar");
 		nestedVfcCsarHlper = getCsarHelper("csars/service-nested-vfc-csar.csar");
+		nfodNEWCsarHlper =  getCsarHelper("csars/service-Nfod2images-csar.csar");
+		
         fdntCsarHelper_Data = new HashMap<String, HashMap<String, List<String>>>(){
     		{
     			HashMap<String, List<String>> FDNT ;
