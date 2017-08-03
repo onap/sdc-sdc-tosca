@@ -39,6 +39,7 @@ import org.openecomp.sdc.toscaparser.api.ToscaTemplate;
 import org.openecomp.sdc.toscaparser.api.elements.Metadata;
 import org.openecomp.sdc.toscaparser.api.elements.NodeType;
 import org.openecomp.sdc.toscaparser.api.functions.Function;
+import org.openecomp.sdc.toscaparser.api.functions.GetInput;
 import org.openecomp.sdc.toscaparser.api.parameters.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -736,21 +737,12 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         if (property instanceof Map) {
             for (Map.Entry<String, Object> item: ((Map<String, Object>) property).entrySet()) {
-                if (item.getKey().equals("get_input")) {
-                    String itemToStr = item.getKey() + ":" + item.getValue().toString();
-                    filterProperties(itemToStr, path, filterType, pattern, filterMap);
-                } else {
-                    path += PATH_DELIMITER + item.getKey();
-                    filterProperties(item.getValue(), path, filterType, pattern, filterMap);
-                }
+                String itemPath = path + PATH_DELIMITER + item.getKey();
+                filterProperties(item.getValue(), itemPath, filterType, pattern, filterMap);
             }
         } else if (property instanceof List) {
             for (Object item: (List<Object>)property) {
                 filterProperties(item, path, filterType, pattern, filterMap);
-            }
-        } else if (property instanceof Function) {
-            if (filterType.isMatch(property.toString(), pattern)) {
-                filterMap.put(path, property.toString());
             }
         } else {
             if (filterType.isMatch(property.toString(), pattern)) {
