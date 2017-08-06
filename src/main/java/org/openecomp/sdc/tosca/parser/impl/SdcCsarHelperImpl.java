@@ -736,21 +736,12 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         if (property instanceof Map) {
             for (Map.Entry<String, Object> item: ((Map<String, Object>) property).entrySet()) {
-                if (item.getKey().equals("get_input")) {
-                    String itemToStr = item.getKey() + ":" + item.getValue().toString();
-                    filterProperties(itemToStr, path, filterType, pattern, filterMap);
-                } else {
-                    path += PATH_DELIMITER + item.getKey();
-                    filterProperties(item.getValue(), path, filterType, pattern, filterMap);
-                }
+                String itemPath = path + PATH_DELIMITER + item.getKey();
+                filterProperties(item.getValue(), itemPath, filterType, pattern, filterMap);
             }
         } else if (property instanceof List) {
             for (Object item: (List<Object>)property) {
                 filterProperties(item, path, filterType, pattern, filterMap);
-            }
-        } else if (property instanceof Function) {
-            if (filterType.isMatch(property.toString(), pattern)) {
-                filterMap.put(path, property.toString());
             }
         } else {
             if (filterType.isMatch(property.toString(), pattern)) {

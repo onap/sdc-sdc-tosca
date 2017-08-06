@@ -24,7 +24,6 @@ public abstract class SdcToscaParserBasicTest {
     static ISdcCsarHelper rainyCsarHelperSingleVf;
     static ISdcCsarHelper rainyCsarHelperMultiVfs;
     static ISdcCsarHelper fdntCsarHelper;
-    static ISdcCsarHelper complexCps;
     static ISdcCsarHelper fdntCsarHelperWithInputs;
     static ISdcCsarHelper nfodCsarHlper;
     static ISdcCsarHelper ipAssignCsarHelper;
@@ -38,7 +37,6 @@ public abstract class SdcToscaParserBasicTest {
         fdntCsarHelper = getCsarHelper("csars/service-sunny-flow.csar");
         rainyCsarHelperMultiVfs = getCsarHelper("csars/service-ServiceFdnt-csar-rainy.csar");
         rainyCsarHelperSingleVf = getCsarHelper("csars/service-ServiceFdnt-csar.csar");
-        complexCps = getCsarHelper("csars/service-consolidated-props-csar.csar");
 		fdntCsarHelperWithInputs = getCsarHelper("csars/service-ServiceFdnt-with-get-input.csar");
 		nfodCsarHlper =  getCsarHelper("csars/service-NfodService-csar.csar");
 		ipAssignCsarHelper =  getCsarHelper("csars/service-Ipassignservice-csar.csar");
