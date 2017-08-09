@@ -72,6 +72,12 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	}
 
 	@Test
+	public void testNodeTemplateNestedFunctionProperty() throws SdcToscaParserException {
+		List<NodeTemplate> vfcs = ipAssignCsarHelper.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		assertEquals(null, ipAssignCsarHelper.getNodeTemplatePropertyLeafValue(vfcs.get(0), "port_pd01_port_ip_requirements#ip_count_required#count"));
+	}
+
+	@Test
 	public void testNodeTemplateNestedProperty() throws SdcToscaParserException {
 		List<NodeTemplate> serviceVlList = fdntCsarHelper.getServiceVlList();
 		NodeTemplate nodeTemplate = serviceVlList.get(0);
@@ -357,7 +363,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 				assertEquals("subnet_role_4", firstIpRequirements.get("subnet_role"));
 				assertEquals(4, firstIpRequirements.get("ip_version"));
 				assertEquals(true, ((Map<String, Object>) firstIpRequirements.get("ip_count_required")).get("is_required"));
-				assertEquals(4, ((Map<String, Object>) firstIpRequirements.get("ip_count_required")).get("count"));
+				assertEquals("get_input:node_count", ((Map<String, Object>) firstIpRequirements.get("ip_count_required")).get("count").toString());
 				assertEquals(false, ((Map<String, Object>)((Map<String, Object>)pd01.get("mac_requirements")).get("mac_count_required")).get("is_required"));
 				assertEquals("test_subnetpoolid", pd01.get("subnetpoolid"));
 				assertEquals("oam", pd01.get("network_role_tag"));
@@ -367,7 +373,6 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		}
 		assertTrue(isChecked);
 	}
-
 
 	@Test
 	public void testGetCpPropertiesFromVfcForNullVFC() {
@@ -400,17 +405,18 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
     //region filterNodeTemplatePropertiesByValue
     @Test
     public void testFilterNodeTemplatePropertiesByContains() {
-        List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+        List<NodeTemplate> vfcs = ipAssignCsarHelper.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
         boolean isChecked = false;
         for (NodeTemplate vfc: vfcs) {
-            if(vfc.getName().equalsIgnoreCase("abstract_ddc"))
+            if(vfc.getName().equalsIgnoreCase("abstract_pd_server"))
             {
                 isChecked = true;
-                Map<String, String> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfc, FilterType.CONTAINS, "get_input");
+                Map<String, String> filteredInputs = ipAssignCsarHelper.filterNodeTemplatePropertiesByValue(vfc, FilterType.CONTAINS, "get_input");
 
-                assertEquals(16, filteredInputs.size());
-                assertEquals("get_input:vnf_id", filteredInputs.get("compute_ddc_metadata#vf_module_id#vnf_id"));
-				assertEquals("get_input:[ddc_int_imbl_v6_ips, 3]", filteredInputs.get("port_ddc_int_imbl__port_fixed_ips#ip_address"));
+                assertEquals(7, filteredInputs.size());
+                assertEquals("get_input:availabilityzone_name", filteredInputs.get("compute_pd_server_availability_zone"));
+				assertEquals("get_input:[pd_server_names, 0]", filteredInputs.get("compute_pd_server_name"));
+				assertEquals("get_input:node_count", filteredInputs.get("port_pd01_port_ip_requirements#ip_count_required#count"));
 
                 break;
             }
@@ -421,25 +427,25 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 
     @Test
     public void testFilterNodeTemplatePropertiesByDummyContains() {
-        List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
-        Map<String, String> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfcs.get(0), FilterType.CONTAINS, "dummy");
+        List<NodeTemplate> vfcs = ipAssignCsarHelper.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+        Map<String, String> filteredInputs = ipAssignCsarHelper.filterNodeTemplatePropertiesByValue(vfcs.get(0), FilterType.CONTAINS, "dummy");
         assertNotNull(filteredInputs);
         assertEquals(0, filteredInputs.size());
     }
 
     @Test
     public void testFilterNodeTemplatePropertiesByEquals() {
-        List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+        List<NodeTemplate> vfcs = ipAssignCsarHelper.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
         boolean isChecked = false;
         for (NodeTemplate vfc: vfcs) {
-            if(vfc.getName().equalsIgnoreCase("abstract_ddc"))
+            if(vfc.getName().equalsIgnoreCase("abstract_pd_server"))
             {
                 isChecked = true;
-                Map<String, String> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfc, FilterType.EQUALS, "ddc");
+                Map<String, String> filteredInputs = ipAssignCsarHelper.filterNodeTemplatePropertiesByValue(vfc, FilterType.EQUALS, "oam");
 
                 assertEquals(2, filteredInputs.size());
-                assertEquals("ddc", filteredInputs.get("vm_type_tag"));
-                assertEquals("ddc", filteredInputs.get("nfc_naming_code"));
+                assertEquals("oam", filteredInputs.get("port_pd02_port_network_role_tag"));
+                assertEquals("oam", filteredInputs.get("port_pd01_port_network_role_tag"));
                 break;
             }
 
@@ -449,31 +455,31 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 
 	@Test
 	public void testFilterNodeTemplatePropertiesByDummyEquals() {
-		List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
-		Map<String, String> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfcs.get(0), FilterType.EQUALS, "dummy");
+		List<NodeTemplate> vfcs = ipAssignCsarHelper.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Map<String, String> filteredInputs = ipAssignCsarHelper.filterNodeTemplatePropertiesByValue(vfcs.get(0), FilterType.EQUALS, "dummy");
 		assertNotNull(filteredInputs);
 		assertEquals(0, filteredInputs.size());
 	}
 
 	@Test
 	public void testFilterNodeTemplatePropertiesByNullFilterType() {
-		List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
-		Map<String, String> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfcs.get(11), null, "ddc");
+		List<NodeTemplate> vfcs = ipAssignCsarHelper.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Map<String, String> filteredInputs = ipAssignCsarHelper.filterNodeTemplatePropertiesByValue(vfcs.get(0), null, "ddc");
 		assertNotNull(filteredInputs);
 		assertEquals(0, filteredInputs.size());
 	}
 
 	@Test
 	public void testFilterNodeTemplatePropertiesByNullPattern() {
-		List<NodeTemplate> vfcs = complexCps.getVfcListByVf("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
-		Map<String, String> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(vfcs.get(11), FilterType.EQUALS, null);
+		List<NodeTemplate> vfcs = ipAssignCsarHelper.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Map<String, String> filteredInputs = ipAssignCsarHelper.filterNodeTemplatePropertiesByValue(vfcs.get(0), FilterType.EQUALS, null);
 		assertNotNull(filteredInputs);
 		assertEquals(0, filteredInputs.size());
 	}
 
 	@Test
 	public void testFilterNodeTemplatePropertiesByNullVfc() {
-		Map<String, String> filteredInputs = complexCps.filterNodeTemplatePropertiesByValue(null, FilterType.EQUALS, "ddc");
+		Map<String, String> filteredInputs = ipAssignCsarHelper.filterNodeTemplatePropertiesByValue(null, FilterType.EQUALS, "ddc");
 		assertNotNull(filteredInputs);
 		assertEquals(0, filteredInputs.size());
 	}
@@ -532,7 +538,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
     
     @Test
     public void testGetVnfConfigByNonFoundVNF() {
-    	NodeTemplate vnfConfig = complexCps.getVnfConfig("f999e2ca-72c0-42d3-9b11-13f2122fb8ef");
+    	NodeTemplate vnfConfig = ipAssignCsarHelper.getVnfConfig("b5190df2-7880-4d6f-836f-56ab17e1b85b");
     	assertNull(vnfConfig);
     }
     
