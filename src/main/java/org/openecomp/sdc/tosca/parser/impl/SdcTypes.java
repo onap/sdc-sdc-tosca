@@ -25,7 +25,7 @@ import java.util.List;
 
 public enum SdcTypes {
 
-    CP, VL, VF, VFC, PNF, SERVICE, CVFC;
+    CP, VL, VF, VFC, PNF, SERVICE, CVFC, SERVICE_PROXY, CONFIGURATION;
 
     public static List<SdcTypes> complexTypes = Arrays.asList(VF, PNF, SERVICE, CVFC);
 

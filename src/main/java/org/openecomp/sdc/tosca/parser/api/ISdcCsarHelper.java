@@ -25,8 +25,7 @@ import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.impl.FilterType;
 import org.openecomp.sdc.tosca.parser.impl.SdcTypes;
-import org.openecomp.sdc.toscaparser.api.Group;
-import org.openecomp.sdc.toscaparser.api.NodeTemplate;
+import org.openecomp.sdc.toscaparser.api.*;
 import org.openecomp.sdc.toscaparser.api.elements.Metadata;
 import org.openecomp.sdc.toscaparser.api.parameters.Input;
 
@@ -203,16 +202,28 @@ public interface ISdcCsarHelper {
 	public String getServiceSubstitutionMappingsTypeName();
 	
 	/**
-	 * Get the CSAR service metadata
-	 * @return - the service metadata object.
+	 * Get service Metadata object.<br>
+	 * This object represents the "metadata" section of a CSAR service.
+	 * @return - the service Metadata object.
 	 */
 	public Metadata getServiceMetadata();
 
 	/**
 	 * Get the CSAR service metadata as map.
 	 * @return - the service metadata object as Map.
+	 * @deprecated This function is deprecated since its not tosca compliant. <br>
+	 * Tosca defines the Metadata section as map of string (not map of object).<br>
+	 *  This function is targeted to be removed as part of 1802.<br>
+	 * Please use {@link #getServiceMetadataAllProperties() getServiceMetadataAllProperties()}.
 	 */
+	@Deprecated
 	public Map<String, Object> getServiceMetadataProperties();
+
+	/**
+	 * Get the CSAR service metadata as map
+	 * @return - the service metadata object as Map
+	 */
+	public Map<String, String> getServiceMetadataAllProperties();
 
 	/**
 	 * Get all VFC node templates from a specified VF.
@@ -326,7 +337,8 @@ public interface ISdcCsarHelper {
 	 *  port_fe_oam={ip_requirements#ip_count_required#count=2, ip_requirements#dhcp_enabled=true, ip_requirements#ip_version=4, subnetpoolid="subnet_2", network_role_tag="Mobility_OAM_protected"}}<br><br>
 	 * @param vfc - VFC node template to look for CP-related props.
 	 * @return map <b>CP node template name</b>  to a map of <b>full path to a property on this CP</b> - <b> value of this property on this CP</b>.
-	 * @deprecated This function is deprecated since its flattened form doesn't provide solution for cp properties of type List. 
+	 * @deprecated This function is deprecated since its flattened form doesn't provide solution for cp properties of type List.
+	 * Will be removed in 1802.
 	 */
 	@Deprecated 
 	public Map<String, Map<String, Object>> getCpPropertiesFromVfc(NodeTemplate vfc);
@@ -367,9 +379,9 @@ public interface ISdcCsarHelper {
 	public List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType);
 
 	/**
-	 * Get all node templates by sdcType for this CSAR service.
+	 * Get all node templates by SDC type enum for this CSAR service.
 	 *
-	 * @param sdcType - the SDC type of the node.
+	 * @param sdcType - the SDC type of the node (for example, CP, VF...).
 	 * @return service node templates of this SDC type.
 	 */
 	public List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType);
@@ -394,4 +406,49 @@ public interface ISdcCsarHelper {
 	 * @return return list of children node templates for node template.
 	 */
 	public List<NodeTemplate> getNodeTemplateChildren(NodeTemplate nodeTemplate);
+
+	/**
+	 * Get node template on service level by node template name.
+	 * @param nodeName - the name of the node template.
+	 * @return service-level node template with this name, or null if no such node template was found.
+	 */
+	public NodeTemplate getServiceNodeTemplateByNodeName(String nodeName);
+
+	/**
+	 * Get node template Metadata object.<br>
+	 * This object represents the "metadata" section of node template.
+	 * @param nt - Node template to get its Metadata object.
+	 * @return Metadata for this node template, or null if not found.
+	 */
+	public Metadata getNodeTemplateMetadata(NodeTemplate nt);
+
+	/**
+	 * Get CapabilityAssignments object for this node template.<br>
+	 * This should be an entry point function for working with capability assignments of node template.<br>
+	 * This object allows filtering capability assignments objects.<br>
+	 * @param nt - Node Template to get its capability assignments.
+	 * @return CapabilitiesAssignments that contains list of capability assignments for the node template.<br>
+	 * If none found, an empty list will be returned.
+	 */
+	public CapabilityAssignments getCapabilitiesOf(NodeTemplate nt);
+
+	/**
+	 * Get RequirementAssignments object for this node template.<br>
+	 * This should be an entry point function for working with requirement assignments of node template.<br>
+	 * This object allows filtering requirement assignments objects.<br>
+	 * @param nt - Node Template to get its requirement assignments.
+	 * @return RequirementAssignments that contains list of requirement assignments for the node template.
+	 * If none found, an empty list will be returned.
+	 */
+	public RequirementAssignments getRequirementsOf(NodeTemplate nt);
+
+	/**
+	 * Get any property leaf value for capability by full path separated by #.
+	 * Same logic as in {@link #getNodeTemplatePropertyLeafValue(NodeTemplate, String) getNodeTemplatePropertyLeafValue}, only for a capability assignment.
+	 * @param capability - capability assignment where the property should be looked up.
+	 * @param pathToPropertyLeafValue - the full path of the required property.
+	 * @return the leaf value as String, or null if there's no such property, or it's not a leaf.
+	 */
+	public String getCapabilityPropertyLeafValue(CapabilityAssignment capability, String pathToPropertyLeafValue);
+
 }

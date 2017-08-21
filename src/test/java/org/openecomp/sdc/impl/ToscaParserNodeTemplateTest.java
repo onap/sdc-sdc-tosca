@@ -729,6 +729,27 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		}
     }
 
+    //region getServiceNodeTemplateByNodeName
+	@Test
+	public void testGetServiceNodeTemplateByRealNodeName() {
+		NodeTemplate nodeTemplate = fdntCsarHelper.getServiceNodeTemplateByNodeName("FDNT 1");
+		assertNotNull(nodeTemplate);
+		assertEquals(nodeTemplate.getName(), "FDNT 1");
+		assertEquals(nodeTemplate.getMetaData().getValue("type"), "VF");
+	}
+
+	@Test
+	public void testGetServiceNodeTemplateByNullNodeName() {
+		NodeTemplate nodeTemplate = fdntCsarHelper.getServiceNodeTemplateByNodeName(null);
+		assertNull(nodeTemplate);
+	}
+
+	@Test
+	public void testGetServiceNodeTemplateByDummyNodeName() {
+		NodeTemplate nodeTemplate = fdntCsarHelper.getServiceNodeTemplateByNodeName("dummy");
+		assertNull(nodeTemplate);
+	}
+	//endregion
 	//region resolve get_input
 	@Test
 	public void testResolveGetInputForComplexTypeAndList() {

@@ -27,14 +27,11 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.api.ISdcCsarHelper;
+import org.openecomp.sdc.toscaparser.api.CapabilityAssignments;
 import org.openecomp.sdc.tosca.parser.utils.GeneralUtility;
+import org.openecomp.sdc.toscaparser.api.RequirementAssignments;
 import org.openecomp.sdc.tosca.parser.utils.SdcToscaUtility;
-import org.openecomp.sdc.toscaparser.api.Group;
-import org.openecomp.sdc.toscaparser.api.NodeTemplate;
-import org.openecomp.sdc.toscaparser.api.Property;
-import org.openecomp.sdc.toscaparser.api.SubstitutionMappings;
-import org.openecomp.sdc.toscaparser.api.TopologyTemplate;
-import org.openecomp.sdc.toscaparser.api.ToscaTemplate;
+import org.openecomp.sdc.toscaparser.api.*;
 import org.openecomp.sdc.toscaparser.api.elements.Metadata;
 import org.openecomp.sdc.toscaparser.api.elements.NodeType;
 import org.openecomp.sdc.toscaparser.api.functions.Function;
@@ -398,10 +395,18 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     @Override
     //Sunny flow - covered with UT
     public Map<String, Object> getServiceMetadataProperties() {
-        if (toscaTemplate.getMetaData()==null){
+        if (toscaTemplate.getMetaData() == null){
             return null;
         }
-        return toscaTemplate.getMetaData().getPropertyMap();
+        return new HashMap<>(toscaTemplate.getMetaData().getAllProperties());
+    }
+
+    @Override
+    public Map<String, String> getServiceMetadataAllProperties() {
+        if (toscaTemplate.getMetaData() == null){
+            return null;
+        }
+        return toscaTemplate.getMetaData().getAllProperties();
     }
 
     @Override
@@ -509,32 +514,37 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     @SuppressWarnings("unchecked")
     public List<Pair<NodeTemplate, NodeTemplate>> getNodeTemplatePairsByReqName(
             List<NodeTemplate> listOfReqNodeTemplates, List<NodeTemplate> listOfCapNodeTemplates, String reqName) {
-        if (listOfReqNodeTemplates == null || listOfCapNodeTemplates == null || reqName == null) {
-            //TODO error message
+
+        if (listOfReqNodeTemplates == null) {
+            log.error("getNodeTemplatePairsByReqName - listOfReqNodeTemplates is null");
+            return new ArrayList<>();
+        }
+
+        if (listOfCapNodeTemplates == null) {
+            log.error("getNodeTemplatePairsByReqName - listOfCapNodeTemplates is null");
+            return new ArrayList<>();
+        }
+
+        if (GeneralUtility.isEmptyString(reqName)) {
+            log.error("getNodeTemplatePairsByReqName - reqName is null or empty");
             return new ArrayList<>();
         }
 
         List<Pair<NodeTemplate, NodeTemplate>> pairsList = new ArrayList<>();
 
-        if (listOfReqNodeTemplates != null) {
-            for (NodeTemplate reqNodeTemplate : listOfReqNodeTemplates) {
-                List<Object> requirements = reqNodeTemplate.getRequirements();
-                for (Object reqEntry : requirements) {
-                    LinkedHashMap<String, Object> reqEntryHash = (LinkedHashMap<String, Object>) reqEntry;
-                    Map<String, Object> reqEntryMap = (Map<String, Object>) reqEntryHash.get(reqName);
-                    if (reqEntryMap != null) {
-                        Object node = reqEntryMap.get("node");
-                        if (node != null) {
-                            String nodeString = (String) node;
-                            Optional<NodeTemplate> findFirst = listOfCapNodeTemplates.stream().filter(x -> x.getName().equals(nodeString)).findFirst();
-                            if (findFirst.isPresent()) {
-                                pairsList.add(new ImmutablePair<NodeTemplate, NodeTemplate>(reqNodeTemplate, findFirst.get()));
-                            }
-                        }
+        for (NodeTemplate reqNodeTemplate : listOfReqNodeTemplates) {
+            List<RequirementAssignment> requirements = reqNodeTemplate.getRequirements().getRequirementsByName(reqName).getAll();
+            for (RequirementAssignment reqEntry : requirements) {
+                String node = reqEntry.getNodeTemplateName();
+                if (node != null) {
+                    Optional<NodeTemplate> findFirst = listOfCapNodeTemplates.stream().filter(x -> x.getName().equals(node)).findFirst();
+                    if (findFirst.isPresent()) {
+                        pairsList.add(new ImmutablePair<NodeTemplate, NodeTemplate>(reqNodeTemplate, findFirst.get()));
                     }
                 }
             }
         }
+
         return pairsList;
     }
 
@@ -727,6 +737,67 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             log.debug("getNodeTemplateChildren - SubstitutionMappings not exist");
 
         return new ArrayList<>();
+    }
+
+    @Override
+    public NodeTemplate getServiceNodeTemplateByNodeName(String nodeName) {
+        if (GeneralUtility.isEmptyString(nodeName)) {
+            log.error("getServiceNodeTemplateByNodeName - nodeName - is null or empty");
+            return null;
+        }
+
+        List<NodeTemplate> nodeTemplates = getServiceNodeTemplates();
+        Optional<NodeTemplate> findFirst =  nodeTemplates.stream().filter(nt -> nt.getName().equals(nodeName)).findFirst();
+
+        return findFirst.isPresent() ? findFirst.get() : null;
+    }
+
+    @Override
+    public Metadata getNodeTemplateMetadata(NodeTemplate nt) {
+        if (nt == null) {
+            log.error("getNodeTemplateMetadata - nt (node template) - is null");
+            return null;
+        }
+
+        return nt.getMetaData();
+    }
+
+    @Override
+    public CapabilityAssignments getCapabilitiesOf(NodeTemplate nt) {
+        if (nt == null) {
+            log.error("getCapabilitiesOf - nt (node template) - is null");
+            return null;
+        }
+
+        return nt.getCapabilities();
+    }
+
+    @Override
+    public RequirementAssignments getRequirementsOf(NodeTemplate nt) {
+        if (nt == null) {
+            log.error("getRequirementsOf - nt (node template) - is null");
+            return null;
+        }
+
+        return nt.getRequirements();
+    }
+
+    @Override
+    public String getCapabilityPropertyLeafValue(CapabilityAssignment capability, String pathToPropertyLeafValue) {
+        if (capability == null) {
+            log.error("getCapabilityPropertyLeafValue - capability is null");
+            return null;
+        }
+
+        if (GeneralUtility.isEmptyString(pathToPropertyLeafValue)) {
+            log.error("getCapabilityPropertyLeafValue - pathToPropertyLeafValue is null or empty");
+            return null;
+        }
+
+        String[] split = getSplittedPath(pathToPropertyLeafValue);
+        LinkedHashMap<String, Property> properties = capability.getProperties();
+        Object property = processProperties(split, properties);
+        return property == null || property instanceof Function ? null : String.valueOf(property);
     }
 
     /************************************* helper functions ***********************************/

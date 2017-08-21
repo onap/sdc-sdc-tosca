@@ -1,8 +1,10 @@
 package org.openecomp.sdc.impl;
 
+import org.openecomp.sdc.toscaparser.api.NodeTemplate;
 import org.testng.annotations.Test;
 import org.openecomp.sdc.toscaparser.api.elements.Metadata;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
@@ -79,6 +81,39 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
         assertNotNull(metadata);
         assertEquals(metadata.size(),9);
         assertEquals(metadata.get("namingPolicy"),"test");
+    }
+    //endregion
+
+    //region getServiceMetadataAllProperties
+    @Test
+    public void testNullServiceMetadataAllPropertiesMap() {
+        Map<String, String> metadata = rainyCsarHelperSingleVf.getServiceMetadataAllProperties();
+        assertNull(metadata);
+    }
+
+    @Test
+    public void testServiceMetadataAllPropertiesMap() {
+        Map<String, String> metadata = fdntCsarHelper.getServiceMetadataAllProperties();
+        assertNotNull(metadata);
+        assertEquals(metadata.size(),9);
+        assertEquals(metadata.get("namingPolicy"),"test");
+    }
+    //endregion
+
+    //region getNodeTemplateMetadata
+    @Test
+    public void testGetNodeTemplateMetadata() {
+        List<NodeTemplate> vfs = fdntCsarHelper.getServiceVfList();
+        Metadata metadata = fdntCsarHelper.getNodeTemplateMetadata(vfs.get(0));
+        assertNotNull(metadata);
+        assertEquals("VF", metadata.getValue("type"));
+        assertEquals("1.0", metadata.getValue("version"));
+    }
+
+    @Test
+    public void testGetNodeTemplateMetadataByNull() {
+        Metadata metadata = fdntCsarHelper.getNodeTemplateMetadata(null);
+        assertNull(metadata);
     }
     //endregion
 }

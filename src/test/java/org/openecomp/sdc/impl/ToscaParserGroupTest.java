@@ -20,7 +20,7 @@ public class ToscaParserGroupTest extends SdcToscaParserBasicTest{
         for (Group group : vfModulesByVf){
             assertTrue(group.getName().startsWith("fdnt1"));
             assertNotNull(group.getMetadata());
-            assertNotNull(group.getMetadata().getValue("vfModuleCustomizationUUID"));
+            assertNotNull(group.getMetadata().getValue("vfModuleModelCustomizationUUID"));
         }
     }
 
