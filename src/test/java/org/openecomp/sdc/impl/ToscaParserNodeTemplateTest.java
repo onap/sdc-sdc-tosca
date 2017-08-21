@@ -6,12 +6,7 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
@@ -660,7 +655,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertEquals(0, children.size());
 	}
 	//endregion
-    
+
     // added by QA
     // Get specific VNF properties
     @Test
@@ -668,43 +663,43 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
     	NodeTemplate vnfConfig = nfodCsarHlper.getVnfConfig("9bb2ef82-f8f6-4391-bc71-db063f15bf57");
     	assertNotNull(vnfConfig);
     	assertEquals("vnfConfiguration", vnfConfig.getMetaData().getValue("name"));
-    	
+
     	String manufacturer_reference_number = nfodCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#ATT_part_12345_for_FortiGate-VM00#vendor_info#manufacturer_reference_number");
     	String num_cpus = nfodCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#ATT_part_67890_for_FortiGate-VM01#compute_flavor#num_cpus");
     	String sp_part_number = nfodCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#ATT_part_67890_for_FortiGate-VM01#sp_part_number");
-    	    	
+
     	assertEquals("FortiGate-VM00",manufacturer_reference_number);
     	assertEquals("10",num_cpus);
     	assertEquals("ATT_part_67890_for_FortiGate-VM01",sp_part_number);
     }
 
     // added by QA
-    // Check that get vnfconfiguration not return as VFC    
+    // Check that get vnfconfiguration not return as VFC
     @Test
     public void testGetVfcTypWithoutVnfCheckNames() {
     	List<NodeTemplate> vfcList = nfodCsarHlper.getVfcListByVf("9bb2ef82-f8f6-4391-bc71-db063f15bf57");
     	assertNotNull(vfcList);
     	assertEquals(2, vfcList.size());
     	for (int i = 0; i < vfcList.size(); i++) {
-    		
+
     		String Name= vfcList.get(i).getName();
-    		
+
     		assertEquals(false, Name.equals("vFW_VNF_Configuration"));
-    		
+
 		}
     }
-    
+
     @Test
     public void testNewGetVnfConfigGetProperties() {
     	NodeTemplate vnfConfig = nfodNEWCsarHlper.getVnfConfig("a6587663-b27f-4e88-8a86-604604302ce6");
     	assertNotNull(vnfConfig);
     	assertEquals("vnfConfiguration", vnfConfig.getMetaData().getValue("name"));
-    	
+
     	//Deployment flavor 1
     	String manufacturer_reference_number = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#123456#vendor_info#manufacturer_reference_number");
     	String num_cpus = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#123456#compute_flavor#num_cpus");
     	String sp_part_number = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#123456#sp_part_number");
-    	    	
+
     	assertEquals("234567",manufacturer_reference_number);
     	assertEquals("2",num_cpus);
     	assertEquals("123456",sp_part_number);
@@ -713,25 +708,150 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
     	manufacturer_reference_number = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#FG_partNumbereJqQjUkteF1#vendor_info#manufacturer_reference_number");
     	num_cpus = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#FG_partNumbereJqQjUkteF1#compute_flavor#num_cpus");
     	sp_part_number = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#FG_partNumbereJqQjUkteF1#sp_part_number");
-    	    	
+
     	assertEquals("EP_manufacturerReferenceNumberkbAiqZZNzx1",manufacturer_reference_number);
     	assertEquals("1",num_cpus);
     	assertEquals("FG_partNumbereJqQjUkteF1",sp_part_number);
     }
 
     // added by QA
-    // Check that get vnfconfiguration not return as VFC    
+    // Check that get vnfconfiguration not return as VFC
     @Test
     public void testNewGetVfcTypWithoutVnfCheckNames() {
     	List<NodeTemplate> vfcList = nfodNEWCsarHlper.getVfcListByVf("a6587663-b27f-4e88-8a86-604604302ce6");
     	assertNotNull(vfcList);
     	assertEquals(1, vfcList.size());
     	for (int i = 0; i < vfcList.size(); i++) {
-    		
+
     		String Name= vfcList.get(i).getName();
-    		
+
     		assertEquals(false, Name.equals("name_6GkVrOjnGp1_VNF_Configuration"));
 		}
     }
-    
+
+	//region resolve get_input
+	@Test
+	public void testResolveGetInputForComplexTypeAndList() {
+		//port_pd01_port_ip_requirements is of type list<org.openecomp.datatypes.network.IpRequirements>
+		//This test covers:
+		// 1) "default" resolving
+		// 2) complex type resolving
+		// 3) List access resolving
+		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
+		assertTrue(propertyAsObject instanceof ArrayList);
+		assertEquals(2, ((ArrayList) propertyAsObject).size());
+		//port_pd01_port_ip_requirements:
+		//- get_input: [ip_requirements, 0]
+		//- get_input: [ip_requirements, 1]
+		assertEquals("subnet_role_4", ((Map) ((ArrayList) propertyAsObject).get(0)).get("subnet_role"));
+		assertEquals("subnet_role_6", ((Map) ((ArrayList) propertyAsObject).get(1)).get("subnet_role"));
+	}
+
+	@Test
+	public void testResolveGetInputForPrimitiveTypeString() {
+		//This test covers "default" resolving of primitive - as Object
+		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_network_role_tag");
+		assertEquals("oam", propertyAsObject);
+	}
+
+	@Test
+	public void testResolveGetInputForPrimitiveTypeInteger() {
+		//This test covers "default" resolving of primitive - as String
+		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		String propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyLeafValue(vfcs.get(0), "port_pd01_port_order");
+		assertEquals("1", propertyAsObject);
+	}
+
+	@Test
+	public void testResolveGetInputForMap() {
+		//This test covers "default" resolving of primitive - as Map
+		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd02_port_ip_requirements#ip_count_required");
+		assertTrue(propertyAsObject instanceof Map);
+		assertEquals(false, ((Map)propertyAsObject).get("is_required"));
+	}
+
+	@Test
+	public void testResolveGetInputForAllHierarchy() {
+		//This test covers "default" resolving from service level
+		List<NodeTemplate> vfs = resolveGetInputCsar.getServiceVfList();
+		Object vfPropertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfs.get(0), "vm_count");
+		assertEquals(2, vfPropertyAsObject);
+		//This test covers property assignment resolving on VFI level (service template), from Vf level
+		List<NodeTemplate> vfcs = resolveGetInputCsar.getNodeTemplateBySdcType(vfs.get(0), SdcTypes.VFC);
+		Object vfcPropertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "my_count");
+		assertEquals(2, vfcPropertyAsObject); //takes it from upper level (VF) property
+	}
+
+	@Test
+	public void testResolveGetInputNoDefValueInnerLevel() {
+		//This test covers resolving when no "default" value is supplied to the input - should be null - VF/VFCI level
+		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		String propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyLeafValue(vfcs.get(0), "index_value");
+		assertNull(propertyAsObject);
+
+	}
+
+	@Test
+	public void testResolveGetInputNoDefValueServiceLevel() {
+		//This test covers resolving when no "default" value is supplied to the input - should be null - Service/VFI level
+		List<NodeTemplate> vfs = resolveGetInputCsar.getServiceVfList();
+		Object vfPropertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfs.get(0), "port_order");
+		assertNull(vfPropertyAsObject);
+
+	}
+	//endregion
+
+	// region Added by QA - Continue with testings of resolve get_input
+	
+	@Test
+	public void testResolveGetInputForComplexTypeAndListWithFalseValue() 
+	{
+		List<NodeTemplate> vfcs = resolveGetInputCsarFalse.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Object propertyAsObject = resolveGetInputCsarFalse.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
+		assertTrue(propertyAsObject instanceof ArrayList);
+		assertEquals(2, ((ArrayList) propertyAsObject).size());
+		assertEquals("get_input:[ip_requirements, 0]", ((ArrayList) propertyAsObject).get(0).toString());
+		assertEquals("get_input:[ip_requirements, 1]", ((ArrayList) propertyAsObject).get(1).toString());
+	}
+	
+	@Test
+	public void testResolveGetInputForPrimitiveTypeStringWithFalseValue() {
+		List<NodeTemplate> vfcs = resolveGetInputCsarFalse.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Object propertyAsObject = resolveGetInputCsarFalse.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_network_role_tag");
+		assertEquals("get_input:role_tag_oam", propertyAsObject.toString());
+	}
+	
+	@Test
+	public void testResolveGetInputForPrimitiveTypeListWithFalseValue() {
+		List<NodeTemplate> vfcs = resolveGetInputCsarFalse.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Object propertyAsObject = resolveGetInputCsarFalse.getNodeTemplatePropertyAsObject(vfcs.get(0), "compute_pd_server_name");
+		assertEquals("[get_input:[pd_server_names, 0]]", propertyAsObject.toString());
+	}
+	
+	//@Test // Maybe a bug here.... need to check with Esti - Mait was sent. 
+	public void testResolveGetInputForPrimitiveTypeList() {
+		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "compute_pd_server_name");
+		assertEquals("\"ZRDM1MOGX01MPD001\"", propertyAsObject.toString());				
+	}
+	
+	@Test
+        public void testResolveGetInputForPrimitiveNullValue() {
+		List<NodeTemplate> vfcs = resolveGetInputCsarQA.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		@SuppressWarnings("unchecked")
+		List<String>propertyAsObject = (List<String>) resolveGetInputCsarQA.getNodeTemplatePropertyAsObject(vfcs.get(0), "compute_pd_server_availability_zone");
+		assertNull(propertyAsObject.get(0));
+		}
+	@Test
+	public void testResolveGetInputForPrimitiveIPValue() {
+		List<NodeTemplate> vfcs = resolveGetInputCsarQA.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Object propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyAsObject(vfcs.get(0), "vm_image_name");
+		assertEquals("107.239.36.5", propertyAsObject.toString());
+	}
+	
+	// endregion Added by QA - Continue with testings of resolve get_input
+	
 }
