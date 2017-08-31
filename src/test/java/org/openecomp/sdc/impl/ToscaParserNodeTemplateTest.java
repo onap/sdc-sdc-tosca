@@ -4,10 +4,8 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
-
-
 import java.util.*;
-
+import static org.hamcrest.CoreMatchers.is;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.openecomp.sdc.tosca.parser.impl.FilterType;
@@ -748,7 +746,10 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	public void testGetServiceNodeTemplateByDummyNodeName() {
 		NodeTemplate nodeTemplate = fdntCsarHelper.getServiceNodeTemplateByNodeName("dummy");
 		assertNull(nodeTemplate);
-	}
+	}	
+	
+
+
 	//endregion
 	//region resolve get_input
 	@Test
@@ -873,6 +874,50 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertEquals("107.239.36.5", propertyAsObject.toString());
 	}
 	
+	//QA region getServiceNodeTemplateByNodeName tests
+	
+	@Test
+	public void getServiceNodeTemplateByNodeNameTypeVF() {
+		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("VF_1_V_port_1 0");
+		assertNotNull(nodeTemplate);
+		assertEquals(nodeTemplate.getName(), "VF_1_V_port_1 0");
+		assertEquals(nodeTemplate.getMetaData().getValue("type"), "VF");
+	}
+	
+	@Test
+	public void getServiceNodeTemplateByNodeNameTypeVL() {
+		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtVL 0");
+		assertNotNull(nodeTemplate);
+		assertEquals(nodeTemplate.getName(), "ExtVL 0");
+		assertEquals(nodeTemplate.getMetaData().getValue("type"), "VL");
+	}
+	
+	@Test
+	public void getServiceNodeTemplateByNodeNameTypeCP() {
+		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtCP 0");
+		assertNotNull(nodeTemplate);
+		assertEquals(nodeTemplate.getName(), "ExtCP 0");
+		assertEquals(nodeTemplate.getMetaData().getValue("type"), "CP");
+	}
+	
+	@Test
+	public void getServiceNodeTemplateByNodeNameTypePNF() {
+		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("PNF TEST 0");
+		assertNotNull(nodeTemplate);
+		assertEquals(nodeTemplate.getName(), "PNF TEST 0");
+		assertEquals(nodeTemplate.getMetaData().getValue("type"), "PNF");
+	}
+	
+	//QA region  getServiceNodeTemplateBySdcType tests 
+	
+	@Test
+	public void getServiceNodeTemplateBySdcType_VF() {
+		List<NodeTemplate> vfList = QAServiceForToscaParserTests.getServiceNodeTemplatesByType("org.openecomp.resource.vf.Vf1VPort1");
+		assertEquals(2, vfList.size());
+		assertEquals("VF_1_V_port_1", vfList.get(0).getMetaData().getValue("name"));
+	}
 	// endregion Added by QA - Continue with testings of resolve get_input
 	
 }
+
+
