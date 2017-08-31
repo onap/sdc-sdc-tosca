@@ -28,9 +28,11 @@ public abstract class SdcToscaParserBasicTest {
     static ISdcCsarHelper ipAssignCsarHelper;
     static ISdcCsarHelper nestedVfcCsarHlper;
     static ISdcCsarHelper nfodNEWCsarHlper;
+    static ISdcCsarHelper QAServiceForToscaParserTests;
     static ISdcCsarHelper resolveGetInputCsar;
     static ISdcCsarHelper resolveGetInputCsarFalse;
     static ISdcCsarHelper resolveGetInputCsarQA;
+    static ISdcCsarHelper resolveReqsCapsCsarQA;
 
     static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
     
@@ -49,7 +51,9 @@ public abstract class SdcToscaParserBasicTest {
 		resolveGetInputCsar = getCsarHelper("csars/service-resolve-get-input-csar.csar");
 		resolveGetInputCsarFalse = getCsarHelper("csars/service-resolve-get-input-csar.csar",false);
 		resolveGetInputCsarQA = getCsarHelper("csars/service-resolve-get-input-csar_QA.csar");
-
+		QAServiceForToscaParserTests = getCsarHelper("csars/service-ServiceForToscaParserTests-csar.csar");
+		resolveReqsCapsCsarQA = getCsarHelper("csars/service-sunny-flow2.csar");
+		
         fdntCsarHelper_Data = new HashMap<String, HashMap<String, List<String>>>(){
     		{
     			HashMap<String, List<String>> FDNT ;

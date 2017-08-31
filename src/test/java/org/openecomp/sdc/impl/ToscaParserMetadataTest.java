@@ -116,4 +116,76 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
         assertNull(metadata);
     }
     //endregion
+    
+    //QA tests region for US 319197 -port mirroring
+    
+   	//getNodeTemplateMetadata (All Types)
+   	@Test
+   	public void GetServiceNodeTemplateMetadataTypeVF() {
+   		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("VF_1_V_port_1 0");
+   		Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
+   		assertNotNull(nodeTemplateMetadata);
+   		assertEquals(nodeTemplateMetadata.getValue("resourceVendorRelease"), "12-12-12");
+   		assertEquals(nodeTemplateMetadata.getValue("type"), "VF");
+   	}
+   	
+   	@Test
+   	public void GetServiceNodeTemplateMetadataTypeVL() {
+   		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtVL 0");
+   		Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
+   		assertNotNull(nodeTemplateMetadata);
+   		assertEquals(nodeTemplateMetadata.getValue("resourceVendorRelease"), "1.0.0.wd03");
+   		assertEquals(nodeTemplateMetadata.getValue("type"), "VL");
+   	}
+   	
+   	@Test
+   	public void GetServiceNodeTemplateMetadataTypeCP() {
+   		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtCP 0");
+   		Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
+   		assertNotNull(nodeTemplateMetadata);
+   		assertEquals(nodeTemplateMetadata.getValue("UUID"), "7a883088-5cab-4bfb-8d55-307d3ffd0758");
+   		assertEquals(nodeTemplateMetadata.getValue("type"), "CP");
+   	}
+   	
+   	@Test
+   	public void GetServiceNodeTemplateMetadataTypePNF() {
+   		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("PNF TEST 0");
+   		Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
+   		assertNotNull(nodeTemplateMetadata);
+   		assertEquals(nodeTemplateMetadata.getValue("resourceVendorModelNumber"), "");
+   		assertEquals(nodeTemplateMetadata.getValue("type"), "PNF");
+   	}
+   	
+   	//QA end region for US 319197 -port mirroring
+   	
+    // Added by QA  //region getServiceMetadataAllProperties
+
+    @Test
+    public void testGetAllMetadataProperties() {
+    	Metadata serviceMetadata = fdntCsarHelper.getServiceMetadata();
+    	assertNotNull(serviceMetadata);
+        Map<String, String> allProperties = serviceMetadata.getAllProperties();
+        assertNotNull(allProperties);
+        String invariantUUID = allProperties.get("invariantUUID");
+        String UUID = allProperties.get("UUID");
+        String name = allProperties.get("name");
+        String description = allProperties.get("description");
+        String type = allProperties.get("type");
+        String category = allProperties.get("category");
+        String ecompGeneratedNaming = allProperties.get("ecompGeneratedNaming");
+        String namingPolicy = allProperties.get("namingPolicy");
+        String serviceEcompNaming = allProperties.get("serviceEcompNaming");
+
+        assertEquals(invariantUUID, "78c72999-1003-4a35-8534-bbd7d96fcae3");
+        assertEquals(UUID, "edd0a9f7-d084-4423-8461-a2eff4cb3eb6");
+        assertEquals(name, "Service FDNT");
+        assertEquals(description, "Service FDNT");
+        assertEquals(type, "Service");
+        assertEquals(category, "Network L1-3");
+        assertEquals(ecompGeneratedNaming, "true");
+        assertEquals(namingPolicy, "test");
+        assertEquals(serviceEcompNaming, "true");
+    }
+    //endregion
+   
 }
