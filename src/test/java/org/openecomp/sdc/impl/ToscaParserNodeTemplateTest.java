@@ -483,8 +483,15 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	public void testServiceNodeTemplateBySdcType() {
 		List<NodeTemplate> serviceVfList = fdntCsarHelper.getServiceNodeTemplateBySdcType(SdcTypes.VF);
 		assertNotNull(serviceVfList);
-		assertEquals(2, serviceVfList.size());
+		assertEquals(serviceVfList.size(), 2);
 		assertEquals(serviceVfList.get(0).getName(), "FDNT 1");
+	}
+
+	@Test
+	public void testServiceNodeTemplateBySdcTypeServiceProxy() {
+		List<NodeTemplate> serviceProxies = portMirroring.getServiceNodeTemplateBySdcType(SdcTypes.SERVICE_PROXY);
+		assertNotNull(serviceProxies);
+		assertEquals(serviceProxies.size(), 2);
 	}
 
 	@Test

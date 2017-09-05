@@ -634,13 +634,13 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             	if (sdcType.equals(SdcTypes.VFC) && isVNF)  {
             		return nodeTemplates.stream()
                     		.filter(x -> (x.getMetaData() != null &&
-                    			sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  isVNFType(x))
+                    			sdcType.getValue().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  isVNFType(x))
                     		.collect(Collectors.toList());
             	}
             	else {
                     return nodeTemplates.stream()
                     		.filter(x -> (x.getMetaData() != null &&
-                    			sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  !isVNFType(x))
+                    			sdcType.getValue().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  !isVNFType(x))
                     		.collect(Collectors.toList());
             	}
             }
@@ -706,9 +706,9 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         }
 
         if (nodeTemplate.getMetaData() != null) {
-            String type = nodeTemplate.getMetaData().getValue("type");
+            String type = nodeTemplate.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE);
             log.debug("hasTopology - node template {} is a {} type", nodeTemplate.getName(), type);
-            return SdcTypes.isComplex(SdcTypes.valueOf(type));
+            return SdcTypes.isComplex(type);
         }
 
         return false;
@@ -852,7 +852,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         List<NodeTemplate> nodeTemplates = topologyTemplate.getNodeTemplates();
 
         if (nodeTemplates != null && nodeTemplates.size() > 0)
-            return nodeTemplates.stream().filter(x -> (x.getMetaData() != null && sdcType.toString().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)))).collect(Collectors.toList());
+            return nodeTemplates.stream().filter(x -> (x.getMetaData() != null && sdcType.getValue().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)))).collect(Collectors.toList());
 
         log.debug("getNodeTemplateBySdcType - topologyTemplate's nodeTemplates not exist");
         return new ArrayList<>();

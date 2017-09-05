@@ -22,14 +22,25 @@ package org.openecomp.sdc.tosca.parser.impl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public enum SdcTypes {
 
-    CP, VL, VF, VFC, PNF, SERVICE, CVFC, SERVICE_PROXY, CONFIGURATION;
+    CP("CP"), VL("VL"), VF("VF"), VFC("VFC"), PNF("PNF"), SERVICE("Service"), CVFC("CVFC"), SERVICE_PROXY("Service Proxy"), CONFIGURATION("Configuration");
 
-    public static List<SdcTypes> complexTypes = Arrays.asList(VF, PNF, SERVICE, CVFC);
+    private String value;
 
-    public static boolean isComplex(SdcTypes sdcType) {
+    private static List<String> complexTypes = Arrays.asList(VF, PNF, SERVICE, CVFC).stream().map(SdcTypes::getValue).collect(Collectors.toList());
+
+    private SdcTypes(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static boolean isComplex(String sdcType) {
         return complexTypes.contains(sdcType);
     }
 }

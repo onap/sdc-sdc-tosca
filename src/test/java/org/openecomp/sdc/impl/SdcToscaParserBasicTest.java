@@ -33,8 +33,10 @@ public abstract class SdcToscaParserBasicTest {
     static ISdcCsarHelper resolveGetInputCsarFalse;
     static ISdcCsarHelper resolveGetInputCsarQA;
     static ISdcCsarHelper resolveReqsCapsCsarQA;
+	static ISdcCsarHelper portMirroring;
 
-    static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
+
+	static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
     
     @BeforeClass
     public static void init() throws SdcToscaParserException, JToscaException, IOException {
@@ -53,6 +55,7 @@ public abstract class SdcToscaParserBasicTest {
 		resolveGetInputCsarQA = getCsarHelper("csars/service-resolve-get-input-csar_QA.csar");
 		QAServiceForToscaParserTests = getCsarHelper("csars/service-ServiceForToscaParserTests-csar.csar");
 		resolveReqsCapsCsarQA = getCsarHelper("csars/service-sunny-flow2.csar");
+		portMirroring = getCsarHelper("csars/service-PortMirroring.csar");
 		
         fdntCsarHelper_Data = new HashMap<String, HashMap<String, List<String>>>(){
     		{
