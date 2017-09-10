@@ -5,7 +5,7 @@
 	
 	<groupId>org.openecomp.sdc.sdc-tosca</groupId>
 	<artifactId>sdc-tosca</artifactId>
-	<name>SDC Tosca Parser</name>
+	<name>sdc-sdc-tosca</name>
 	<description>SDC Tosca Parser JAR file for use by consumers</description>
 	<version>1.1.51-SNAPSHOT</version>
 	<packaging>jar</packaging>
