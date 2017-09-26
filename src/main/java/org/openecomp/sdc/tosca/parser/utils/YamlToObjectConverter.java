@@ -20,6 +20,7 @@
 
 package org.openecomp.sdc.tosca.parser.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -109,11 +110,13 @@ public class YamlToObjectConverter {
 	public <T> T convertFromString(String yamlContents, Class<T> className) {
 
 		T config = null;
-
-		Yaml yaml = getYamlByClassName(className);
-
+		Yaml yaml = new Yaml();
 		try {
-			config = yaml.loadAs(yamlContents, className);
+			Object data = yaml.load(yamlContents);
+            // convert it manually with jackson instead of using snakeyaml auto converter,
+            // because of problematic complex objects like JtoscaValidationIssueConfiguration
+			ObjectMapper mapper = new ObjectMapper(); 
+			config = mapper.convertValue(data, className);
 		} catch (Exception e){
 			log.error("Failed to convert YAML {} to object." , yamlContents, e);
 		}
