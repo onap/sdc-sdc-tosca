@@ -924,7 +924,16 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertEquals("VF_1_V_port_1", vfList.get(0).getMetaData().getValue("name"));
 	}
 	// endregion Added by QA - Continue with testings of resolve get_input
-	
+
+
+	@Test
+	public void testResolveGetInputArrayStructure() {
+		List<NodeTemplate> vfcs = resolveGetInputCsarQA.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
+		Object propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyAsObject(vfcs.get(0), "compute_pd_server_name");
+		assertEquals( ((ArrayList)propertyAsObject).get(0).toString(), "\"ZRDM1MOGX01MPD001\"");
+		propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
+		assertEquals( ((ArrayList)propertyAsObject).get(1), null);
+	}
 }
 
 
