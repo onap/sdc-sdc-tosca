@@ -32,6 +32,7 @@ public class ConfigurationManager {
 	private void initialConfigObjectsFromFiles() {
 		loadConfigurationClass(ErrorConfiguration.class);
 		loadConfigurationClass(Configuration.class);
+		loadConfigurationClass(JtoscaValidationIssueConfiguration.class);
 	}
 
 	private <T> void loadConfigurationClass(Class<T> clazz) {
@@ -60,13 +61,13 @@ public class ConfigurationManager {
 
 
 	public static ConfigurationManager getInstance() {
-		if (instance == null) {
-			synchronized (ConfigurationManager.class) {
-				if (instance == null) {
+	//	if (instance == null) {
+	//		synchronized (ConfigurationManager.class) {
+	//			if (instance == null) {
 					instance = new ConfigurationManager();
-				}
-			}
-		}
+	//			}
+	//		}
+	//	}
 		return instance;
 	}
 
@@ -102,6 +103,9 @@ public class ConfigurationManager {
 
 	public ErrorConfiguration getErrorConfiguration() {
 		return (ErrorConfiguration) configurations.get((ErrorConfiguration.class.getSimpleName()));
+	}
+	public JtoscaValidationIssueConfiguration getJtoscaValidationIssueConfiguration() {
+		return (JtoscaValidationIssueConfiguration) configurations.get((JtoscaValidationIssueConfiguration.class.getSimpleName()));
 	}
 
 	public Configuration getConfiguration() {
