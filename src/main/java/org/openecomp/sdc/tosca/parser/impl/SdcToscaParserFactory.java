@@ -44,26 +44,10 @@ public class SdcToscaParserFactory {
      * @throws SdcToscaParserException - in case the path or CSAR are invalid.
      */
     public ISdcCsarHelper getSdcCsarHelper(String csarPath) throws SdcToscaParserException {
-        return init(csarPath, true);
-    }
-
-    /**
-     * Get an ISdcCsarHelper object for this CSAR file.
-     *
-     * @param csarPath - the absolute path to CSAR file.
-     * @param resolveGetInput - resolve get_input properties
-     * @return ISdcCsarHelper object.
-     * @throws SdcToscaParserException - in case the path or CSAR are invalid.
-     */
-    public ISdcCsarHelper getSdcCsarHelper(String csarPath, boolean resolveGetInput) throws SdcToscaParserException {
-        return init(csarPath, resolveGetInput);
-    }
-
-    private ISdcCsarHelper init(String csarPath, boolean resolveGetInput) throws SdcToscaParserException {
         synchronized (SdcToscaParserFactory.class) {
             ToscaTemplate tosca = null;
             try {
-                tosca = new ToscaTemplate(csarPath, null, true, null, resolveGetInput);
+                tosca = new ToscaTemplate(csarPath, null, true, null);
             } catch (JToscaException e) {
                 throwSdcToscaParserException(e);
             }
