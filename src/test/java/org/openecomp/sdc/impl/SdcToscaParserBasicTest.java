@@ -12,6 +12,7 @@ import org.openecomp.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.openecomp.sdc.tosca.parser.impl.SdcToscaParserFactory;
 import org.openecomp.sdc.toscaparser.api.common.JToscaException;
+import org.openecomp.sdc.toscaparser.api.utils.ThreadLocalsHolder;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -27,10 +28,8 @@ public abstract class SdcToscaParserBasicTest {
     static ISdcCsarHelper nfodCsarHlper;
     static ISdcCsarHelper ipAssignCsarHelper;
     static ISdcCsarHelper nestedVfcCsarHlper;
-    static ISdcCsarHelper nfodNEWCsarHlper;
-    static ISdcCsarHelper resolveGetInputCsar;
-    static ISdcCsarHelper resolveGetInputCsarFalse;
-    static ISdcCsarHelper resolveGetInputCsarQA;
+    static ISdcCsarHelper nfodNEWCsarHlper;    
+
 
     static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
     
@@ -38,18 +37,15 @@ public abstract class SdcToscaParserBasicTest {
     public static void init() throws SdcToscaParserException, JToscaException, IOException {
 
         factory = SdcToscaParserFactory.getInstance();
-        fdntCsarHelper = getCsarHelper("csars/service-sunny-flow.csar", false);
-        rainyCsarHelperMultiVfs = getCsarHelper("csars/service-ServiceFdnt-csar-rainy.csar", false);
-        rainyCsarHelperSingleVf = getCsarHelper("csars/service-ServiceFdnt-csar.csar", false);
-		fdntCsarHelperWithInputs = getCsarHelper("csars/service-ServiceFdnt-with-get-input.csar", false);
-		nfodCsarHlper =  getCsarHelper("csars/service-NfodService-csar.csar", false);
-		ipAssignCsarHelper =  getCsarHelper("csars/service-Ipassignservice-csar.csar", false);
-		nestedVfcCsarHlper = getCsarHelper("csars/service-nested-vfc-csar.csar", false);
-		nfodNEWCsarHlper =  getCsarHelper("csars/service-Nfod2images-csar.csar", false);
-		resolveGetInputCsar = getCsarHelper("csars/service-resolve-get-input-csar.csar");
-		resolveGetInputCsarFalse = getCsarHelper("csars/service-resolve-get-input-csar.csar",false);
-		resolveGetInputCsarQA = getCsarHelper("csars/service-resolve-get-input-csar_QA.csar");
-
+        fdntCsarHelper = getCsarHelper("csars/service-sunny-flow.csar");
+        rainyCsarHelperMultiVfs = getCsarHelper("csars/service-ServiceFdnt-csar-rainy.csar");
+        rainyCsarHelperSingleVf = getCsarHelper("csars/service-ServiceFdnt-csar.csar");
+		fdntCsarHelperWithInputs = getCsarHelper("csars/service-ServiceFdnt-with-get-input.csar");
+		nfodCsarHlper =  getCsarHelper("csars/service-NfodService-csar.csar");
+		ipAssignCsarHelper =  getCsarHelper("csars/service-Ipassignservice-csar.csar");
+		nestedVfcCsarHlper = getCsarHelper("csars/service-nested-vfc-csar.csar");
+		nfodNEWCsarHlper =  getCsarHelper("csars/service-Nfod2images-csar.csar");
+		
         fdntCsarHelper_Data = new HashMap<String, HashMap<String, List<String>>>(){
     		{
     			HashMap<String, List<String>> FDNT ;
@@ -119,15 +115,7 @@ public abstract class SdcToscaParserBasicTest {
         ISdcCsarHelper sdcCsarHelper = factory.getSdcCsarHelper(file1.getAbsolutePath());
 		return sdcCsarHelper;
 	}
-
-	protected static ISdcCsarHelper getCsarHelper(String path, boolean resolveGetInput) throws SdcToscaParserException {
-		System.out.println("Parsing CSAR "+path+"...");
-		String fileStr1 = SdcToscaParserBasicTest.class.getClassLoader().getResource(path).getFile();
-		File file1 = new File(fileStr1);
-		ISdcCsarHelper sdcCsarHelper = factory.getSdcCsarHelper(file1.getAbsolutePath(), resolveGetInput);
-		return sdcCsarHelper;
-	}
-
+    
     @BeforeMethod
     public void setupTest(Method method) {
         System.out.println("#### Starting Test " + method.getName() + " ###########");
