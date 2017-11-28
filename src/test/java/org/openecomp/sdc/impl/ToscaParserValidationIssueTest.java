@@ -46,7 +46,7 @@ public class ToscaParserValidationIssueTest extends SdcToscaParserBasicTest {
 	public void testMultiSinceConformanceLevelIssues() throws SdcToscaParserException {
 		ISdcCsarHelper Nfod2images = getCsarHelper("csars/service-Nfod2images-csar.csar");//conformance level 4.0
 		List<JToscaValidationIssue> notAnalyzedReport = factory.getNotAnalyzadExceptions();
-		assertEquals( notAnalyzedReport.size(),17);
+		assertEquals( notAnalyzedReport.size(),2);
 		List<JToscaValidationIssue> warningsReport = factory.getWarningExceptions();
 		assertEquals( warningsReport.size(),0);
 		List<JToscaValidationIssue> criticalsReport = factory.getCriticalExceptions();
