@@ -15,6 +15,7 @@ import org.openecomp.sdc.toscaparser.api.common.JToscaException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 public abstract class SdcToscaParserBasicTest {
 
@@ -38,7 +39,7 @@ public abstract class SdcToscaParserBasicTest {
 
 	static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
     
-    @BeforeClass
+    @BeforeSuite
     public static void init() throws SdcToscaParserException, JToscaException, IOException {
 
         factory = SdcToscaParserFactory.getInstance();

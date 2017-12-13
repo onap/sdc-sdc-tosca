@@ -18,12 +18,9 @@ public class ConfigurationManager {
 
 	private static final String CONFIGURATION_DIR = "config/";
 	private static volatile ConfigurationManager instance;
-//    private Configuration configuration;
-//    private ErrorConfiguration errorConfiguration;
+
 
 	Map<String, Object> configurations = new HashMap<String, Object>();
-
-
 
 	private ConfigurationManager() {
 		initialConfigObjectsFromFiles();
@@ -40,18 +37,26 @@ public class ConfigurationManager {
 		configurations.put(clazz.getSimpleName(), object);
 	}
 
+	private <T> void loadConfigurationClass(Class<T> clazz, String fileName) {
+		T object = getObjectFromYaml(clazz,fileName);
+		configurations.put(clazz.getSimpleName(), object);
+	}
 
-	public <T> T getObjectFromYaml(Class<T> className) {
+	public static <T> T getObjectFromYaml(Class<T> className) {
+		return getObjectFromYaml(className, null);
+	}
+
+	public static <T> T getObjectFromYaml(Class<T> className, String fileName) {
 
 
-		String configFileName = calculateFileName(className);
+		String configFileName = fileName != null ? fileName : calculateFileName(className); ;
 
 		URL url = Resources.getResource(CONFIGURATION_DIR + configFileName);
 		String configFileContents = null;
 		try {
 			configFileContents = Resources.toString(url, Charsets.UTF_8);
 		} catch (IOException e) {
-			log.error("ConfigurationManager - Failed to load configuration file");
+			log.error("ConfigurationManager - Failed to load configuration file {}", configFileName, e);
 		}
 		YamlToObjectConverter yamlToObjectConverter = new YamlToObjectConverter();
 		T object = yamlToObjectConverter.convertFromString(configFileContents, className);
@@ -61,13 +66,13 @@ public class ConfigurationManager {
 
 
 	public static ConfigurationManager getInstance() {
-	//	if (instance == null) {
-	//		synchronized (ConfigurationManager.class) {
-	//			if (instance == null) {
+		if (instance == null) {
+			synchronized (ConfigurationManager.class) {
+				if (instance == null) {
 					instance = new ConfigurationManager();
-	//			}
-	//		}
-	//	}
+				}
+			}
+		}
 		return instance;
 	}
 
@@ -107,7 +112,9 @@ public class ConfigurationManager {
 	public JtoscaValidationIssueConfiguration getJtoscaValidationIssueConfiguration() {
 		return (JtoscaValidationIssueConfiguration) configurations.get((JtoscaValidationIssueConfiguration.class.getSimpleName()));
 	}
-
+	public void setJtoscaValidationIssueConfiguration(String fileName) {
+		loadConfigurationClass(JtoscaValidationIssueConfiguration.class, fileName);
+	}
 	public Configuration getConfiguration() {
 		return (Configuration) configurations.get((Configuration.class.getSimpleName()));
 	}

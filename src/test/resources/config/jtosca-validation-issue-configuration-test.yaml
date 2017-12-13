@@ -1,28 +1,32 @@
-# jTosca validation issues 
-#by error code, type the validation issue to be CRITICAL/WARNING 
+# jTosca validation issues
+#by error code, type the validation issue to be CRITICAL/WARNING
 # since Conformance level considered to this type. for example:
-#JE001: 
-#      - issueType: WARNING
-#        sinceCsarConformanceLevel: 3.0     
-#      - issueType: WARNING
+#JE001:
+#      - type: WARNING,
+#        sinceCsarConformanceLevel: 3.0
+#      - type: WARNING,
 #        sinceCsarConformanceLevel: 5.0
 validationIssues:
     # TypeMismatchError
-    JE001: 
+    JE001:
         - issueType: WARNING
           sinceCsarConformanceLevel: 3.0
+        - issueType: CRITICAL
+          sinceCsarConformanceLevel: 4.0
+        - issueType: WARNING
+          sinceCsarConformanceLevel: 5.0
     # MissingType
     JE002:
         - issueType: WARNING
           sinceCsarConformanceLevel: 3.0
     #MissingRequiredFieldError
     JE003:
-        - issueType: WARNING
-          sinceCsarConformanceLevel: 3.0
+        - issueType: CRITICAL
+          sinceCsarConformanceLevel: 4.0
     #MissingRequiredFieldError2
     JE004:
         - issueType: WARNING
-          sinceCsarConformanceLevel: 3.0
+          sinceCsarConformanceLevel: 2.0
     #InvalidGroupTargetException
     JE005:
         - issueType: WARNING
@@ -31,6 +35,10 @@ validationIssues:
     JE006:
         - issueType: WARNING
           sinceCsarConformanceLevel: 3.0
+        - issueType: CRITICAL
+          sinceCsarConformanceLevel: 4.0
+        - issueType: WARNING
+          sinceCsarConformanceLevel: 5.0
     #The unit \"%s\" is not valid
     JE007:
         - issueType: WARNING

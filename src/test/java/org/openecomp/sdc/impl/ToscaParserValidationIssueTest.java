@@ -1,16 +1,40 @@
 package org.openecomp.sdc.impl;
 
-import static org.testng.Assert.assertEquals;
+import org.apache.commons.io.IOUtils;
+import org.openecomp.sdc.tosca.parser.api.ISdcCsarHelper;
+import org.openecomp.sdc.tosca.parser.config.ConfigurationManager;
+import org.openecomp.sdc.tosca.parser.config.JtoscaValidationIssueConfiguration;
+import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
+import org.openecomp.sdc.toscaparser.api.common.JToscaValidationIssue;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.openecomp.sdc.tosca.parser.api.ISdcCsarHelper;
-import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
-import org.openecomp.sdc.toscaparser.api.common.JToscaValidationIssue;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 
 public class ToscaParserValidationIssueTest extends SdcToscaParserBasicTest {
+	protected static ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+
+	@BeforeClass
+	public void loadJtoscaValidationIssueConfiguration() throws IOException {
+		//load the tests dedicated configuration
+		configurationManager.setJtoscaValidationIssueConfiguration( "jtosca-validation-issue-configuration-test.yaml");
+		factory.setConfigurationManager(configurationManager);
+	}
+
+	@AfterClass
+	public void loadJtoscaValidationIssueOriginalConfiguration() throws IOException {
+		//load the tests dedicated configuration
+		configurationManager.setJtoscaValidationIssueConfiguration("jtosca-validation-issue-configuration.yaml");
+		factory.setConfigurationManager(configurationManager);
+
+	}
+
 
 	@Test
 	public void testNoValidationIssues() throws SdcToscaParserException {
@@ -42,15 +66,25 @@ public class ToscaParserValidationIssueTest extends SdcToscaParserBasicTest {
 		List<JToscaValidationIssue> criticalsReport = factory.getCriticalExceptions();
 		assertEquals( criticalsReport.size(),0);
 	}
+
+	@Test(expectedExceptions = SdcToscaParserException.class)
+	public void testCriticalIssueThrowsSdcToscaParserException() throws SdcToscaParserException {
+		getCsarHelper("csars/service-Nfod2images-csar.csar");//conformance level 4.0
+	}
+
 	@Test
-	public void testMultiSinceConformanceLevelIssues() throws SdcToscaParserException {
-		ISdcCsarHelper Nfod2images = getCsarHelper("csars/service-Nfod2images-csar.csar");//conformance level 4.0
+	public void testMultiSinceConformanceLevelIssues() {
+		try {
+			ISdcCsarHelper Nfod2images = getCsarHelper("csars/service-Nfod2images-csar.csar");//conformance level 4.0
+		} catch (SdcToscaParserException e) {
+			System.out.println("SdcToscaParserException is caught here - this is WAD in this specific test.");
+		}
 		List<JToscaValidationIssue> notAnalyzedReport = factory.getNotAnalyzadExceptions();
-		assertEquals( notAnalyzedReport.size(),2);
+		assertEquals(2, notAnalyzedReport.size());
 		List<JToscaValidationIssue> warningsReport = factory.getWarningExceptions();
-		assertEquals( warningsReport.size(),0);
+		assertEquals( 0, warningsReport.size());
 		List<JToscaValidationIssue> criticalsReport = factory.getCriticalExceptions();
-		assertEquals( criticalsReport.size(),24);
+		assertEquals( 24, criticalsReport.size());
 		//JE006 multy values sinceCsarConformanceLevel
 		assertEquals( criticalsReport.stream().filter(c->c.getCode().equals("JE006")).collect(Collectors.toList()).size(), 18);
 		assertEquals( criticalsReport.stream().filter(c->c.getCode().equals("JE003")).collect(Collectors.toList()).size(), 6);

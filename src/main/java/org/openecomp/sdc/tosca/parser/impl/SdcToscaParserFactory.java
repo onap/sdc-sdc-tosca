@@ -18,17 +18,13 @@ import org.slf4j.LoggerFactory;
 
 public class SdcToscaParserFactory {
 	private static Logger log = LoggerFactory.getLogger(SdcToscaParserFactory.class.getName());
-	
+
+    private static ConfigurationManager configurationManager;
     private static volatile SdcToscaParserFactory instance;
-    private static Configuration configuration;
-    private static ErrorConfiguration errorConfiguration;
-    private static JtoscaValidationIssueConfiguration jtoscaValidationIssueConfiguration;
     private List<JToscaValidationIssue> criticalExceptions = new ArrayList<>();
     private List<JToscaValidationIssue> warningExceptions = new ArrayList<>();
     private List<JToscaValidationIssue> notAnalyzadExceptions = new ArrayList<>();
-    private SdcToscaParserFactory() {
-
-    }
+    private SdcToscaParserFactory() {}
 
     /**
      * Get an SdcToscaParserFactory instance.
@@ -39,13 +35,15 @@ public class SdcToscaParserFactory {
             synchronized (SdcToscaParserFactory.class) {
                 if (instance == null) {
                     instance = new SdcToscaParserFactory();
-                    configuration = ConfigurationManager.getInstance().getConfiguration();
-                    errorConfiguration = ConfigurationManager.getInstance().getErrorConfiguration();
-                    jtoscaValidationIssueConfiguration = ConfigurationManager.getInstance().getJtoscaValidationIssueConfiguration();
+                    configurationManager = ConfigurationManager.getInstance();
                 }
             }
         }
         return instance;
+    }
+
+    public static void setConfigurationManager(ConfigurationManager configurationManager) {
+        SdcToscaParserFactory.configurationManager = configurationManager;
     }
 
     /**
@@ -85,8 +83,7 @@ public class SdcToscaParserFactory {
             try {
                 handleErrorsByTypes(csarPath, cSarConformanceLevel);
 			} catch (JToscaException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                throwSdcToscaParserException(e);
 			}
             return sdcCsarHelperImpl;
         }
@@ -95,7 +92,7 @@ public class SdcToscaParserFactory {
     private void handleErrorsByTypes(String csarPath, String cSarConformanceLevel) throws JToscaException {
         clearValidationIssuesLists();
     	for(JToscaValidationIssue toscaValidationIssue : ThreadLocalsHolder.getCollector().getValidationIssues().values()){
-            List<JToscaValidationIssueInfo> issueInfos = jtoscaValidationIssueConfiguration.getValidationIssues().get(toscaValidationIssue.getCode());
+            List<JToscaValidationIssueInfo> issueInfos = configurationManager.getJtoscaValidationIssueConfiguration().getValidationIssues().get(toscaValidationIssue.getCode());
     		if(issueInfos != null && !issueInfos.isEmpty()){
                 JToscaValidationIssueInfo issueInfo = null;
     			issueInfo = issueInfos.stream()
@@ -167,7 +164,7 @@ public class SdcToscaParserFactory {
 
 
 	private void validateCsarVersion(String cSarVersion) throws SdcToscaParserException {
-        ConformanceLevel level = configuration.getConformanceLevel();
+        ConformanceLevel level = configurationManager.getConfiguration().getConformanceLevel();
         String minVersion = level.getMinVersion();
         String maxVersion = level.getMaxVersion();
         if (cSarVersion != null) {
@@ -188,13 +185,15 @@ public class SdcToscaParserFactory {
         return false;
     }
     private void throwConformanceLevelException(String minVersion, String maxVersion) throws SdcToscaParserException {
-        ErrorInfo errorInfo = errorConfiguration.getErrorInfo(SdcToscaParserErrors.CONFORMANCE_LEVEL_ERROR.toString());
+        ErrorInfo errorInfo = configurationManager.getErrorConfiguration().getErrorInfo(SdcToscaParserErrors.CONFORMANCE_LEVEL_ERROR.toString());
         throw new SdcToscaParserException(String.format(errorInfo.getMessage(), minVersion, maxVersion), errorInfo.getCode());
     }
 
     private void throwSdcToscaParserException(JToscaException e) throws SdcToscaParserException {
-        ErrorInfo errorInfo = errorConfiguration.getErrorInfo(SdcToscaParserErrors.getSdcErrorByJToscaError(JToscaErrorCodes.getByCode(e.getCode())).toString());
+        ErrorInfo errorInfo = configurationManager.getErrorConfiguration().getErrorInfo(SdcToscaParserErrors.getSdcErrorByJToscaError(JToscaErrorCodes.getByCode(e.getCode())).toString());
         throw new SdcToscaParserException(errorInfo.getMessage(), errorInfo.getCode());
     }
+
+
 
 }
