@@ -118,4 +118,7 @@ public class ConfigurationManager {
 	public Configuration getConfiguration() {
 		return (Configuration) configurations.get((Configuration.class.getSimpleName()));
 	}
+	public void setErrorConfiguration(String fileName) {
+		loadConfigurationClass(ErrorConfiguration.class, fileName);
+	}
 }

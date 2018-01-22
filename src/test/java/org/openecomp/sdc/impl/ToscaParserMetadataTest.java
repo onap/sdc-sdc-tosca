@@ -1,8 +1,11 @@
 package org.openecomp.sdc.impl;
 
+import org.openecomp.sdc.tosca.parser.api.ISdcCsarHelper;
+import org.openecomp.sdc.tosca.parser.config.ConfigurationManager;
+import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.openecomp.sdc.toscaparser.api.NodeTemplate;
-import org.testng.annotations.Test;
 import org.openecomp.sdc.toscaparser.api.elements.Metadata;
+import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -187,5 +190,30 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
         assertEquals(serviceEcompNaming, "true");
     }
     //endregion
+
+  @Test
+  public void testCSARMissingConformanceLevelWithCustomErrorConfig() throws
+      SdcToscaParserException {
+    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+    configurationManager.setErrorConfiguration("error-configuration-test.yaml");
+    factory.setConfigurationManager(configurationManager);
+
+    ISdcCsarHelper missingCSARMetaCsarCustomConfig = getCsarHelper
+        ("csars/service-missing-csar-meta-file.csar");
+    String conformanceLevel = missingCSARMetaCsarCustomConfig.getConformanceLevel();
+    assertNotNull(conformanceLevel);
+    assertEquals(conformanceLevel, configurationManager.getConfiguration().getConformanceLevel()
+        .getMaxVersion());
+
+    configurationManager.setErrorConfiguration("error-configuration.yaml");
+    factory.setConfigurationManager(configurationManager);
+  }
+
+  @Test(expectedExceptions = SdcToscaParserException.class)
+  public void testCSARMissingConformanceLevelWithDefaultErrorConfig() throws
+      SdcToscaParserException {
+    ISdcCsarHelper missingCSARMetaCsarDefaultConfig = getCsarHelper("csars/service-missing-csar-meta-file.csar");
+    missingCSARMetaCsarDefaultConfig.getConformanceLevel();
+  }
    
 }

@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.api.ISdcCsarHelper;
+import org.openecomp.sdc.tosca.parser.config.ConfigurationManager;
 import org.openecomp.sdc.toscaparser.api.CapabilityAssignments;
 import org.openecomp.sdc.tosca.parser.utils.GeneralUtility;
 import org.openecomp.sdc.toscaparser.api.RequirementAssignments;
@@ -46,10 +47,16 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     private static final String PATH_DELIMITER = "#";
     private static final String CUSTOMIZATION_UUID = "customizationUUID";
     private ToscaTemplate toscaTemplate;
+    private ConfigurationManager configurationManager;
     private static Logger log = LoggerFactory.getLogger(SdcCsarHelperImpl.class.getName());
 
     public SdcCsarHelperImpl(ToscaTemplate toscaTemplate) {
         this.toscaTemplate = toscaTemplate;
+    }
+
+    public SdcCsarHelperImpl(ToscaTemplate toscaTemplate, ConfigurationManager configurationManager) {
+        this.toscaTemplate = toscaTemplate;
+        this.configurationManager = configurationManager;
     }
 
     @Override
@@ -579,24 +586,40 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return nodeTemplate.getTypeDefinition().getType();
     }
 
-	@Override
-	public String getConformanceLevel() {
-		LinkedHashMap<String, Object> csarMeta = toscaTemplate.getMetaProperties("csar.meta");
-		if (csarMeta == null){
-			log.warn("No csar.meta file is found in CSAR - this file should hold the conformance level of the CSAR. This might be OK for older CSARs.");
-			return null;
-		}
+    /**
+     * This methdd is returning the csarConformanceLevel for input CSAR
+     * When csarConformanceLevel is configured with failOnError as False in Error Configuration; it
+     * assigns the default value to csarConformanceLevel which is the max level provided in
+     * Configuration file
+     * @return csarConformanceLevel
+     */
+    @Override
+    public String getConformanceLevel() {
+      LinkedHashMap<String, Object> csarMeta = toscaTemplate.getMetaProperties("csar.meta");
+      if (csarMeta == null){
+        log.warn("No csar.meta file is found in CSAR - this file should hold the conformance level of the CSAR. This might be OK for older CSARs.");
+        if (configurationManager != null && !configurationManager.getErrorConfiguration()
+            .getErrorInfo("CONFORMANCE_LEVEL_ERROR").getFailOnError()){
+          String csarConLevel = configurationManager.getConfiguration().getConformanceLevel().getMaxVersion();
+          log.warn("csarConformanceLevel is not found in input csar; defaulting to max version {}" , csarConLevel);
+          return csarConLevel;
+        }
+        else {
+          log.warn("csarConformanceLevel is not found in input csar; returning null as no defaults defined in error configuration");
+          return null;
+        }
+      }
 
-		Object conformanceLevel = csarMeta.get("SDC-TOSCA-Definitions-Version");
-		if (conformanceLevel != null){
-			String confLevelStr = conformanceLevel.toString();
-			log.debug("CSAR conformance level is {}", confLevelStr);
-			return confLevelStr;
-		} else {
-			log.error("Invalid csar.meta file - no entry found for SDC-TOSCA-Definitions-Version key. This entry should hold the conformance level.");
-			return null;
-		}
-	}
+      Object conformanceLevel = csarMeta.get("SDC-TOSCA-Definitions-Version");
+      if (conformanceLevel != null){
+        String confLevelStr = conformanceLevel.toString();
+        log.debug("CSAR conformance level is {}", confLevelStr);
+        return confLevelStr;
+      } else {
+        log.error("Invalid csar.meta file - no entry found for SDC-TOSCA-Definitions-Version key. This entry should hold the conformance level.");
+        return null;
+      }
+    }
 	
 	
 	@Override
