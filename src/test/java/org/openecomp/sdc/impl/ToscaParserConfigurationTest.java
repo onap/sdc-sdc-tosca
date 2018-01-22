@@ -1,12 +1,14 @@
 package org.openecomp.sdc.impl;
 
 import org.openecomp.sdc.tosca.parser.config.ErrorConfiguration;
+import org.openecomp.sdc.tosca.parser.config.JtoscaValidationIssueConfiguration;
 import org.testng.annotations.Test;
 import org.openecomp.sdc.tosca.parser.config.Configuration;
 import org.openecomp.sdc.tosca.parser.config.ConfigurationManager;
 
 import java.io.IOException;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 public class ToscaParserConfigurationTest extends SdcToscaParserBasicTest {
@@ -28,4 +30,22 @@ public class ToscaParserConfigurationTest extends SdcToscaParserBasicTest {
         assertNotNull(errorConfig.getErrors());
     }
 
+    @Test
+    public void testSetErrorConfiguration() throws IOException {
+        ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+        configurationManager.setErrorConfiguration("error-configuration-test.yaml");
+        ErrorConfiguration errorConfig = configurationManager.getErrorConfiguration();
+        assertEquals(false, errorConfig.getErrorInfo("CONFORMANCE_LEVEL_ERROR").getFailOnError());
+        assertEquals(true, errorConfig.getErrorInfo("FILE_NOT_FOUND").getFailOnError());
+    }
+
+    @Test
+    public void testSetJtoscaValidationIssueConfiguration() throws IOException {
+        ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+        configurationManager.setJtoscaValidationIssueConfiguration(
+            "jtosca-validation-issue-configuration-test.yaml");
+        JtoscaValidationIssueConfiguration issueConfig = configurationManager
+            .getJtoscaValidationIssueConfiguration();
+        assertNotNull(issueConfig);
+    }
 }
