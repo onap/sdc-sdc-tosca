@@ -12,7 +12,7 @@ errors:
     }
     CONFORMANCE_LEVEL_ERROR: {
         code: TP0003,
-        failOnError: true,
+        failOnError: false,
         message: "Error: CSAR version is unsupported. Parser supports versions %s to %s." 
     }
     GENERAL_ERROR: {

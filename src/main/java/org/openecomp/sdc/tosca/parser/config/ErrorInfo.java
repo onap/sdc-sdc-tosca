@@ -24,6 +24,7 @@ public class ErrorInfo {
 
 	private String code;
 	private String message;
+	private boolean failOnError;
 
 	public String getCode() {
 		return code;
@@ -40,10 +41,19 @@ public class ErrorInfo {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
+	public boolean getFailOnError() {
+		return failOnError;
+	}
+
+	public void setFailOnError(boolean failOnError) {
+		this.failOnError = failOnError;
+	}
 
 	public void cloneData(ErrorInfo other) {
 		this.code = other.getCode();
 		this.message = other.getMessage();
+		this.failOnError = other.getFailOnError();
 	}
 
 }
