@@ -77,7 +77,7 @@ public class SdcToscaParserFactory {
             } catch (JToscaException e) {
                 throwSdcToscaParserException(e);
             }
-            SdcCsarHelperImpl sdcCsarHelperImpl = new SdcCsarHelperImpl(tosca);
+            SdcCsarHelperImpl sdcCsarHelperImpl = new SdcCsarHelperImpl(tosca, configurationManager);
             String cSarConformanceLevel = sdcCsarHelperImpl.getConformanceLevel();
             validateCsarVersion(cSarConformanceLevel);
             try {

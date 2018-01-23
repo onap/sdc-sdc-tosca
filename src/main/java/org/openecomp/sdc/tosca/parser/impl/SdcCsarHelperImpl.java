@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.api.ISdcCsarHelper;
+import org.openecomp.sdc.tosca.parser.config.ConfigurationManager;
 import org.openecomp.sdc.toscaparser.api.CapabilityAssignments;
 import org.openecomp.sdc.tosca.parser.utils.GeneralUtility;
 import org.openecomp.sdc.toscaparser.api.RequirementAssignments;
@@ -46,10 +47,12 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     private static final String PATH_DELIMITER = "#";
     private static final String CUSTOMIZATION_UUID = "customizationUUID";
     private ToscaTemplate toscaTemplate;
+    private ConfigurationManager configurationManager;
     private static Logger log = LoggerFactory.getLogger(SdcCsarHelperImpl.class.getName());
 
-    public SdcCsarHelperImpl(ToscaTemplate toscaTemplate) {
+    public SdcCsarHelperImpl(ToscaTemplate toscaTemplate, ConfigurationManager configurationManager) {
         this.toscaTemplate = toscaTemplate;
+        this.configurationManager = configurationManager;
     }
 
     @Override
@@ -584,7 +587,19 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 		LinkedHashMap<String, Object> csarMeta = toscaTemplate.getMetaProperties("csar.meta");
 		if (csarMeta == null){
 			log.warn("No csar.meta file is found in CSAR - this file should hold the conformance level of the CSAR. This might be OK for older CSARs.");
-			return null;
+        // Assign default value to csarConformanceLevel
+        // when it is configured with failOnError as False
+        if (configurationManager.getErrorConfiguration().getErrorInfo("CONFORMANCE_LEVEL_ERROR")
+            .getFailOnError().equalsIgnoreCase("False")){
+            String csarConLevel = configurationManager.getConfiguration().getConformanceLevel()
+                .getMaxVersion();
+            log.warn("csarConformanceLevel is not found in input csar; defaulting to max version " +
+                "" + csarConLevel);
+            return csarConLevel;
+        }
+        else {
+            return null;
+        }
 		}
 
 		Object conformanceLevel = csarMeta.get("SDC-TOSCA-Definitions-Version");
