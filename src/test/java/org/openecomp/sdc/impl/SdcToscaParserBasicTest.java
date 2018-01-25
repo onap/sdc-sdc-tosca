@@ -35,6 +35,7 @@ public abstract class SdcToscaParserBasicTest {
     static ISdcCsarHelper resolveGetInputCsarQA;
     static ISdcCsarHelper resolveReqsCapsCsarQA;
 	static ISdcCsarHelper portMirroring;
+	static ISdcCsarHelper csarHelperServiceWithCrs;
 
 
 	static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
@@ -57,6 +58,7 @@ public abstract class SdcToscaParserBasicTest {
 		QAServiceForToscaParserTests = getCsarHelper("csars/service-ServiceForToscaParserTests-csar.csar");
 		resolveReqsCapsCsarQA = getCsarHelper("csars/service-sunny-flow2.csar");
 		portMirroring = getCsarHelper("csars/service-PortMirroring.csar");
+		csarHelperServiceWithCrs = getCsarHelper("csars/service-CrTestService-csar.csar");
 		
         fdntCsarHelper_Data = new HashMap<String, HashMap<String, List<String>>>(){
     		{
