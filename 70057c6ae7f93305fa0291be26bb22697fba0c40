@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_7bde2413",
+        "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 479
+      },
+      "writtenOn": "2018-01-25T14:53:42Z",
+      "side": 1,
+      "message": "Please create another constructor not to break the existing API. It\u0027s public and can be invoked independently by the API consumers.",
+      "revId": "70057c6ae7f93305fa0291be26bb22697fba0c40",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_fb7c7422",
         "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
         "patchSetId": 1
