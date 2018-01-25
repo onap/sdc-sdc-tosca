@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a93c517_5bafa894",
+        "filename": "src/main/java/org/openecomp/sdc/tosca/parser/config/ErrorInfo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 479
+      },
+      "writtenOn": "2018-01-25T14:38:36Z",
+      "side": 1,
+      "message": "please move up to other fields for code standard\nAlso, I think it should be boolean and not String?",
+      "revId": "70057c6ae7f93305fa0291be26bb22697fba0c40",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_fb7c7422",
+        "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 479
+      },
+      "writtenOn": "2018-01-25T14:38:36Z",
+      "side": 1,
+      "message": "Is there a junit for the below logic?",
+      "revId": "70057c6ae7f93305fa0291be26bb22697fba0c40",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_9b6210ac",
         "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
         "patchSetId": 1
@@ -42,6 +76,23 @@
         "endLine": 597,
         "endChar": 35
       },
+      "revId": "70057c6ae7f93305fa0291be26bb22697fba0c40",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_7b894425",
+        "filename": "src/main/resources/config/error-configuration.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 479
+      },
+      "writtenOn": "2018-01-25T14:38:36Z",
+      "side": 1,
+      "message": "shouldn\u0027t it be boolean and not String?",
       "revId": "70057c6ae7f93305fa0291be26bb22697fba0c40",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
