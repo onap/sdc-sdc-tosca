@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_9b6210ac",
+        "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 69
+      },
+      "writtenOn": "2018-01-25T13:38:26Z",
+      "side": 1,
+      "message": "move the comment into a java doc instade of a comment on the code",
+      "range": {
+        "startLine": 590,
+        "startChar": 8,
+        "endLine": 591,
+        "endChar": 58
+      },
+      "revId": "70057c6ae7f93305fa0291be26bb22697fba0c40",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_db5098d6",
+        "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 69
+      },
+      "writtenOn": "2018-01-25T13:38:26Z",
+      "side": 1,
+      "message": "please use {} in the log instead of + for performance reasons",
+      "range": {
+        "startLine": 596,
+        "startChar": 16,
+        "endLine": 597,
+        "endChar": 35
+      },
+      "revId": "70057c6ae7f93305fa0291be26bb22697fba0c40",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
