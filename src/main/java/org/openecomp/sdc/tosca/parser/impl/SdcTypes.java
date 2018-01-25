@@ -26,11 +26,11 @@ import java.util.stream.Collectors;
 
 public enum SdcTypes {
 
-    CP("CP"), VL("VL"), VF("VF"), VFC("VFC"), PNF("PNF"), SERVICE("Service"), CVFC("CVFC"), SERVICE_PROXY("Service Proxy"), CONFIGURATION("Configuration");
+    CP("CP"), VL("VL"), VF("VF"), CR("CR"), VFC("VFC"), PNF("PNF"), SERVICE("Service"), CVFC("CVFC"), SERVICE_PROXY("Service Proxy"), CONFIGURATION("Configuration");
 
     private String value;
 
-    private static List<String> complexTypes = Arrays.asList(VF, PNF, SERVICE, CVFC).stream().map(SdcTypes::getValue).collect(Collectors.toList());
+    private static List<String> complexTypes = Arrays.asList(VF, PNF, CR, SERVICE, CVFC).stream().map(SdcTypes::getValue).collect(Collectors.toList());
 
     private SdcTypes(String value) {
         this.value = value;
