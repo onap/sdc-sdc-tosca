@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_300ae4d2",
+        "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 69
+      },
+      "writtenOn": "2018-02-04T18:12:22Z",
+      "side": 1,
+      "message": "if the configuration manger is not set and the csar does not have the csar meta you will faile on null pointer,\n\nplease align the indentations.",
+      "range": {
+        "startLine": 601,
+        "startChar": 13,
+        "endLine": 601,
+        "endChar": 57
+      },
+      "revId": "e6d31ec119572143cc604103cf128ddb38f030a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_d0106003",
+        "filename": "src/test/java/org/openecomp/sdc/impl/ToscaParserConfigurationTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 69
+      },
+      "writtenOn": "2018-02-04T18:12:22Z",
+      "side": 1,
+      "message": "please add a test for checking the new logic of parsing the csar with no conformance level",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 45
+      },
+      "revId": "e6d31ec119572143cc604103cf128ddb38f030a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
