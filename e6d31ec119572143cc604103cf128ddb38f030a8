@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_708f0ccd",
+        "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 2125
+      },
+      "writtenOn": "2018-02-05T07:06:20Z",
+      "side": 1,
+      "message": "agree, as per the previous comment a new constructor has been added which increased the chance of this use case. This is fixed now.",
+      "parentUuid": "5a93c517_300ae4d2",
+      "range": {
+        "startLine": 601,
+        "startChar": 13,
+        "endLine": 601,
+        "endChar": 57
+      },
+      "revId": "e6d31ec119572143cc604103cf128ddb38f030a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_d0106003",
         "filename": "src/test/java/org/openecomp/sdc/impl/ToscaParserConfigurationTest.java",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-04T18:12:22Z",
       "side": 1,
       "message": "please add a test for checking the new logic of parsing the csar with no conformance level",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 45
+      },
+      "revId": "e6d31ec119572143cc604103cf128ddb38f030a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_30c184e4",
+        "filename": "src/test/java/org/openecomp/sdc/impl/ToscaParserConfigurationTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 2125
+      },
+      "writtenOn": "2018-02-05T07:06:20Z",
+      "side": 1,
+      "message": "I have added the relevant tests on caller side. However the new test has now been added here as well to cover both use cases.",
+      "parentUuid": "5a93c517_d0106003",
       "range": {
         "startLine": 13,
         "startChar": 0,
