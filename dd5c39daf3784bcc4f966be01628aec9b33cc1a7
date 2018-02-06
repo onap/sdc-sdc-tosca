@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_66698dbd",
+        "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 69
+      },
+      "writtenOn": "2018-02-06T18:13:42Z",
+      "side": 1,
+      "message": "add a logging out put to provide insight into the failuer",
+      "range": {
+        "startLine": 608,
+        "startChar": 10,
+        "endLine": 608,
+        "endChar": 21
+      },
+      "revId": "dd5c39daf3784bcc4f966be01628aec9b33cc1a7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_c6a981e0",
+        "filename": "src/test/java/org/openecomp/sdc/impl/ToscaParserMetadataTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 69
+      },
+      "writtenOn": "2018-02-06T18:13:42Z",
+      "side": 1,
+      "message": "perhapse move thsi into the before pahse of each test?",
+      "range": {
+        "startLine": 208,
+        "startChar": 3,
+        "endLine": 209,
+        "endChar": 58
+      },
+      "revId": "dd5c39daf3784bcc4f966be01628aec9b33cc1a7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
