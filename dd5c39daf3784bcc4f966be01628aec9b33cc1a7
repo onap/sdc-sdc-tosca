@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_a69a3561",
+        "filename": "src/main/java/org/openecomp/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 2125
+      },
+      "writtenOn": "2018-02-06T20:17:39Z",
+      "side": 1,
+      "message": "sure, I will make this change now.",
+      "parentUuid": "5a93c517_66698dbd",
+      "range": {
+        "startLine": 608,
+        "startChar": 10,
+        "endLine": 608,
+        "endChar": 21
+      },
+      "revId": "dd5c39daf3784bcc4f966be01628aec9b33cc1a7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_c6a981e0",
         "filename": "src/test/java/org/openecomp/sdc/impl/ToscaParserMetadataTest.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-02-06T18:13:42Z",
       "side": 1,
       "message": "perhapse move thsi into the before pahse of each test?",
+      "range": {
+        "startLine": 208,
+        "startChar": 3,
+        "endLine": 209,
+        "endChar": 58
+      },
+      "revId": "dd5c39daf3784bcc4f966be01628aec9b33cc1a7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_e6903d45",
+        "filename": "src/test/java/org/openecomp/sdc/impl/ToscaParserMetadataTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 2125
+      },
+      "writtenOn": "2018-02-06T20:17:39Z",
+      "side": 1,
+      "message": "There are 2 tests here; one with default config and one with custom error config. Since the configuration manager and factory initialization are modified in the custom test; they have been reverted back to default settings to make sure subsequent tests works fine. By default each test already inherits it from before phase.",
+      "parentUuid": "5a93c517_c6a981e0",
       "range": {
         "startLine": 208,
         "startChar": 3,
