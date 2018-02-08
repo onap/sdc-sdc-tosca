@@ -62,6 +62,17 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
     }
     //endregion
 
+    @Test
+    public void GetServiceNodeTemplateMetadataTypeCR() {
+        NodeTemplate nodeTemplate = csarHelperServiceWithCrs.getServiceNodeTemplateByNodeName("chaya best cr 0");
+        Metadata nodeTemplateMetadata = csarHelperServiceWithCrs.getNodeTemplateMetadata(nodeTemplate);
+        assertNotNull(nodeTemplateMetadata);
+        assertEquals(nodeTemplateMetadata.getValue("resourceVendorModelNumber"), "");
+        assertEquals(nodeTemplateMetadata.getValue("type"), "CR");
+        assertEquals(nodeTemplateMetadata.getValue("name"), "chaya best cr");
+        assertEquals(nodeTemplateMetadata.getValue("version"), "0.1");
+    }
+
     //region getConformanceLevel
     @Test
     public void testSunnyGetConformanceLevel() {

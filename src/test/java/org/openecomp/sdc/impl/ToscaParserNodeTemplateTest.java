@@ -6,6 +6,8 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import java.util.*;
 import static org.hamcrest.CoreMatchers.is;
+
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.openecomp.sdc.tosca.parser.impl.FilterType;
@@ -934,6 +936,37 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
 		assertEquals( ((ArrayList)propertyAsObject).get(1), null);
 	}
+
+	@Test
+	public void testServiceNodeTemplateByCRType() {
+		List<NodeTemplate> serviceCRList = csarHelperServiceWithCrs.getServiceNodeTemplateBySdcType(SdcTypes.CR);
+		assertNotNull(serviceCRList);
+		assertEquals(serviceCRList.size(), 2);
+		assertEquals(serviceCRList.get(0).getName(), "chaya best cr 1");
+		assertEquals(serviceCRList.get(0).getType(), "org.openecomp.resource.cr.ChayaBestCr");
+		assertEquals(serviceCRList.get(1).getName(), "chaya best cr 0");
+		assertEquals(serviceCRList.get(1).getType(), "org.openecomp.resource.cr.ChayaBestCr");
+	}
+
+	@Test
+	public void testGetCPOfCRNodeTemplate() {
+		NodeTemplate nodeTemplate = csarHelperServiceWithCrs.getServiceNodeTemplateByNodeName("chaya best cr 0");
+		List<NodeTemplate> crCpChildren = csarHelperServiceWithCrs.getNodeTemplateBySdcType(nodeTemplate, SdcTypes.CP);
+		assertEquals(crCpChildren.get(0).getName(), "ContrailPort 0");
+		assertEquals(crCpChildren.get(0).getMetaData().getValue("type"), SdcTypes.CP.name());
+	}
+
+	@Test
+	public void testServiceCRInstanceProps() {
+		List<NodeTemplate> serviceCrList = csarHelperServiceWithCrs.getServiceNodeTemplateBySdcType(SdcTypes.CR);
+		assertNotNull(serviceCrList);
+		NodeTemplate crTemplate = serviceCrList.get(0);
+		assertNotNull(crTemplate);
+		assertEquals(crTemplate.getPropertyValue("nf_naming").toString(), ImmutableMap.of("ecomp_generated_naming", "true").toString());
+		assertEquals(crTemplate.getPropertyValue("contrailport0_virtual_network"), "chaya");
+	}
+
+
 }
 
 
