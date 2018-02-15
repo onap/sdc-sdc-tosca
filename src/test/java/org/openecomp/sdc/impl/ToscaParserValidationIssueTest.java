@@ -80,14 +80,16 @@ public class ToscaParserValidationIssueTest extends SdcToscaParserBasicTest {
 			System.out.println("SdcToscaParserException is caught here - this is WAD in this specific test.");
 		}
 		List<JToscaValidationIssue> notAnalyzedReport = factory.getNotAnalyzadExceptions();
-		assertEquals(2, notAnalyzedReport.size());
+		assertEquals(3, notAnalyzedReport.size());
 		List<JToscaValidationIssue> warningsReport = factory.getWarningExceptions();
 		assertEquals( 0, warningsReport.size());
 		List<JToscaValidationIssue> criticalsReport = factory.getCriticalExceptions();
-		assertEquals( 24, criticalsReport.size());
+		assertEquals( 22, criticalsReport.size());
 		//JE006 multy values sinceCsarConformanceLevel
-		assertEquals( criticalsReport.stream().filter(c->c.getCode().equals("JE006")).collect(Collectors.toList()).size(), 18);
-		assertEquals( criticalsReport.stream().filter(c->c.getCode().equals("JE003")).collect(Collectors.toList()).size(), 6);
+		assertEquals( criticalsReport.stream().filter(c->c.getCode().equals("JE006")).collect
+				(Collectors.toList()).size(), 18);
+		assertEquals( criticalsReport.stream().filter(c->c.getCode().equals("JE003")).collect
+				(Collectors.toList()).size(), 4);
 	}
 
 
