@@ -5,8 +5,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import java.util.*;
-import static org.hamcrest.CoreMatchers.is;
-
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
@@ -14,10 +12,7 @@ import org.openecomp.sdc.tosca.parser.impl.FilterType;
 import org.openecomp.sdc.tosca.parser.impl.SdcTypes;
 import org.openecomp.sdc.toscaparser.api.Group;
 import org.openecomp.sdc.toscaparser.api.NodeTemplate;
-import org.openecomp.sdc.toscaparser.api.Property;
 import org.testng.annotations.Test;
-
-import fj.data.fingertrees.Node;
 
 public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 
@@ -965,7 +960,84 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertEquals(crTemplate.getPropertyValue("nf_naming").toString(), ImmutableMap.of("ecomp_generated_naming", "true").toString());
 		assertEquals(crTemplate.getPropertyValue("contrailport0_virtual_network"), "chaya");
 	}
-
+	
+	@Test
+	public void testGetPoliciesOfOriginOfNodeTemplate() {
+		NodeTemplate nt0 = csarHelperServicePolicy.getNodeTemplateByName("al_vf 0");
+		NodeTemplate nt1 = csarHelperServicePolicy.getNodeTemplateByName("al_vf 1");
+		List<Map<String, Object>> policies = csarHelperServicePolicy.getPoliciesOfOriginOfNodeTemplate(nt0);
+		assertNotNull(policies);
+		assertEquals(policies.size(), 3);
+		policies = csarHelperServicePolicy.getPoliciesOfOriginOfNodeTemplate(nt1);
+		assertNotNull(policies);
+		assertEquals(policies.size(), 3);
+	}
+	
+	@Test
+	public void testGetPoliciesOfOriginOfNodeTemplateByToscaPolicyType() {
+		NodeTemplate nt0 = csarHelperServicePolicy.getNodeTemplateByName("al_vf 0");
+		NodeTemplate nt1 = csarHelperServicePolicy.getNodeTemplateByName("al_vf 1");
+		List<Map<String, Object>> policies = csarHelperServicePolicy.getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(nt0, "org.openecomp.policies.placement.Colocate");
+		assertNotNull(policies);
+		assertEquals(policies.size(), 1);
+		
+		policies = csarHelperServicePolicy.getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(nt0, "org.openecomp.policies.placement.Antilocate");
+		assertNotNull(policies);
+		assertEquals(policies.size(), 1);
+		
+		policies = csarHelperServicePolicy.getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(nt0, "org.openecomp.policies.placement.valet.Diversity");
+		assertNotNull(policies);
+		assertEquals(policies.size(), 1);
+		
+		policies = csarHelperServicePolicy.getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(nt1, "org.openecomp.policies.placement.Colocate");
+		assertNotNull(policies);
+		assertEquals(policies.size(), 1);
+		
+		policies = csarHelperServicePolicy.getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(nt1, "org.openecomp.policies.placement.Antilocate");
+		assertNotNull(policies);
+		assertEquals(policies.size(), 1);
+		
+		policies = csarHelperServicePolicy.getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(nt1, "org.openecomp.policies.placement.valet.Diversity");
+		assertNotNull(policies);
+		assertEquals(policies.size(), 1);
+	}
+	
+	@Test
+	public void testGetPolicyTargetNodeTemplatesFromOrigin() {
+		List<Map<String, Object>> nodeTemplates = csarHelperServicePolicy.getPolicyTargetsFromOrigin(csarHelperServicePolicy.getNodeTemplateByName("al_vf 1"),"policy..Colocate..0");
+		assertNotNull(nodeTemplates);
+		assertEquals(nodeTemplates.size(), 2);
+	}
+	
+	@Test
+	public void testGetPoliciesOfNodeTemplate() {
+		NodeTemplate nt0 = csarHelperVfPolicy.getNodeTemplateByName("al_vfc 1");
+		List<Map<String, Map<String, Object>>> policies = csarHelperVfPolicy.getPoliciesOfTarget(nt0);
+		assertNotNull(policies);
+		assertEquals(policies.size(), 1);
+	}
+	
+	@Test
+	public void testGetPoliciesOfNodeTemplateByToscaPolicyType() {
+		NodeTemplate nt0 = csarHelperVfPolicy.getNodeTemplateByName("al_vfc 1");
+		List<Map<String, Map<String, Object>>> policies = csarHelperVfPolicy.getPoliciesOfTargetByToscaPolicyType(nt0, "org.openecomp.policies.placement.Colocate");
+		assertNotNull(policies);
+		assertEquals(policies.size(), 1);
+	}
+	
+	@Test
+	public void testGetPoliciesOfTopologyTemplate() {
+		List<Map<String, Map<String, Object>>> policies = csarHelperVfPolicy.getPoliciesOfTopologyTemplate();
+		assertNotNull(policies);
+		assertEquals(policies.size(), 1);
+	}
+	
+	@Test
+	public void testGetPolicyTargetNodeTemplates() {
+		List<NodeTemplate> nodeTemplates = csarHelperVfPolicy.getPolicyTargetsFromTopologyTemplate("policy..Colocate..0");
+		assertNotNull(nodeTemplates);
+		assertEquals(nodeTemplates.size(), 2);
+	}
 
 }
 

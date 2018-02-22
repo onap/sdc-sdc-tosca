@@ -450,5 +450,98 @@ public interface ISdcCsarHelper {
 	 * @return the leaf value as String, or null if there's no such property, or it's not a leaf.
 	 */
 	public String getCapabilityPropertyLeafValue(CapabilityAssignment capability, String pathToPropertyLeafValue);
+	
+	/**
+	 * Get all the policies of the main topology template (either VF or service)
+	 * @return	the list of the policies
+	 */
+	public List<Map<String, Map<String, Object>>> getPoliciesOfTopologyTemplate();
+	
+	/**
+	 * Get all the policies of the main topology template (either VF or service) specified by policy type
+	 * @param policyTypeName	the name of the policy type
+	 * @return					the list of the policies						
+	 */
+	public List<Map<String, Map<String, Object>>> getPoliciesOfTopologyTemplateByToscaPolicyType(String policyTypeName);
+	
+	/**
+	 * Get all the policies of the origin component (nested topology template) of the node template
+	 * @param nodeTemplate	the node template
+	 * @return				the list of the policies
+	 */
+	public List<Map<String,Object>> getPoliciesOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
+	
+	/**
+	 * Get all the policies of the origin component (nested topology template) of the node template specified by policy type
+	 * @param nodeTemplate		the node template
+	 * @param policyTypeName	the name of the policy type
+	 * @return					the list of the policies
+	 */
+	public List<Map<String, Object>> getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
+	
+	/**
+	 * Get all the node templates of the topology template, which are the targets of the policy specified by name
+	 * @param policyName	the name of the policy
+	 * @return				the list of the node templates
+	 */
+	public List<NodeTemplate> getPolicyTargetsFromTopologyTemplate(String policyName);
+	
+	/**
+	 * Get all the node templates of the origin component (nested topology template) of node template, which are the targets of the policy specified by name
+	 * @param nodeTemplate	the node template
+	 * @param policyName	the name of the policy
+	 * @return				the list of the node templates
+	 */
+	public List<Map<String, Object>> getPolicyTargetsFromOrigin(NodeTemplate nodeTemplate, String policyName);
+	
+	/**
+	 * Get the node template of the topology template specified by name
+	 * @param nodeTemplateName	the name of the node template
+	 * @return					the node template
+	 */
+	public NodeTemplate getNodeTemplateByName(String nodeTemplateName);
+    
+    /**
+     * Get all the policies, which contain the specified node template as a target
+     * @param targetNode	the node template
+     * @return				the list of the policies
+     */
+	public List<Map<String, Map<String, Object>>> getPoliciesOfTarget(NodeTemplate targetNode);
+	
+	/**
+	 * Get all the policies of the specified type, which contain the specified node template as a target
+	 * @param nodeTemplate		the node template
+	 * @param policyTypeName	the name of the policy type
+	 * @return					the list of the policies
+	 */
+    public List<Map<String, Map<String, Object>>> getPoliciesOfTargetByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
+    
+    /**
+     * Get all groups of this of the main topology template (either VF or service)
+     * @return  the list of the groups
+     */
+    public List<Map<String, Map<String, Object>>> getGroupsOfTopologyTemplate();
+
+    /**
+     * Get all groups of this of the main topology template (either VF or service) by specified tosca group type
+     * @param groupType     the group type
+     * @return  the list of the groups
+     */
+    public List<Map<String, Map<String, Object>>> getGroupsOfTopologyTemplateByToscaGroupType(String groupType);
+    
+    
+    /**
+     * Get all the groups of the origin component (nested topology template) of the node template
+     * @param               nodeTemplate  the node template
+     * @return              the list of the groups
+     */
+    public List<Map<String,Object>> getGroupsOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
+    
+    /**
+     * Get group members of the group belongs to the main topology template (either VF or service) by group name
+     * @param groupName     the name of the group
+     * @return
+     */
+    public List<NodeTemplate> getGroupMembersFromTopologyTemplate(String groupName);
 
 }
