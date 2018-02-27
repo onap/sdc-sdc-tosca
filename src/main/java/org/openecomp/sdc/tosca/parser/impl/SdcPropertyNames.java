@@ -106,12 +106,4 @@ public class SdcPropertyNames {
     
     public static String PROPERTY_NAME_NETWORKFLOWS_ISBOUNDTOVPN="network_flows#is_bound_to_vpn";
     public static String PROPERTY_NAME_NETWORKFLOWS_VPNBINDING="network_flows#vpn_binding";
-    
-    //Policy
-    public static String PROPERTY_NAME_TOPOLOGY_TEMPLATE = "topology_template";
-    public static String PROPERTY_NAME_NODE_TEMPLATES = "node_templates";
-    public static String PROPERTY_NAME_POLICIES = "policies";
-	public static String PROPERTY_NAME_METADATA = "metadata";
-	public static String PROPERTY_NAME_PROPERTIES = "properties";
-	public static String PROPERTY_NAME_TARGETS = "targets";
 }
