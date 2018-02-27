@@ -3,7 +3,6 @@ package org.openecomp.sdc.impl;
 import org.openecomp.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.openecomp.sdc.tosca.parser.config.ConfigurationManager;
 import org.openecomp.sdc.tosca.parser.exceptions.SdcToscaParserException;
-import org.openecomp.sdc.tosca.parser.impl.SdcToscaParserFactory;
 import org.openecomp.sdc.toscaparser.api.NodeTemplate;
 import org.openecomp.sdc.toscaparser.api.elements.Metadata;
 import org.testng.annotations.Test;
@@ -208,7 +207,7 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
       SdcToscaParserException {
     ConfigurationManager configurationManager = ConfigurationManager.getInstance();
     configurationManager.setErrorConfiguration("error-configuration-test.yaml");
-    SdcToscaParserFactory.setConfigurationManager(configurationManager);
+    factory.setConfigurationManager(configurationManager);
 
     ISdcCsarHelper missingCSARMetaCsarCustomConfig = getCsarHelper
         ("csars/service-missing-csar-meta-file.csar");
@@ -218,7 +217,7 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
         .getMaxVersion());
 
     configurationManager.setErrorConfiguration("error-configuration.yaml");
-    SdcToscaParserFactory.setConfigurationManager(configurationManager);
+    factory.setConfigurationManager(configurationManager);
   }
 
   @Test(expectedExceptions = SdcToscaParserException.class)
