@@ -1,4 +1,4 @@
-# OpenECOMP SDC-Tosca
+# ONAP SDC-Tosca
 
 
 ---
@@ -6,21 +6,21 @@
 
 # Introduction
 
-OpenECOMP SDC-Tosca is delivered as helper JAR that can be used by clients that work with SDC TOSCA CSAR files.
+ONAP SDC-Tosca is delivered as helper JAR that can be used by clients that work with SDC TOSCA CSAR files.
 It parses the CSAR and returns the model object which represents the CSAR contents, through designated function calls with SDC flavour.
 It uses the underlying generic JTOSCA parser.
 
 
-# Compiling OpenECOMP JTOSCA
+# Compiling ONAP JTOSCA
 
-OpenECOMP SDC-Tosca can be compiled easily using maven command: `mvn clean install`
+ONAP SDC-Tosca can be compiled easily using maven command: `mvn clean install`
 The result is JAR file under "target" folder
 
 # Getting Help
 
 *** to be completed on release ***
 
-SDC@lists.openecomp.org
+SDC@lists.onap.org
 
 SDC Javadoc and Maven site
  
