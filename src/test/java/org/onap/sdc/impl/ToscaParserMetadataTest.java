@@ -210,7 +210,7 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
     ConfigurationManager configurationManager = ConfigurationManager.getInstance();
     try {
       configurationManager.setErrorConfiguration("error-configuration-test.yaml");
-      factory.setConfigurationManager(configurationManager);
+      SdcToscaParserFactory.setConfigurationManager(configurationManager);
       ISdcCsarHelper missingCSARMetaCsarCustomConfig = getCsarHelper
           ("csars/service-missing-csar-meta-file.csar");
       String conformanceLevel = missingCSARMetaCsarCustomConfig.getConformanceLevel();
@@ -220,7 +220,7 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
     }
     finally {
       configurationManager.setErrorConfiguration("error-configuration.yaml");
-      factory.setConfigurationManager(configurationManager);
+      SdcToscaParserFactory.setConfigurationManager(configurationManager);
     }
 
   }
