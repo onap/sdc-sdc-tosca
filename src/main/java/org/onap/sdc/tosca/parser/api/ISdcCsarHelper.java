@@ -19,6 +19,7 @@
 package org.onap.sdc.tosca.parser.api;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -515,26 +516,20 @@ public interface ISdcCsarHelper {
 	 * @return					the list of the policies
 	 */
     public List<Map<String, Map<String, Object>>> getPoliciesOfTargetByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
-    
-    /**
-     * Get all groups of this of the main topology template (either VF or service)
-     * @return                  the list of the groups
-     */
-    public List<Map<String, Map<String, Object>>> getGroupsOfTopologyTemplate();
 
     /**
      * Get all the groups of the origin component (nested topology template) of the node template
      * @param               nodeTemplate  the node template
      * @return              the list of the groups
      */
-    public List<Map<String,Object>> getGroupsOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
+    public ArrayList<Group> getGroupsOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
     
     /**
      * Get all groups of this of the main topology template (either VF or service) by specified tosca group type
      * @param groupType     the group type
      * @return              the list of the groups
      */
-    public List<Map<String, Map<String, Object>>> getGroupsOfTopologyTemplateByToscaGroupType(String groupType);
+    public ArrayList<Group> getGroupsOfTopologyTemplateByToscaGroupType(String groupType);
     
     
     /**
@@ -543,7 +538,7 @@ public interface ISdcCsarHelper {
      * @param groupType     the group type
      * @return              the list of the groups
      */
-     public List<Map<String, Object>> getGroupsOfOriginOfNodeTemplateByToscaGroupType(NodeTemplate nodeTemplate, String groupType);
+     public ArrayList<Group> getGroupsOfOriginOfNodeTemplateByToscaGroupType(NodeTemplate nodeTemplate, String groupType);
     
     /**
      * Get members of the group belongs to the main topology template (either VF or service) by group name
@@ -558,6 +553,6 @@ public interface ISdcCsarHelper {
      * @param groupName     the name of the group
      * @return              the list of the node templates
      */
-    public List<Map<String, Object>> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName);
+    public List<NodeTemplate> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName);
 
 }

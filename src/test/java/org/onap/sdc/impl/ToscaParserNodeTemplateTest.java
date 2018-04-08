@@ -5,17 +5,19 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.onap.sdc.tosca.parser.impl.FilterType;
 import org.onap.sdc.tosca.parser.impl.SdcTypes;
+import org.onap.sdc.toscaparser.api.CapabilityAssignment;
+import org.onap.sdc.toscaparser.api.CapabilityAssignments;
 import org.onap.sdc.toscaparser.api.Group;
 import org.onap.sdc.toscaparser.api.NodeTemplate;
 import org.onap.sdc.toscaparser.api.Property;
 import org.testng.annotations.Test;
-
-import fj.data.fingertrees.Node;
 
 public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 
@@ -334,6 +336,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	//endregion
 
 	//region getCpPropertiesFromVfc
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetCpPropertiesFromVfc() {
 		List<NodeTemplate> vfcs = ipAssignCsarHelper.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
@@ -759,6 +762,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 
 	//endregion
 	//region resolve get_input
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testResolveGetInputForComplexTypeAndList() {
 		//port_pd01_port_ip_requirements is of type list<org.openecomp.datatypes.network.IpRequirements>
@@ -793,6 +797,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertEquals("1", propertyAsObject);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testResolveGetInputForMap() {
 		//This test covers "default" resolving of primitive - as Map
@@ -835,6 +840,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 
 	// region Added by QA - Continue with testings of resolve get_input
 	
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testResolveGetInputForComplexTypeAndListWithFalseValue() 
 	{
@@ -926,6 +932,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	// endregion Added by QA - Continue with testings of resolve get_input
 
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testResolveGetInputArrayStructure() {
 		List<NodeTemplate> vfcs = resolveGetInputCsarQA.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
@@ -1041,7 +1048,99 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertNotNull(nodeTemplates);
 		assertEquals(nodeTemplates.size(), 2);
 	}
-
+	
+	@Test
+	public void testGetGroups() {
+		NodeTemplate groupsVf = csarHelperServiceGroups.getNodeTemplateByName("GroupsVf 0");
+		NodeTemplate vlanGroups = csarHelperServiceGroups.getNodeTemplateByName("VlanGroups 0");
+		
+		ArrayList<Group> groups = csarHelperServiceGroups.getGroupsOfOriginOfNodeTemplate(groupsVf);
+		assertNotNull(groups);
+		assertEquals(groups.size(), 5);
+		
+		groups = csarHelperServiceGroups.getGroupsOfOriginOfNodeTemplate(vlanGroups);
+		assertNotNull(groups);
+		assertEquals(groups.size(), 4);
+		
+		groups = csarHelperServiceGroups.getGroupsOfOriginOfNodeTemplateByToscaGroupType(groupsVf, "org.openecomp.groups.VfcInstanceGroup");
+		assertNotNull(groups);
+		assertEquals(groups.size(), 1);
+		
+		groups = csarHelperServiceGroups.getGroupsOfOriginOfNodeTemplateByToscaGroupType(vlanGroups, "org.openecomp.groups.VfcInstanceGroup");
+		assertNotNull(groups);
+		assertEquals(groups.size(), 2);
+		
+		List<NodeTemplate> members = csarHelperServiceGroups.getGroupMembersOfOriginOfNodeTemplate(groupsVf, "x_group");
+		
+		assertNotNull(members);
+		assertEquals(members.size(), 3);
+		Optional<NodeTemplate> memberOpt = (members.stream().filter(m -> m.getName().equals("lb_1"))).findFirst();
+		assertTrue(memberOpt.isPresent());
+		memberOpt = (members.stream().filter(m -> m.getName().equals("lb_2"))).findFirst();
+		assertTrue(memberOpt.isPresent());
+		memberOpt = (members.stream().filter(m -> m.getName().equals("mg_4"))).findFirst();
+		assertTrue(memberOpt.isPresent());
+		
+		members = csarHelperServiceGroups.getGroupMembersOfOriginOfNodeTemplate(vlanGroups, "oam_group");
+		assertNotNull(members);
+		assertEquals(members.size(), 1);
+		memberOpt = (members.stream().filter(m -> m.getName().equals("abstract_vdbe_1"))).findFirst();
+		assertTrue(memberOpt.isPresent());
+		
+		members = csarHelperServiceGroups.getGroupMembersOfOriginOfNodeTemplate(vlanGroups, "untr_group");
+		assertNotNull(members);
+		assertEquals(members.size(), 1);
+		memberOpt = (members.stream().filter(m -> m.getName().equals("abstract_vdbe"))).findFirst();
+		assertTrue(memberOpt.isPresent());
+	}
+	
+	@Test
+	public void testGetGroupsInputsProperties() {
+		NodeTemplate vdbe0 = csarHelperServiceGroupsInputs.getNodeTemplateByName("vDBE 0");
+		ArrayList<Group> groups = csarHelperServiceGroupsInputs.getGroupsOfOriginOfNodeTemplate(vdbe0);
+		assertNotNull(groups);
+		assertEquals(groups.size(), 4);
+		
+		Optional<Group> groupOpt = (groups.stream().filter(g -> g.getName().equals("oam_group"))).findFirst();
+		assertTrue(groupOpt.isPresent());
+		Group group = groupOpt.get();
+		validateInputsProperties(vdbe0, group);
+		
+		groupOpt = (groups.stream().filter(g -> g.getName().equals("untr_group"))).findFirst();
+		assertTrue(groupOpt.isPresent());
+		group = groupOpt.get();
+		validateInputsProperties(vdbe0, group);
+	}
+	
+	@Test
+	public void testGetGroupsInputsCapabilities() {
+		NodeTemplate vdbe = csarHelperServiceGroupsCapabilities.getNodeTemplateByName("vdbe_srv_proxy 0");
+		CapabilityAssignments capabilities = csarHelperServiceGroupsCapabilities.getCapabilitiesOf(vdbe);
+		CapabilityAssignment capability = capabilities.getCapabilityByName("vdbe0.oam_group.vlan_assignment");
+		assertNotNull(capability);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void validateInputsProperties(NodeTemplate vdbe0, Group group) {
+		assertNotNull(group.getPropertiesObjects());
+		ArrayList<Property> properties = group.getPropertiesObjects();
+		
+		List<String> inputs = properties.stream()
+		.filter(p -> p.getValue() instanceof Map)
+		.map(p -> ((Map<String, String>)p.getValue()).get("get_input"))
+		.collect(Collectors.toList());
+		
+		assertEquals(inputs.size(), 2);
+		
+		inputs.forEach(i -> assertTrue(vdbe0.getProperties().containsKey(i)));
+		
+		 List<Object> list = vdbe0.getProperties().entrySet().stream()
+				 .filter(e -> inputs.contains(e.getKey()))
+				 .map(e -> e.getValue().getValue())
+				 .collect(Collectors.toList());
+		 assertEquals(list.size(), 2);
+	}
+	
 }
 
 

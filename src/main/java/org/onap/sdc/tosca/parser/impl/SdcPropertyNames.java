@@ -111,7 +111,10 @@ public class SdcPropertyNames {
     public static String PROPERTY_NAME_TOPOLOGY_TEMPLATE = "topology_template";
     public static String PROPERTY_NAME_NODE_TEMPLATES = "node_templates";
     public static String PROPERTY_NAME_POLICIES = "policies";
+    public static String PROPERTY_NAME_GROUPS = "groups";
 	public static String PROPERTY_NAME_METADATA = "metadata";
 	public static String PROPERTY_NAME_PROPERTIES = "properties";
 	public static String PROPERTY_NAME_TARGETS = "targets";
+	public static String PROPERTY_NAME_MEMBERS = "members";
+	public static String PROPERTY_NAME_CAPABILITIES = "capabilities";
 }
