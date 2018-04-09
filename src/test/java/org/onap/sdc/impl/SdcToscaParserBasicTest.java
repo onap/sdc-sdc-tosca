@@ -37,6 +37,11 @@ public abstract class SdcToscaParserBasicTest {
 	static ISdcCsarHelper csarHelperServiceWithCrs;
 	static ISdcCsarHelper csarHelperServicePolicy;
 	static ISdcCsarHelper csarHelperVfPolicy;
+	static ISdcCsarHelper csarHelperServiceGroups;
+	static ISdcCsarHelper csarHelperServiceGroupsInputs;
+	static ISdcCsarHelper csarHelperServiceGroupsCapabilities;
+	static ISdcCsarHelper csarHelperVfGroupsPolicies;
+	static ISdcCsarHelper csarHelperServiceGroupsPolicies;
 
 	static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
     
@@ -61,6 +66,11 @@ public abstract class SdcToscaParserBasicTest {
 		csarHelperServiceWithCrs = getCsarHelper("csars/service-CrTestService-csar.csar");
 		csarHelperVfPolicy = getCsarHelper("csars/resource-Policy-csar.csar");
 		csarHelperServicePolicy = getCsarHelper("csars/service-AlService-csar.csar");
+		csarHelperServiceGroups = getCsarHelper("csars/service-Groupstest-csar.csar");
+		csarHelperServiceGroupsInputs = getCsarHelper("csars/service-VdbeSrv-csar.csar");
+		csarHelperServiceGroupsCapabilities = getCsarHelper("csars/service-VdbePx-csar.csar");
+		csarHelperVfGroupsPolicies = getCsarHelper("csars/resource-Vdbe-csar.csar");
+		csarHelperServiceGroupsPolicies = getCsarHelper("csars/service-VlanD2dSrv-csar.csar");
 
 		fdntCsarHelper_Data = new HashMap<String, HashMap<String, List<String>>>(){
     		{
