@@ -19,6 +19,7 @@
 package org.onap.sdc.tosca.parser.api;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -455,21 +456,21 @@ public interface ISdcCsarHelper {
 	 * Get all the policies of the main topology template (either VF or service)
 	 * @return	the list of the policies
 	 */
-	public List<Map<String, Map<String, Object>>> getPoliciesOfTopologyTemplate();
+	public List<Policy> getPoliciesOfTopologyTemplate();
 	
 	/**
 	 * Get all the policies of the main topology template (either VF or service) specified by policy type
 	 * @param policyTypeName	the name of the policy type
 	 * @return					the list of the policies						
 	 */
-	public List<Map<String, Map<String, Object>>> getPoliciesOfTopologyTemplateByToscaPolicyType(String policyTypeName);
+	public List<Policy> getPoliciesOfTopologyTemplateByToscaPolicyType(String policyTypeName);
 	
 	/**
 	 * Get all the policies of the origin component (nested topology template) of the node template
 	 * @param nodeTemplate	the node template
 	 * @return				the list of the policies
 	 */
-	public List<Map<String,Object>> getPoliciesOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
+	public List<Policy> getPoliciesOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
 	
 	/**
 	 * Get all the policies of the origin component (nested topology template) of the node template specified by policy type
@@ -477,7 +478,7 @@ public interface ISdcCsarHelper {
 	 * @param policyTypeName	the name of the policy type
 	 * @return					the list of the policies
 	 */
-	public List<Map<String, Object>> getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
+	public List<Policy> getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
 	
 	/**
 	 * Get all the node templates of the topology template, which are the targets of the policy specified by name
@@ -492,7 +493,7 @@ public interface ISdcCsarHelper {
 	 * @param policyName	the name of the policy
 	 * @return				the list of the node templates
 	 */
-	public List<Map<String, Object>> getPolicyTargetsFromOrigin(NodeTemplate nodeTemplate, String policyName);
+	public List<NodeTemplate> getPolicyTargetsFromOrigin(NodeTemplate nodeTemplate, String policyName);
 	
 	/**
 	 * Get the node template of the topology template specified by name
@@ -506,7 +507,7 @@ public interface ISdcCsarHelper {
      * @param targetNode	the node template
      * @return				the list of the policies
      */
-	public List<Map<String, Map<String, Object>>> getPoliciesOfTarget(NodeTemplate targetNode);
+	public List<Policy> getPoliciesOfTarget(NodeTemplate targetNode);
 	
 	/**
 	 * Get all the policies of the specified type, which contain the specified node template as a target
@@ -514,28 +515,27 @@ public interface ISdcCsarHelper {
 	 * @param policyTypeName	the name of the policy type
 	 * @return					the list of the policies
 	 */
-    public List<Map<String, Map<String, Object>>> getPoliciesOfTargetByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
-    
-    /**
-     * Get all groups of this of the main topology template (either VF or service)
-     * @return                  the list of the groups
-     */
-    public List<Map<String, Map<String, Object>>> getGroupsOfTopologyTemplate();
+    public List<Policy> getPoliciesOfTargetByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
 
     /**
      * Get all the groups of the origin component (nested topology template) of the node template
      * @param               nodeTemplate  the node template
      * @return              the list of the groups
      */
-    public List<Map<String,Object>> getGroupsOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
+    public ArrayList<Group> getGroupsOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
     
     /**
      * Get all groups of this of the main topology template (either VF or service) by specified tosca group type
      * @param groupType     the group type
      * @return              the list of the groups
      */
-    public List<Map<String, Map<String, Object>>> getGroupsOfTopologyTemplateByToscaGroupType(String groupType);
+    public ArrayList<Group> getGroupsOfTopologyTemplateByToscaGroupType(String groupType);
     
+    /**
+     * Get all groups of this of the main topology template (either VF or service)
+     * @return              the list of the groups
+     */
+    public ArrayList<Group> getGroupsOfTopologyTemplate();
     
     /**
      * Get all groups of this of the origin component (nested topology template) of the node template by specified tosca group type
@@ -543,7 +543,7 @@ public interface ISdcCsarHelper {
      * @param groupType     the group type
      * @return              the list of the groups
      */
-     public List<Map<String, Object>> getGroupsOfOriginOfNodeTemplateByToscaGroupType(NodeTemplate nodeTemplate, String groupType);
+     public ArrayList<Group> getGroupsOfOriginOfNodeTemplateByToscaGroupType(NodeTemplate nodeTemplate, String groupType);
     
     /**
      * Get members of the group belongs to the main topology template (either VF or service) by group name
@@ -558,6 +558,6 @@ public interface ISdcCsarHelper {
      * @param groupName     the name of the group
      * @return              the list of the node templates
      */
-    public List<Map<String, Object>> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName);
+    public List<NodeTemplate> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName);
 
 }
