@@ -48,6 +48,7 @@ import org.onap.sdc.toscaparser.api.RequirementAssignments;
 import org.onap.sdc.toscaparser.api.SubstitutionMappings;
 import org.onap.sdc.toscaparser.api.TopologyTemplate;
 import org.onap.sdc.toscaparser.api.ToscaTemplate;
+import org.onap.sdc.toscaparser.api.elements.InterfacesDef;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
 import org.onap.sdc.toscaparser.api.elements.NodeType;
 import org.onap.sdc.toscaparser.api.functions.Function;
@@ -1081,5 +1082,42 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         log.error("processProperties - property {} not found", propName);
         return null;
     }
+
+  @Override
+  public Map<String, List<InterfacesDef>> getInterfacesOf(NodeTemplate nt){
+    if (nt == null) {
+      return null;
+    }
+    return nt.getAllInterfaceDetailsForNodeType();
+  }
+
+  @Override
+  public List<String> getInterfaces(NodeTemplate nt){
+    Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
+    return new ArrayList<>(interfaceDetails.keySet());
+  }
+
+  @Override
+  public List<InterfacesDef> getInterfaceDetails(NodeTemplate nt, String interfaceName){
+    Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
+    return interfaceDetails.get(interfaceName);
+  }
+
+  @Override
+  public List<String> getAllInterfaceOperations(NodeTemplate nt, String interfaceName){
+    Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
+    return interfaceDetails.values().stream().flatMap(List::stream).map(val -> val.getOperationName()).collect(
+        Collectors.toList());
+  }
+
+  @Override
+  public InterfacesDef getInterfaceOperationDetails(NodeTemplate nt, String interfaceName, String operationName){
+    Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
+    if(!interfaceDetails.isEmpty()){
+      List<InterfacesDef> interfaceDefs = interfaceDetails.get(interfaceName);
+      return interfaceDefs.stream().filter(val -> val.getOperationName().equals(operationName)).findFirst().orElse(null);
+    }
+    return null;
+  }
 
 }

@@ -27,6 +27,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.onap.sdc.tosca.parser.impl.SdcTypes;
 import org.onap.sdc.tosca.parser.impl.FilterType;
 import org.onap.sdc.toscaparser.api.*;
+import org.onap.sdc.toscaparser.api.elements.InterfacesDef;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
 import org.onap.sdc.toscaparser.api.parameters.Input;
 
@@ -559,5 +560,40 @@ public interface ISdcCsarHelper {
      * @return              the list of the node templates
      */
     public List<NodeTemplate> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName);
+
+	/**
+	 * Get all interface details for given node template.<br>
+	 * @return Map that contains the list of all interfaces and their definitions.
+	 * If none found, an empty map will be returned.
+	 */
+	public Map<String, List<InterfacesDef>> getInterfacesOf(NodeTemplate nt);
+
+	/**
+	 * Get all interface names for given node template.<br>
+	 * @return List that contains the name of all interfaces.
+	 * If none found, an empty list will be returned.
+	 */
+	public List<String> getInterfaces(NodeTemplate nt);
+
+	/**
+	 * Get all details for given node template and interface name.<br>
+	 * @return List that contains the definitions of given interface name.
+	 * If none found, an empty list will be returned.
+	 */
+	public List<InterfacesDef> getInterfaceDetails(NodeTemplate nt, String interfaceName);
+
+	/**
+	 * Get all operation names for given node template and interface name.<br>
+	 * @return List that contains the name of all operations for a given node template and interface name.
+	 * If none found, an empty list will be returned.
+	 */
+	public List<String> getAllInterfaceOperations(NodeTemplate nt, String interfaceName);
+
+	/**
+	 * Get interface details for a given node template, interface name and operation name.<br>
+	 * @return InterfaceDef representing the operation details.
+	 * If none found, null will be returned.
+	 */
+	public InterfacesDef getInterfaceOperationDetails(NodeTemplate nt, String interfaceName, String operationName);
 
 }
