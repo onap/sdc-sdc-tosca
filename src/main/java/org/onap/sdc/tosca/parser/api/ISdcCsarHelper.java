@@ -559,5 +559,11 @@ public interface ISdcCsarHelper {
      * @return              the list of the node templates
      */
     public List<NodeTemplate> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName);
+    
+    /**
+     * Get inputs of the topology template including existing annotations
+     * @return				the list of the inputs
+     */
+    public List<Input> getInputsWithAnnotations();
 
 }
