@@ -1120,4 +1120,9 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     return null;
   }
 
+	@Override
+	public List<Input> getInputsWithAnnotations() {
+		return toscaTemplate.getInputs(true);
+	}
+
 }

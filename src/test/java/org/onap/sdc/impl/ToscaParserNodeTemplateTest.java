@@ -18,6 +18,8 @@ import org.onap.sdc.toscaparser.api.Group;
 import org.onap.sdc.toscaparser.api.NodeTemplate;
 import org.onap.sdc.toscaparser.api.Policy;
 import org.onap.sdc.toscaparser.api.Property;
+import org.onap.sdc.toscaparser.api.parameters.Annotation;
+import org.onap.sdc.toscaparser.api.parameters.Input;
 import org.testng.annotations.Test;
 
 public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
@@ -1121,6 +1123,47 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertNotNull(capability);
 	}
 	
+	@Test
+	public void testGetVfGroupsPolicies() {
+		List<Policy> policies = csarHelperVfGroupsPolicies.getPoliciesOfTopologyTemplate();
+		assertNotNull(policies);
+		List<Group> groups = csarHelperVfGroupsPolicies.getGroupsOfTopologyTemplate();
+		assertNotNull(groups);
+	}
+	
+	@Test
+	public void testGetServiceGroupsPolicies() {
+		NodeTemplate nt = csarHelperServiceGroupsPolicies.getNodeTemplateByName("vDBE 0");
+		List<Policy> policies = csarHelperServiceGroupsPolicies.getPoliciesOfOriginOfNodeTemplate(nt);
+		assertNotNull(policies);
+		List<Group> groups = csarHelperServiceGroupsPolicies.getGroupsOfOriginOfNodeTemplate(nt);
+		assertNotNull(groups);
+	}
+	
+	@Test
+	public void testGetResourceInputsWithAnnotations() {
+		List<Input> inputs = csarHelperServiceAnnotations.getServiceInputs();
+		assertNotNull(inputs);
+		assertEquals(inputs.size(), 19);
+		assertTrue(inputs.stream().filter(i -> i.getAnnotations() != null).collect(Collectors.toList()).isEmpty());
+		
+		inputs = csarHelperServiceAnnotations.getInputsWithAnnotations();
+		assertNotNull(inputs);
+		assertEquals(inputs.size(), 19);
+		validateInputsAnnotations(inputs);
+	}
+	
+	@Test
+	public void testGetServiceInputsWithAnnotations() {
+		List<Input> inputs = csarHelperServiceAdiodAnnotations.getServiceInputs();
+		assertNotNull(inputs);
+		assertTrue(inputs.stream().filter(i -> i.getAnnotations() != null).collect(Collectors.toList()).isEmpty());
+		
+		inputs = csarHelperServiceAdiodAnnotations.getInputsWithAnnotations();
+		assertNotNull(inputs);
+		validateInputsAnnotations(inputs);
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void validateInputsProperties(NodeTemplate vdbe0, Group group) {
 		assertNotNull(group.getPropertiesObjects());
@@ -1142,21 +1185,27 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		 assertEquals(list.size(), 2);
 	}
 	
-	@Test
-	public void testGetVfGroupsPolicies() {
-		List<Policy> policies = csarHelperVfGroupsPolicies.getPoliciesOfTopologyTemplate();
-		assertNotNull(policies);
-		List<Group> groups = csarHelperVfGroupsPolicies.getGroupsOfTopologyTemplate();
-		assertNotNull(groups);
+	private void validateInputsAnnotations(List<Input> inputs) {
+		List<Input> inputsWithAnnotations = inputs.stream().filter(i -> i.getAnnotations() != null).collect(Collectors.toList());
+		assertTrue(!inputs.isEmpty());
+		inputsWithAnnotations.stream().forEach(i -> validateAnnotations(i));
 	}
-	@Test
-	public void testGetServiceGroupsPolicies() {
-		NodeTemplate nt = csarHelperServiceGroupsPolicies.getNodeTemplateByName("vDBE 0");
-		List<Policy> policies = csarHelperServiceGroupsPolicies.getPoliciesOfOriginOfNodeTemplate(nt);
-		assertNotNull(policies);
-		List<Group> groups = csarHelperServiceGroupsPolicies.getGroupsOfOriginOfNodeTemplate(nt);
-		assertNotNull(groups);
+	
+	private void validateAnnotations(Input input) {
+		assertNotNull(input.getAnnotations());
+		assertEquals(input.getAnnotations().size(), 1);
+		Annotation annotation = input.getAnnotations().get("source");
+		assertEquals(annotation.getName(), "source");
+		assertEquals(annotation.getType().toLowerCase(), "org.openecomp.annotations.source");
+		assertNotNull(annotation.getProperties());
+		Optional<Property> source_type = annotation.getProperties()
+				.stream()
+				.filter(p->p.getName().equals("source_type"))
+				.findFirst();
+		assertTrue(source_type.isPresent());
+		assertEquals(source_type.get().getValue(), "HEAT");
 	}
+
 }
 
 
