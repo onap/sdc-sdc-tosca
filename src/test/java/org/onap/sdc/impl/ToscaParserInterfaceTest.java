@@ -56,4 +56,13 @@ public class ToscaParserInterfaceTest extends SdcToscaParserBasicTest {
         assertEquals(interfaceDef.getOperationName(), "instantiate");
     }
 
+    @Test
+    public void testGetInterfaceOperationImplementationDetails() {
+        InterfacesDef interfaceDef = csarHelperVfInterfaces.getInterfaceOperationDetails(vfs.get(0), "org.openecomp.interfaces.node.lifecycle.CxVnf1", "upgrade");
+        assertNotNull(interfaceDef);
+        assertNotNull(interfaceDef.getImplementation());
+        assertEquals(((Map)interfaceDef.getImplementation()).get("primary"), "Artifacts/Deployment/WORKFLOW/CreateWorkFlow.json");
+        assertEquals(((Map)interfaceDef.getImplementation()).get("dependencies"), "TestDependency1");
+    }
+
 }
