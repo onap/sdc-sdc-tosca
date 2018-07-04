@@ -10,7 +10,6 @@ import org.onap.sdc.tosca.parser.config.JToscaValidationIssueInfo;
 import org.onap.sdc.tosca.parser.config.SdcToscaParserErrors;
 import org.onap.sdc.tosca.parser.utils.GeneralUtility;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
-import org.onap.sdc.tosca.parser.config.*;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.onap.sdc.toscaparser.api.ToscaTemplate;
 import org.onap.sdc.toscaparser.api.common.JToscaValidationIssue;
@@ -170,13 +169,12 @@ public class SdcToscaParserFactory {
 	private void validateCsarVersion(String cSarVersion) throws SdcToscaParserException {
         ConformanceLevel level = configurationManager.getConfiguration().getConformanceLevel();
         String minVersion = level.getMinVersion();
-        String maxVersion = level.getMaxVersion();
         if (cSarVersion != null) {
-            if ((GeneralUtility.conformanceLevelCompare(cSarVersion, minVersion) < 0) || (GeneralUtility.conformanceLevelCompare(cSarVersion, maxVersion) > 0)) {
-                throwConformanceLevelException(minVersion, maxVersion);
+            if (GeneralUtility.conformanceLevelCompare(cSarVersion, minVersion) < 0) {
+                throwConformanceLevelException(minVersion);
             }
         } else {
-            throwConformanceLevelException(minVersion, maxVersion);
+            throwConformanceLevelException(minVersion);
         }
     }
 
@@ -188,9 +186,9 @@ public class SdcToscaParserFactory {
         }
         return false;
     }
-    private void throwConformanceLevelException(String minVersion, String maxVersion) throws SdcToscaParserException {
+    private void throwConformanceLevelException(String minVersion) throws SdcToscaParserException {
         ErrorInfo errorInfo = configurationManager.getErrorConfiguration().getErrorInfo(SdcToscaParserErrors.CONFORMANCE_LEVEL_ERROR.toString());
-        throw new SdcToscaParserException(String.format(errorInfo.getMessage(), minVersion, maxVersion), errorInfo.getCode());
+        throw new SdcToscaParserException(String.format(errorInfo.getMessage(), minVersion), errorInfo.getCode());
     }
 
     private void throwSdcToscaParserException(JToscaException e) throws SdcToscaParserException {
