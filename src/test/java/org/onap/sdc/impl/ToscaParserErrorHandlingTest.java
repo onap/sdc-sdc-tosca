@@ -77,6 +77,15 @@ public class ToscaParserErrorHandlingTest extends SdcToscaParserBasicTest {
 		Throwable captureThrowable = captureThrowable(file.getAbsolutePath());
 		assertNull(captureThrowable);
 	}
+
+	@Test
+	public void testVerifyConformanceLevelVersion9(){
+		String csarPath = "csars/service-Servicetosca9-csar.csar";
+		String fileLocationString = ToscaParserErrorHandlingTest.class.getClassLoader().getResource(csarPath).getFile();
+		File file = new File(fileLocationString);
+		Throwable captureThrowable = captureThrowable(file.getAbsolutePath());
+		assertNull(captureThrowable);
+	}
 	
 	@Test
 	public void testFileNotFound(){
