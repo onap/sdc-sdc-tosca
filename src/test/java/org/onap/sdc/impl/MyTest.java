@@ -10,13 +10,13 @@ import java.io.File;
 
 import static org.onap.sdc.impl.SdcToscaParserBasicTest.getCsarHelper;
 
-public class myTest  {
+public class MyTest {
 
 	static SdcToscaParserFactory factory;
 	static ISdcCsarHelper fdntCsarHelper;
 
 	@Test
-	public void testNoValidationIssues() throws SdcToscaParserException {
+	public void testMyCsar() throws SdcToscaParserException {
 
 
 //		factory = SdcToscaParserFactory.getInstance();
