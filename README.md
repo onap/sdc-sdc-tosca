@@ -36,6 +36,18 @@ String target_range = fdntCsarHelper.getNodeTemplatePropertyLeafValue(serviceNod
 
 ```
 
+# Adding the SDC-Tosca to you project
+the SDC tosca is avilalble as a maven depandency.
+to use add the folowing depandency to your POM file:
+```
+<dependency>
+  <groupId>org.onap.sdc.sdc-tosca</groupId>
+  <artifactId>sdc-tosca</artifactId>
+  <version>1.4.1</version>
+</dependency>
+``` 
+
+
 # Getting Help
 
 
