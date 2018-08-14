@@ -78,6 +78,8 @@ to use add the folowing depandency to your POM file:
    from this version the max version will no longer be checked by the parser. 
 2. **Operations support**: add support for parsing the Operations in the tosca models.  
 
+## 1.4.2
 
-
+### Features:
+1. **enable types validation**  from this version all types in CSAR will be verified, all used types should be properly declared in "base" yml files e.g. node.yml , data.yml etc.
 

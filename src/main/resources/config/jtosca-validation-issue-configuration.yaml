@@ -51,3 +51,7 @@ validationIssues:
     JE136:
         - issueType: CRITICAL
           sinceCsarConformanceLevel: 3.0
+    #Exception from SnakeYAML
+    JE198:
+        - issueType: CRITICAL
+          sinceCsarConformanceLevel: 3.0
