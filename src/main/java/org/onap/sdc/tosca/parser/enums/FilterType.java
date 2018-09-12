@@ -1,4 +1,4 @@
-package org.onap.sdc.tosca.parser.impl;
+package org.onap.sdc.tosca.parser.enums;
 
 public enum FilterType {
 
