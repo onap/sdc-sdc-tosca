@@ -117,4 +117,5 @@ public class SdcPropertyNames {
 	public static String PROPERTY_NAME_TARGETS = "targets";
 	public static String PROPERTY_NAME_MEMBERS = "members";
 	public static String PROPERTY_NAME_CAPABILITIES = "capabilities";
+    public static String PROPERTY_NAME_ENTRY_SCHEMA = "entry_schema";
 }
