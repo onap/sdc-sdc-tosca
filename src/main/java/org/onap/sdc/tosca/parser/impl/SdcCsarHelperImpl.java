@@ -21,7 +21,10 @@
 package org.onap.sdc.tosca.parser.impl;
 
 import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,7 +38,11 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.config.ConfigurationManager;
+import org.onap.sdc.tosca.parser.enums.FilterType;
+import org.onap.sdc.tosca.parser.enums.PropertySchemaType;
+import org.onap.sdc.tosca.parser.enums.SdcTypes;
 import org.onap.sdc.tosca.parser.utils.GeneralUtility;
+import org.onap.sdc.tosca.parser.utils.PropertyUtils;
 import org.onap.sdc.tosca.parser.utils.SdcToscaUtility;
 import org.onap.sdc.toscaparser.api.CapabilityAssignment;
 import org.onap.sdc.toscaparser.api.CapabilityAssignments;
@@ -199,33 +206,23 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     @Override
     //Sunny flow  - covered with UT, flat and nested
     public String getNodeTemplatePropertyLeafValue(NodeTemplate nodeTemplate, String leafValuePath) {
-        if (nodeTemplate == null) {
-            log.error("getNodeTemplatePropertyLeafValue - nodeTemplate is null");
-            return null;
-        }
-        if (GeneralUtility.isEmptyString(leafValuePath)) {
-            log.error("getNodeTemplatePropertyLeafValue - leafValuePath is null or empty");
-            return null;
-        }
-        String[] split = getSplittedPath(leafValuePath);
-        LinkedHashMap<String, Property> properties = nodeTemplate.getProperties();
-        Object property = processProperties(split, properties);
-        return property == null || property instanceof Function ? null : String.valueOf(property);
+        Object value = getNodeTemplatePropertyValueAsObject(nodeTemplate, leafValuePath);
+        return value == null || value instanceof Function ? null : String.valueOf(value);
     }
 
     @Override
-    public Object getNodeTemplatePropertyAsObject(NodeTemplate nodeTemplate, String leafValuePath) {
+    public Object getNodeTemplatePropertyValueAsObject(NodeTemplate nodeTemplate, String leafValuePath) {
         if (nodeTemplate == null) {
-            log.error("getNodeTemplatePropertyAsObject - nodeTemplate is null");
+            log.error("getNodeTemplatePropertyValueAsObject - nodeTemplate is null");
             return null;
         }
         if (GeneralUtility.isEmptyString(leafValuePath)) {
-            log.error("getNodeTemplatePropertyAsObject - leafValuePath is null or empty");
+            log.error("getNodeTemplatePropertyValueAsObject - leafValuePath is null or empty");
             return null;
         }
         String[] split = getSplittedPath(leafValuePath);
         LinkedHashMap<String, Property> properties = nodeTemplate.getProperties();
-        return processProperties(split, properties);
+        return PropertyUtils.processProperties(split, properties);
     }
     
     public Map<String, Map<String, Object>> getCpPropertiesFromVfcAsObject(NodeTemplate vfc) {
@@ -436,7 +433,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             if (findFirst.isPresent()) {
                 Input input = findFirst.get();
                 Object current = input.getDefault();
-                Object property = iterateProcessPath(2, current, split);
+                Object property = PropertyUtils.iterateProcessPath(2, current, split);
                 return property == null || property instanceof Function? null : String.valueOf(property);
             }
         }
@@ -463,42 +460,15 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             if (findFirst.isPresent()) {
                 Input input = findFirst.get();
                 Object current = input.getDefault();
-                return iterateProcessPath(2, current, split);
+                return PropertyUtils.iterateProcessPath(2, current, split);
             }
         }
         log.error("getServiceInputLeafValueOfDefaultAsObject - value not found");
         return null;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    private Object iterateProcessPath(Integer index, Object current, String[] split) {
-        if (current == null) {
-            log.error("iterateProcessPath - this input has no default");
-            return null;
-        }
-        if (split.length > index) {
-            for (int i = index; i < split.length; i++) {
-                if (current instanceof Map) {
-                    current = ((Map<String, Object>) current).get(split[i]);
-                } else if (current instanceof List) {
-                    current = ((List) current).get(0);
-                    i--;
-                }
-                 else {
-                        log.error("iterateProcessPath - found an unexpected leaf where expected to find a complex type");
-                        return null;
-                }
-            }
-        }
-        if (current != null) {
-            return current;
-        }
-        log.error("iterateProcessPath - Path not Found");
-        return null;
-    }
-
-    private String[] getSplittedPath(String inputLeafValuePath) {
-        return inputLeafValuePath.split(PATH_DELIMITER);
+    private String[] getSplittedPath(String leafValuePath) {
+        return leafValuePath.split(PATH_DELIMITER);
     }
 
 
@@ -564,7 +534,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         String[] split = getSplittedPath(leafValuePath);
         LinkedHashMap<String, Property> properties = group.getProperties();
-        Object property = processProperties(split, properties);
+        Object property = PropertyUtils.processProperties(split, properties);
         return property == null || property instanceof Function? null : String.valueOf(property);
     }
 
@@ -582,7 +552,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         String[] split = getSplittedPath(leafValuePath);
         LinkedHashMap<String, Property> properties = group.getProperties();
-        return processProperties(split, properties);
+        return PropertyUtils.processProperties(split, properties);
     }
 
     @Override
@@ -756,6 +726,13 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     public List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType) {
     	return getNodeTemplateBySdcType(parentNodeTemplate, sdcType, false); 
+    }
+
+    public boolean isNodeTypeSupported(NodeTemplate nodeTemplate) {
+        SdcTypes[] supportedTypes = SdcTypes.values();
+        return Arrays.stream(supportedTypes)
+                .anyMatch(v->nodeTemplate.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)
+                        .equals(v.getValue()));
     }
     
     private List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType, boolean isVNF)  {
@@ -941,7 +918,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         String[] split = getSplittedPath(pathToPropertyLeafValue);
         LinkedHashMap<String, Property> properties = capability.getProperties();
-        Object property = processProperties(split, properties);
+        Object property = PropertyUtils.processProperties(split, properties);
         return property == null || property instanceof Function ? null : String.valueOf(property);
     }
     
@@ -1073,18 +1050,6 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         }
     }
 
-    private Object processProperties(String[] split, LinkedHashMap<String, Property> properties) {
-        Optional<Entry<String, Property>> findFirst = properties.entrySet().stream().filter(x -> x.getKey().equals(split[0])).findFirst();
-        if (findFirst.isPresent()) {
-            Property property = findFirst.get().getValue();
-            Object current = property.getValue();
-            return iterateProcessPath(1, current, split);
-        }
-        String propName = (split != null && split.length > 0 ? split[0] : null);
-        log.error("processProperties - property {} not found", propName);
-        return null;
-    }
-
   @Override
   public Map<String, List<InterfacesDef>> getInterfacesOf(NodeTemplate nt){
     if (nt == null) {
@@ -1122,7 +1087,115 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     return null;
   }
 
-	@Override
+    @Override
+    public List<String> getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath(String propertyNamePath, String nodeTemplatePath) {
+        log.info("A new request is received: property path is [{}], node template path is [{}]",
+                propertyNamePath, nodeTemplatePath);
+
+        List<String> propertyValuesList;
+
+        if (StringUtils.isEmpty(nodeTemplatePath) || StringUtils.isEmpty(propertyNamePath)) {
+            log.error("One of parameters is empty or null: property path is [{}], node template path is [{}]",
+                    propertyNamePath, nodeTemplatePath);
+            propertyValuesList = Collections.emptyList();
+        }
+        else {
+            String[] nodeTemplates = getSplittedPath(nodeTemplatePath);
+            propertyValuesList = getPropertyFromInternalNodeTemplate(getNodeTemplateByName(nodeTemplates[0]), 1, nodeTemplates, propertyNamePath);
+            log.info("Found property value {} by path [{}] for node template [{}]",
+                    propertyValuesList, propertyNamePath, nodeTemplatePath);
+        }
+        return propertyValuesList;
+    }
+
+    private List<String> getPropertyFromInternalNodeTemplate(NodeTemplate parent, int index,
+                                                       String[] nodeTemplatePath, String propertyPath) {
+        List<String> propertyValuesList;
+        if (parent == null) {
+            log.error("Node template {} is not found, the request will be rejected", nodeTemplatePath[index]);
+            propertyValuesList = Collections.emptyList();
+        }
+        else if (nodeTemplatePath.length <= index) {
+            log.debug("Stop NODE TEMPLATE searching");
+            propertyValuesList = getSimpleOrListPropertyValue(parent, propertyPath);
+        }
+        else {
+            log.debug("Node template {} is found with name {}", nodeTemplatePath[index], parent.getName());
+            NodeTemplate childNT = getChildNodeTemplateByName(parent, nodeTemplatePath[index]);
+
+            if (childNT == null || !isNodeTypeSupported(childNT)) {
+                log.error("Unsupported or not found node template named {}, the request will be rejected",
+                        nodeTemplatePath[index]);
+                propertyValuesList = Collections.emptyList();
+            }
+            else {
+                propertyValuesList = getPropertyFromInternalNodeTemplate(childNT, index + 1, nodeTemplatePath,
+                        propertyPath);
+            }
+        }
+        return propertyValuesList;
+    }
+
+
+
+    private List<String> getSimpleOrListPropertyValue(NodeTemplate nodeTemplate, String propertyPath) {
+        List<String> propertyValueList;
+        String[] path = getSplittedPath(propertyPath);
+        Property property = getNodeTemplatePropertyObjectByName(nodeTemplate, path[0]);
+
+        if (PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property)) {
+            //the requested property type is either simple or list of simple types
+            PropertySchemaType propertyType = PropertySchemaType.getEnumByValue(property.getType());
+            if (propertyType == PropertySchemaType.LIST &&
+                        PropertyUtils.isDataPropertyType((String)property.getEntrySchema()
+                                .get(SdcPropertyNames.PROPERTY_NAME_TYPE))) {
+                //cover the case when a type of property "path[0]' is list of data types
+                // and the requested property is an internal simple property of this data type
+                propertyValueList = calculatePropertyValue(getNodeTemplatePropertyValueAsObject(nodeTemplate, path[0]), path, nodeTemplate.getName());
+            }
+            else {
+                //the requested property is simple type or list of simple types
+                propertyValueList = calculatePropertyValue(getNodeTemplatePropertyValueAsObject(nodeTemplate, propertyPath), null, nodeTemplate.getName());
+            }
+        }
+        else {
+            log.error("The type of property {} on node {} is neither simple nor list of simple objects, the request will be rejected",
+                    propertyPath, nodeTemplate.getName());
+            propertyValueList = Collections.emptyList();
+        }
+        return propertyValueList;
+    }
+
+    private List<String> calculatePropertyValue(Object valueAsObject, String path[], String nodeName) {
+        if (valueAsObject == null || valueAsObject instanceof Map) {
+            log.error("The property {} either is not found on node template [{}], or it is data type, or it is not resolved get_input", path, nodeName);
+            return Collections.emptyList();
+        }
+        if (path != null) {
+            return PropertyUtils.findSimplePropertyValueInListOfDataTypes((List<Object>)valueAsObject, path);
+        }
+        return PropertyUtils.buildSimplePropertValueOrList(valueAsObject);
+    }
+
+
+
+
+    private Property getNodeTemplatePropertyObjectByName(NodeTemplate nodeTemplate, String propertyName) {
+        return nodeTemplate.getPropertiesObjects()
+                .stream()
+                .filter(p->p.getName().equals(propertyName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private NodeTemplate getChildNodeTemplateByName(NodeTemplate parent, String nodeTemplateName) {
+        return getNodeTemplateChildren(parent)
+            .stream()
+            .filter(nt->nt.getName().equals(nodeTemplateName))
+            .findFirst().orElse(null);
+    }
+
+    @Override
 	public List<Input> getInputsWithAnnotations() {
 		return toscaTemplate.getInputs(true);
 	}

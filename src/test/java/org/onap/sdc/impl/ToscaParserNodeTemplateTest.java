@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
-import org.onap.sdc.tosca.parser.impl.FilterType;
-import org.onap.sdc.tosca.parser.impl.SdcTypes;
+import org.onap.sdc.tosca.parser.enums.FilterType;
+import org.onap.sdc.tosca.parser.enums.SdcTypes;
 import org.onap.sdc.toscaparser.api.CapabilityAssignment;
 import org.onap.sdc.toscaparser.api.CapabilityAssignments;
 import org.onap.sdc.toscaparser.api.Group;
@@ -382,13 +382,13 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	}
 	//endregion
 
-	//region getNodeTemplatePropertyAsObject
+	//region getNodeTemplatePropertyValueAsObject
 	@Test
 	public void testGetNodeTemplatePropertyAsObject() {
 		List<NodeTemplate> serviceVfList = fdntCsarHelper.getServiceVfList();
-		assertEquals("2", fdntCsarHelper.getNodeTemplatePropertyAsObject(serviceVfList.get(0), "availability_zone_max_count"));
-		assertEquals(3, fdntCsarHelper.getNodeTemplatePropertyAsObject(serviceVfList.get(0), "max_instances"));
-		assertEquals("some code", fdntCsarHelper.getNodeTemplatePropertyAsObject(serviceVfList.get(0), "nf_naming_code"));
+		assertEquals("2", fdntCsarHelper.getNodeTemplatePropertyValueAsObject(serviceVfList.get(0), "availability_zone_max_count"));
+		assertEquals(3, fdntCsarHelper.getNodeTemplatePropertyValueAsObject(serviceVfList.get(0), "max_instances"));
+		assertEquals("some code", fdntCsarHelper.getNodeTemplatePropertyValueAsObject(serviceVfList.get(0), "nf_naming_code"));
 	}
 	//endregion
 
@@ -775,7 +775,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		// 2) complex type resolving
 		// 3) List access resolving
 		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
-		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
+		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
 		assertTrue(propertyAsObject instanceof ArrayList);
 		assertEquals(2, ((ArrayList) propertyAsObject).size());
 		//port_pd01_port_ip_requirements:
@@ -810,7 +810,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	public void testResolveGetInputForPrimitiveTypeString() {
 		//This test covers "default" resolving of primitive - as Object
 		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
-		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_network_role_tag");
+		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "port_pd01_port_network_role_tag");
 		assertEquals("oam", propertyAsObject);
 	}
 
@@ -827,7 +827,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	public void testResolveGetInputForMap() {
 		//This test covers "default" resolving of primitive - as Map
 		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
-		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd02_port_ip_requirements#ip_count_required");
+		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "port_pd02_port_ip_requirements#ip_count_required");
 		assertTrue(propertyAsObject instanceof Map);
 		assertEquals(false, ((Map)propertyAsObject).get("is_required"));
 	}
@@ -836,11 +836,11 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	public void testResolveGetInputForAllHierarchy() {
 		//This test covers "default" resolving from service level
 		List<NodeTemplate> vfs = resolveGetInputCsar.getServiceVfList();
-		Object vfPropertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfs.get(0), "vm_count");
+		Object vfPropertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyValueAsObject(vfs.get(0), "vm_count");
 		assertEquals(2, vfPropertyAsObject);
 		//This test covers property assignment resolving on VFI level (service template), from Vf level
 		List<NodeTemplate> vfcs = resolveGetInputCsar.getNodeTemplateBySdcType(vfs.get(0), SdcTypes.VFC);
-		Object vfcPropertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "my_count");
+		Object vfcPropertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "my_count");
 		assertEquals(2, vfcPropertyAsObject); //takes it from upper level (VF) property
 	}
 
@@ -857,7 +857,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	public void testResolveGetInputNoDefValueServiceLevel() {
 		//This test covers resolving when no "default" value is supplied to the input - should be null - Service/VFI level
 		List<NodeTemplate> vfs = resolveGetInputCsar.getServiceVfList();
-		Object vfPropertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfs.get(0), "port_order");
+		Object vfPropertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyValueAsObject(vfs.get(0), "port_order");
 		assertNull(vfPropertyAsObject);
 
 	}
@@ -870,7 +870,7 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	public void testResolveGetInputForComplexTypeAndListWithFalseValue() 
 	{
 		List<NodeTemplate> vfcs = resolveGetInputCsarFalse.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
-		Object propertyAsObject = resolveGetInputCsarFalse.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
+		Object propertyAsObject = resolveGetInputCsarFalse.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
 		assertTrue(propertyAsObject instanceof ArrayList);
 		assertEquals(2, ((ArrayList) propertyAsObject).size());
 		assertEquals("get_input:[ip_requirements, 0]", ((ArrayList) propertyAsObject).get(0).toString());
@@ -880,21 +880,21 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	@Test
 	public void testResolveGetInputForPrimitiveTypeStringWithFalseValue() {
 		List<NodeTemplate> vfcs = resolveGetInputCsarFalse.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
-		Object propertyAsObject = resolveGetInputCsarFalse.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_network_role_tag");
+		Object propertyAsObject = resolveGetInputCsarFalse.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "port_pd01_port_network_role_tag");
 		assertEquals("get_input:role_tag_oam", propertyAsObject.toString());
 	}
 	
 	@Test
 	public void testResolveGetInputForPrimitiveTypeListWithFalseValue() {
 		List<NodeTemplate> vfcs = resolveGetInputCsarFalse.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
-		Object propertyAsObject = resolveGetInputCsarFalse.getNodeTemplatePropertyAsObject(vfcs.get(0), "compute_pd_server_name");
+		Object propertyAsObject = resolveGetInputCsarFalse.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "compute_pd_server_name");
 		assertEquals("[get_input:[pd_server_names, 0]]", propertyAsObject.toString());
 	}
 	
 	//@Test // Maybe a bug here.... need to check with Esti - Mait was sent. 
 	public void testResolveGetInputForPrimitiveTypeList() {
 		List<NodeTemplate> vfcs = resolveGetInputCsar.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
-		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyAsObject(vfcs.get(0), "compute_pd_server_name");
+		Object propertyAsObject = resolveGetInputCsar.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "compute_pd_server_name");
 		assertEquals("\"ZRDM1MOGX01MPD001\"", propertyAsObject.toString());				
 	}
 	
@@ -902,13 +902,13 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
         public void testResolveGetInputForPrimitiveNullValue() {
 		List<NodeTemplate> vfcs = resolveGetInputCsarQA.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
 		@SuppressWarnings("unchecked")
-		List<String>propertyAsObject = (List<String>) resolveGetInputCsarQA.getNodeTemplatePropertyAsObject(vfcs.get(0), "compute_pd_server_availability_zone");
+		List<String>propertyAsObject = (List<String>) resolveGetInputCsarQA.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "compute_pd_server_availability_zone");
 		assertNull(propertyAsObject.get(0));
 		}
 	@Test
 	public void testResolveGetInputForPrimitiveIPValue() {
 		List<NodeTemplate> vfcs = resolveGetInputCsarQA.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
-		Object propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyAsObject(vfcs.get(0), "vm_image_name");
+		Object propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "vm_image_name");
 		assertEquals("107.239.36.5", propertyAsObject.toString());
 	}
 	
@@ -961,10 +961,10 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	@Test
 	public void testResolveGetInputArrayStructure() {
 		List<NodeTemplate> vfcs = resolveGetInputCsarQA.getVfcListByVf("b5190df2-7880-4d6f-836f-56ab17e1b85b");
-		Object propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyAsObject(vfcs.get(0), "compute_pd_server_name");
+		Object propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "compute_pd_server_name");
 		assertEquals( ((ArrayList)propertyAsObject).get(0).toString(), "\"ZRDM1MOGX01MPD001\"");
-		propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
-		assertEquals( ((ArrayList)propertyAsObject).get(1), null);
+		propertyAsObject = resolveGetInputCsarQA.getNodeTemplatePropertyValueAsObject(vfcs.get(0), "port_pd01_port_ip_requirements");
+		assertEquals(2, ((ArrayList)propertyAsObject).size());
 	}
 
 	@Test
@@ -1185,7 +1185,85 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertNotNull(inputs);
 		validateInputsAnnotations(inputs);
 	}
-	
+
+	@Test
+	public void getPropertyValueByNamePathAndNodeTypePathWhenPropertyValueIncludesGetInputAndPropertyHasDataType() {
+		List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath("exCP_naming",
+				"vDBE 0#abstract_vdbe_1#vdbe_vdbe_untr_port");
+		assertEquals(0, propertyValues.size());
+	}
+
+	@Test
+	public void getPropertyValueByNamePathAndNodeTypePathWhenPropertyPathIsComplex() {
+		List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath("exCP_naming#ecomp_generated_naming",
+				"vDBE 0#abstract_vdbe_1#vdbe_vdbe_untr_port");
+		assertEquals(1, propertyValues.size());
+		assertEquals("true", propertyValues.get(0));
+	}
+
+	@Test
+	public void getPropertyValueByNamePathAndNodeTypePathWhenNoValueFoundForGetInputProperty() {
+		List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath("virtual_machine_interface_allowed_address_pairs#allowed_address_pair#address_mode",
+				"vDBE 0#abstract_vdbe_1#vdbe_vdbe_untr_port_nested2#vdbe_0_subint_oam_vmi_0");
+		assertEquals(0, propertyValues.size());
+	}
+
+	@Test
+	public void getPropertyValueByNamePathAndNodeTemplatePathSuccess() {
+		List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath("is_default",
+				"vDBE 0#abstract_vdbe_1#vdbe_vdbe_untr_port_nested2#vdbe_0_subint_oam_vmi_0");
+		assertEquals(1, propertyValues.size());
+		assertEquals("false", propertyValues.get(0));
+	}
+
+    @Test
+    public void getPropertyValueByNamePathAndEmptyNodeTypePath() {
+        List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath(null, "");
+		assertEquals(0, propertyValues.size());
+	}
+
+    @Test
+    public void getPropertyValueByNamePathAndNullNodeTypePath() {
+		List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath(null, null);
+		assertTrue(propertyValues.isEmpty());
+    }
+
+	@Test
+	public void getPropertyValueByNamePathAndNodeTypePathForListOfGetInputs() {
+		List<String> propertyValues = resolveGetInputCsar.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath("port_pd01_port_ip_requirements#subnet_role",
+				"ipAssign4 0#abstract_pd_server");
+		assertEquals(2, propertyValues.size());
+		assertTrue(propertyValues.get(0).equals("subnet_role_4") || propertyValues.get(0).equals("subnet_role_6"));
+        assertTrue(propertyValues.get(1).equals("subnet_role_4") || propertyValues.get(1).equals("subnet_role_6"));
+	}
+
+	@Test
+    public void getPropertyValueByNamePathAndNodeTypePathForNetworkCloud() {
+        List<String> propertyValues = csarHelperServiceNetworkCloud.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath("related_networks#related_network_role",
+                "Network Cloud VNF MOCK 0#abstract_testVM#testVM_testVM_SRIOVtrunk1_port");
+        assertEquals(3, propertyValues.size());
+        assertTrue(propertyValues.contains("cor_direct_2"));
+        assertTrue(propertyValues.contains("sgi_direct_2"));
+        assertTrue(propertyValues.contains("int_imbl_2"));
+    }
+
+    @Test
+    public void getPropertyValueByNamePathAndSingleNodeTypeNameForNetworkCloud() {
+        List<String> propertyValues = csarHelperServiceNetworkCloud.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath("nf_naming#ecomp_generated_naming",
+                "Network Cloud VNF MOCK 0");
+        assertEquals(1, propertyValues.size());
+        assertEquals("true", propertyValues.get(0));
+    }
+
+    @Test
+    //todo test for port_order on resolveGetInputCsar
+    public void getPropertyValueByNamePathAndNodeTypePathWithGetInputNotSet() {
+		List<String> propertyValues = csarHelperServiceNetworkCloud.getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath(
+				"name", "Network Cloud VNF MOCK 0#abstract_testVM#testVM");
+        assertTrue(propertyValues.isEmpty());
+	}
+
+
 	@SuppressWarnings("unchecked")
 	private void validateInputsProperties(NodeTemplate vdbe0, Group group) {
 		assertNotNull(group.getPropertiesObjects());

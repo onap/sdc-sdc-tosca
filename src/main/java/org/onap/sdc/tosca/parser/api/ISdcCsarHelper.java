@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.onap.sdc.tosca.parser.impl.SdcTypes;
-import org.onap.sdc.tosca.parser.impl.FilterType;
+import org.onap.sdc.tosca.parser.enums.SdcTypes;
+import org.onap.sdc.tosca.parser.enums.FilterType;
 import org.onap.sdc.toscaparser.api.*;
 import org.onap.sdc.toscaparser.api.elements.InterfacesDef;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
@@ -108,7 +108,7 @@ public interface ISdcCsarHelper {
 	 * @param pathToPropertyLeafValue - the full path of the required property.
 	 * @return the leaf value as Object, or null if there's no such property. It's up to the caller to cast it to a proper type.
 	 */
-	public Object getNodeTemplatePropertyAsObject(NodeTemplate nodeTemplate, String pathToPropertyLeafValue);
+	public Object getNodeTemplatePropertyValueAsObject(NodeTemplate nodeTemplate, String pathToPropertyLeafValue);
 
 	/**
 	 * Get any property leaf value for a group definition by full path separated by #.
@@ -479,14 +479,14 @@ public interface ISdcCsarHelper {
 	 * @param policyTypeName	the name of the policy type
 	 * @return					the list of the policies
 	 */
-	public List<Policy> getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
+	List<Policy> getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
 	
 	/**
 	 * Get all the node templates of the topology template, which are the targets of the policy specified by name
 	 * @param policyName	the name of the policy
 	 * @return				the list of the node templates
 	 */
-	public List<NodeTemplate> getPolicyTargetsFromTopologyTemplate(String policyName);
+	List<NodeTemplate> getPolicyTargetsFromTopologyTemplate(String policyName);
 	
 	/**
 	 * Get all the node templates of the origin component (nested topology template) of node template, which are the targets of the policy specified by name
@@ -494,21 +494,21 @@ public interface ISdcCsarHelper {
 	 * @param policyName	the name of the policy
 	 * @return				the list of the node templates
 	 */
-	public List<NodeTemplate> getPolicyTargetsFromOrigin(NodeTemplate nodeTemplate, String policyName);
+	List<NodeTemplate> getPolicyTargetsFromOrigin(NodeTemplate nodeTemplate, String policyName);
 	
 	/**
 	 * Get the node template of the topology template specified by name
 	 * @param nodeTemplateName	the name of the node template
 	 * @return					the node template
 	 */
-	public NodeTemplate getNodeTemplateByName(String nodeTemplateName);
+	NodeTemplate getNodeTemplateByName(String nodeTemplateName);
     
     /**
      * Get all the policies, which contain the specified node template as a target
      * @param targetNode	the node template
      * @return				the list of the policies
      */
-	public List<Policy> getPoliciesOfTarget(NodeTemplate targetNode);
+	List<Policy> getPoliciesOfTarget(NodeTemplate targetNode);
 	
 	/**
 	 * Get all the policies of the specified type, which contain the specified node template as a target
@@ -516,27 +516,27 @@ public interface ISdcCsarHelper {
 	 * @param policyTypeName	the name of the policy type
 	 * @return					the list of the policies
 	 */
-    public List<Policy> getPoliciesOfTargetByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
+    List<Policy> getPoliciesOfTargetByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
 
     /**
      * Get all the groups of the origin component (nested topology template) of the node template
      * @param               nodeTemplate  the node template
      * @return              the list of the groups
      */
-    public ArrayList<Group> getGroupsOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
+    ArrayList<Group> getGroupsOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
     
     /**
      * Get all groups of this of the main topology template (either VF or service) by specified tosca group type
      * @param groupType     the group type
      * @return              the list of the groups
      */
-    public ArrayList<Group> getGroupsOfTopologyTemplateByToscaGroupType(String groupType);
+    ArrayList<Group> getGroupsOfTopologyTemplateByToscaGroupType(String groupType);
     
     /**
      * Get all groups of this of the main topology template (either VF or service)
      * @return              the list of the groups
      */
-    public ArrayList<Group> getGroupsOfTopologyTemplate();
+    ArrayList<Group> getGroupsOfTopologyTemplate();
     
     /**
      * Get all groups of this of the origin component (nested topology template) of the node template by specified tosca group type
@@ -544,14 +544,14 @@ public interface ISdcCsarHelper {
      * @param groupType     the group type
      * @return              the list of the groups
      */
-     public ArrayList<Group> getGroupsOfOriginOfNodeTemplateByToscaGroupType(NodeTemplate nodeTemplate, String groupType);
+     ArrayList<Group> getGroupsOfOriginOfNodeTemplateByToscaGroupType(NodeTemplate nodeTemplate, String groupType);
     
     /**
      * Get members of the group belongs to the main topology template (either VF or service) by group name
      * @param groupName     the name of the group
      * @return              the list of the node templates
      */
-    public List<NodeTemplate> getGroupMembersFromTopologyTemplate(String groupName);
+    List<NodeTemplate> getGroupMembersFromTopologyTemplate(String groupName);
     
     /**
      * Get members of the group belongs to the origin component (nested topology template) of the node template by group name
@@ -559,20 +559,20 @@ public interface ISdcCsarHelper {
      * @param groupName     the name of the group
      * @return              the list of the node templates
      */
-    public List<NodeTemplate> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName);
+    List<NodeTemplate> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName);
     
     /**
      * Get inputs of the topology template including existing annotations
      * @return				the list of the inputs
      */
-    public List<Input> getInputsWithAnnotations();
+    List<Input> getInputsWithAnnotations();
 
 	/**
 	 * Get all interface details for given node template.<br>
 	 * @return Map that contains the list of all interfaces and their definitions.
 	 * If none found, an empty map will be returned.
 	 */
-	public Map<String, List<InterfacesDef>> getInterfacesOf(NodeTemplate nt);
+	Map<String, List<InterfacesDef>> getInterfacesOf(NodeTemplate nt);
 
 	/**
 	 * Get all interface names for given node template.<br>
@@ -586,20 +586,31 @@ public interface ISdcCsarHelper {
 	 * @return List that contains the definitions of given interface name.
 	 * If none found, an empty list will be returned.
 	 */
-	public List<InterfacesDef> getInterfaceDetails(NodeTemplate nt, String interfaceName);
+	List<InterfacesDef> getInterfaceDetails(NodeTemplate nt, String interfaceName);
 
 	/**
 	 * Get all operation names for given node template and interface name.<br>
 	 * @return List that contains the name of all operations for a given node template and interface name.
 	 * If none found, an empty list will be returned.
 	 */
-	public List<String> getAllInterfaceOperations(NodeTemplate nt, String interfaceName);
+	List<String> getAllInterfaceOperations(NodeTemplate nt, String interfaceName);
 
 	/**
 	 * Get interface details for a given node template, interface name and operation name.<br>
 	 * @return InterfaceDef representing the operation details.
 	 * If none found, null will be returned.
 	 */
-	public InterfacesDef getInterfaceOperationDetails(NodeTemplate nt, String interfaceName, String operationName);
+	InterfacesDef getInterfaceOperationDetails(NodeTemplate nt, String interfaceName, String operationName);
 
+	/**
+	 * Get property value for a property of given node template.<br>
+	 * @param propertyNamePath valid name of property for search.<br>
+	 *        To find value in the datatype with datatype entry schema, the property name should be defined with # delimiter
+	 * @param nodeTemplatePath path to the model node template that property value will be searched.<br>
+	 *        Path is based on the collection of the node templates names delimited by #.
+	 * @return List of property values. If none found, empty list will be returned.
+	 */
+	List<String> getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath(String propertyNamePath, String nodeTemplatePath);
+
+	boolean isNodeTypeSupported(NodeTemplate nodeTemplate);
 }
