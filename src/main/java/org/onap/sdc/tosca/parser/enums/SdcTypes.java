@@ -18,7 +18,7 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.sdc.tosca.parser.impl;
+package org.onap.sdc.tosca.parser.enums;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +32,7 @@ public enum SdcTypes {
 
     private static List<String> complexTypes = Arrays.asList(VF, PNF, CR, SERVICE, CVFC).stream().map(SdcTypes::getValue).collect(Collectors.toList());
 
-    private SdcTypes(String value) {
+    SdcTypes(String value) {
         this.value = value;
     }
 

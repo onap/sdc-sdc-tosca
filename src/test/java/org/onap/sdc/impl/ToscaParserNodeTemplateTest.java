@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
-import org.onap.sdc.tosca.parser.impl.FilterType;
-import org.onap.sdc.tosca.parser.impl.SdcTypes;
+import org.onap.sdc.tosca.parser.enums.FilterType;
+import org.onap.sdc.tosca.parser.enums.SdcTypes;
 import org.onap.sdc.toscaparser.api.CapabilityAssignment;
 import org.onap.sdc.toscaparser.api.CapabilityAssignments;
 import org.onap.sdc.toscaparser.api.Group;
@@ -1163,7 +1163,81 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		assertNotNull(inputs);
 		validateInputsAnnotations(inputs);
 	}
-	
+
+	@Test
+	public void getPropertyValueByNamePathAndNodeTypePathWhenPropertyValueIncludesGetInputAndPropertyHasDataType() {
+		List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyValuesByPropertyNamePathAndNodeTemplatePath("exCP_naming",
+				"vDBE 0#abstract_vdbe_1#vdbe_vdbe_untr_port");
+		assertEquals(0, propertyValues.size());
+	}
+
+	@Test
+	public void getPropertyValueByNamePathAndNodeTypePathWhenPropertyPathIsWrong() {
+		List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyValuesByPropertyNamePathAndNodeTemplatePath("exCP_naming#ecomp_generated_naming",
+				"vDBE 0#abstract_vdbe_1#vdbe_vdbe_untr_port");
+		assertEquals(0, propertyValues.size());
+	}
+
+	@Test
+	public void getPropertyValueByNamePathAndNodeTypePathWhenNoValueFoundForGetInputProperty() {
+		List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyValuesByPropertyNamePathAndNodeTemplatePath("virtual_machine_interface_allowed_address_pairs#allowed_address_pair#address_mode",
+				"vDBE 0#abstract_vdbe_1#vdbe_vdbe_untr_port_nested2#vdbe_0_subint_oam_vmi_0");
+		assertEquals(0, propertyValues.size());
+	}
+
+	@Test
+	public void getPropertyValueByNamePathAndNodeTemplatePathSuccess() {
+		List<String> propertyValues = csarHelperServiceGroupsInputs.getPropertyValuesByPropertyNamePathAndNodeTemplatePath("is_default",
+				"vDBE 0#abstract_vdbe_1#vdbe_vdbe_untr_port_nested2#vdbe_0_subint_oam_vmi_0");
+		assertEquals(1, propertyValues.size());
+		assertEquals("false", propertyValues.get(0));
+	}
+
+
+
+ /*  use for scenario when input does not exist
+              "virtual_machine_interface_allowed_address_pairs#allowed_address_pair#address_mode",
+                "vDBE 0#abstract_vdbe_1#vdbe_vdbe_untr_port_nested2#vdbe_0_subint_oam_vmi_0");
+*/
+
+/*
+        List<NodeTemplate> vfChildren = csarHelperServiceGroupsInputs.getNodeTemplateChildren(csarHelperServiceGroupsInputs.getNodeTemplateByName("vDBE 0"));
+        NodeTemplate cvfc1 = vfChildren.stream().filter(p->p.getName().equals("abstract_vdbe_1")).findFirst().get();
+		assertNotNull(cvfc1);
+		List<NodeTemplate> cvfc1Children = csarHelperServiceGroupsInputs.getNodeTemplateChildren(cvfc1);
+		NodeTemplate cvfc2 = cvfc1Children.stream().filter(p->p.getName().equals("vdbe_vdbe_untr_port_nested2")).findFirst().get();
+		assertNotNull(cvfc2);
+		List<NodeTemplate> cvfc2Children = csarHelperServiceGroupsInputs.getNodeTemplateChildren(cvfc2);
+		NodeTemplate vlanSubInf = cvfc2Children.stream().filter(p->p.getName().equals("vdbe_0_subint_oam_vmi_0")).findFirst().get();
+
+*/
+		/*Property property = vlanSubInf.getPropertiesObjects()
+				.stream()
+				.filter(p->p.getName().equals("virtual_machine_interface_allowed_address_pairs"))
+				.findFirst()
+				.get();*/
+		//property.get
+/*
+		String value = csarHelperServiceGroupsInputs.getNodeTemplatePropertyLeafValue(internalNodeTemplate,
+                "virtual_machine_interface_allowed_address_pairs#allowed_address_pair#address_mode");
+		assertNotNull(value);
+		String[] foundProperty = value.split("=");
+		assertEquals("get_input", foundProperty[0].substring(1));
+*/
+//TODO correct for real API
+    @Test
+    public void getPropertyValueByNamePathAndEmptyNodeTypePath() {
+        assertNull(csarHelperServiceGroupsInputs.getPropertyValuesByPropertyNamePathAndNodeTemplatePath(null, ""));
+    }
+
+    @Test
+    public void getPropertyValueByNamePathAndNullNodeTypePath() {
+        assertNull(csarHelperServiceGroupsInputs.getPropertyValuesByPropertyNamePathAndNodeTemplatePath(null, null));
+    }
+
+//TODO add test where node template path conains only one element
+
+
 	@SuppressWarnings("unchecked")
 	private void validateInputsProperties(NodeTemplate vdbe0, Group group) {
 		assertNotNull(group.getPropertiesObjects());

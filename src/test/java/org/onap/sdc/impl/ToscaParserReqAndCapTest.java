@@ -1,11 +1,10 @@
 package org.onap.sdc.impl;
 
-import org.onap.sdc.tosca.parser.impl.SdcTypes;
+import org.onap.sdc.tosca.parser.enums.SdcTypes;
 import org.onap.sdc.toscaparser.api.CapabilityAssignments;
 import org.onap.sdc.toscaparser.api.CapabilityAssignment;
 import org.onap.sdc.toscaparser.api.NodeTemplate;
 import org.onap.sdc.toscaparser.api.RequirementAssignments;
-import org.onap.sdc.toscaparser.api.elements.Metadata;
 import org.testng.annotations.Test;
 
 import java.util.List;

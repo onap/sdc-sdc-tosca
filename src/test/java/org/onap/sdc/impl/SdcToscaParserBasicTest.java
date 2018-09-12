@@ -52,6 +52,7 @@ public abstract class SdcToscaParserBasicTest {
     public static void init() throws SdcToscaParserException, JToscaException, IOException {
 
         factory = SdcToscaParserFactory.getInstance();
+/*
         fdntCsarHelper = getCsarHelper("csars/service-sunny-flow.csar", false);
         rainyCsarHelperMultiVfs = getCsarHelper("csars/service-ServiceFdnt-csar-rainy.csar", false);
         rainyCsarHelperSingleVf = getCsarHelper("csars/service-ServiceFdnt-csar.csar", false);
@@ -70,13 +71,16 @@ public abstract class SdcToscaParserBasicTest {
 		csarHelperVfPolicy = getCsarHelper("csars/resource-Policy-csar.csar");
 		csarHelperServicePolicy = getCsarHelper("csars/service-AlService-csar.csar");
 		csarHelperServiceGroups = getCsarHelper("csars/service-Groupstest-csar.csar");
+*/
 		csarHelperServiceGroupsInputs = getCsarHelper("csars/service-VdbeSrv-csar.csar");
+/*
 		csarHelperServiceGroupsCapabilities = getCsarHelper("csars/service-VdbePx-csar.csar");
 		csarHelperVfGroupsPolicies = getCsarHelper("csars/resource-Vdbe-csar.csar");
 		csarHelperServiceGroupsPolicies = getCsarHelper("csars/service-VlanD2dSrv-csar.csar");
 		csarHelperServiceAnnotations = getCsarHelper("csars/resource-Sirovinputannotation-csar.csar");
 		csarHelperVfInterfaces = getCsarHelper("csars/service-CxSvc-csar.csar");
 		csarHelperServiceAdiodAnnotations = getCsarHelper("csars/service-AdiodVmxVpeBvService-csar.csar");
+*/
 
 		fdntCsarHelper_Data = new HashMap<String, HashMap<String, List<String>>>(){
     		{

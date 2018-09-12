@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.onap.sdc.tosca.parser.impl.SdcTypes;
-import org.onap.sdc.tosca.parser.impl.FilterType;
+import org.onap.sdc.tosca.parser.enums.SdcTypes;
+import org.onap.sdc.tosca.parser.enums.FilterType;
 import org.onap.sdc.toscaparser.api.*;
 import org.onap.sdc.toscaparser.api.elements.InterfacesDef;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
@@ -602,4 +602,15 @@ public interface ISdcCsarHelper {
 	 */
 	public InterfacesDef getInterfaceOperationDetails(NodeTemplate nt, String interfaceName, String operationName);
 
+	/**
+	 * Get property value for a property of given node template.<br>
+	 * @param propertyNamePath valid name of property for search.<br>
+	 *        To find value in the datatype with datatype entry schema, the property name should be defined with # delimiter
+	 * @param nodeTemplatePath path to the model node template that property value will be searched.<br>
+	 *        Path is based on the collection of the node templates names delimited by #.
+	 * @return List of property values. If none found, null will be returned.
+	 */
+	public List<String> getPropertyValuesByPropertyNamePathAndNodeTemplatePath(String propertyNamePath, String nodeTemplatePath);
+
+	boolean isNodeTypeSupported(NodeTemplate nodeTemplate);
 }

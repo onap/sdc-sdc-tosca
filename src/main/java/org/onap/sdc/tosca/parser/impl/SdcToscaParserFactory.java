@@ -8,6 +8,7 @@ import org.onap.sdc.tosca.parser.config.ConfigurationManager;
 import org.onap.sdc.tosca.parser.config.ErrorInfo;
 import org.onap.sdc.tosca.parser.config.JToscaValidationIssueInfo;
 import org.onap.sdc.tosca.parser.config.SdcToscaParserErrors;
+import org.onap.sdc.tosca.parser.enums.JToscaValidationIssueType;
 import org.onap.sdc.tosca.parser.utils.GeneralUtility;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
