@@ -1,6 +1,7 @@
 package org.onap.sdc.impl;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
@@ -782,6 +783,27 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 		//- get_input: [ip_requirements, 1]
 		assertEquals("subnet_role_4", ((Map) ((ArrayList) propertyAsObject).get(0)).get("subnet_role"));
 		assertEquals("subnet_role_6", ((Map) ((ArrayList) propertyAsObject).get(1)).get("subnet_role"));
+	}
+
+	@Test
+	public void testResolveGetInputForListOnNetworkCloud() {
+		final String related_network_role = "related_network_role";
+		List<NodeTemplate> serviceVfList = csarHelperServiceNetworkCloud.getServiceVfList();
+		assertNotNull(serviceVfList);
+		assertFalse(serviceVfList.isEmpty());
+		List<NodeTemplate> vfcListByVf = csarHelperServiceNetworkCloud.getVfcListByVf(csarHelperServiceNetworkCloud.getNodeTemplateCustomizationUuid(serviceVfList.get(0)));
+		assertNotNull(vfcListByVf);
+		assertFalse(vfcListByVf.isEmpty());
+		List<NodeTemplate> cpList = csarHelperServiceNetworkCloud.getNodeTemplateChildren(vfcListByVf.get(0));
+		assertNotNull(cpList);
+		assertFalse(cpList.isEmpty());
+		final Object propertyValue = cpList.get(0).getPropertyValue("related_networks");
+		assertNotNull(propertyValue);
+		ArrayList<Map<String, String>> relatedNetworkList = (ArrayList)propertyValue;
+		assertEquals(3, relatedNetworkList.size());
+		assertEquals("cor_direct_2", relatedNetworkList.get(0).get(related_network_role));
+		assertEquals("sgi_direct_2", relatedNetworkList.get(1).get(related_network_role));
+		assertEquals("int_imbl_2", relatedNetworkList.get(2).get(related_network_role));
 	}
 
 	@Test

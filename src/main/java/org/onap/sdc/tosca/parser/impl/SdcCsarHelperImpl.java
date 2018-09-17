@@ -820,7 +820,9 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         if (ntProperties != null && ntProperties.size() > 0) {
 
             for (Property current : ntProperties.values()) {
-                filterProperties(current.getValue(), current.getName(), filterType, pattern, filterMap);
+                if (current.getValue() != null) {
+                    filterProperties(current.getValue(), current.getName(), filterType, pattern, filterMap);
+                }
             }
         }
 
