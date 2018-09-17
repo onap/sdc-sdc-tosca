@@ -45,6 +45,7 @@ public abstract class SdcToscaParserBasicTest {
 	static ISdcCsarHelper csarHelperVfInterfaces;
 	static ISdcCsarHelper csarHelperServiceAnnotations;
 	static ISdcCsarHelper csarHelperServiceAdiodAnnotations;
+	static ISdcCsarHelper csarHelperServiceNetworkCloud;
 
 	static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
     
@@ -77,6 +78,7 @@ public abstract class SdcToscaParserBasicTest {
 		csarHelperServiceAnnotations = getCsarHelper("csars/resource-Sirovinputannotation-csar.csar");
 		csarHelperVfInterfaces = getCsarHelper("csars/service-CxSvc-csar.csar");
 		csarHelperServiceAdiodAnnotations = getCsarHelper("csars/service-AdiodVmxVpeBvService-csar.csar");
+		csarHelperServiceNetworkCloud = getCsarHelper("csars/service-NetworkCloudVnfServiceMock-csar.csar");
 
 		fdntCsarHelper_Data = new HashMap<String, HashMap<String, List<String>>>(){
     		{
