@@ -83,3 +83,28 @@ to use add the folowing depandency to your POM file:
 ### Features:
 1. **enable types validation**  from this version all types in CSAR will be verified, all used types should be properly declared in "base" yml files e.g. node.yml , data.yml etc.
 
+## 1.4.3
+
+### Bug fix:
+1. **validation fix**  Maximum nodeTypes we allowed in CSAR file was increased from 10 to 20.
+
+## 1.4.4
+
+### Features:
+1. **list support for get input**  until know the get input was only supported in the following format get_input \[ <list > , index ] this way was the only option for using a list typed property and retrieving its value for a use in a property  , from this release you can use get input < list> to retrieve the whole list.
+
+      example:
+      ```
+      properties:
+        # the property type is list
+        related_networks:
+          #this is now supoorted you can retrive the whole list
+          get_input: port_vpg_private_0_port_related_networks
+        # the property type is string
+        network:
+          # this will retrive a value from the list
+          get_input:
+          - port_vpg_private_0_port_network
+          - index_value
+      ```
+
