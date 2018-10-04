@@ -108,3 +108,8 @@ to use add the folowing depandency to your POM file:
           - index_value
       ```
 
+## 1.4.5
+
+### Features:
+1. **getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath API** The new Tosca Parser API resolves property value by path in the model (including nested nodes with # delimiter) and property name. 
+It resolves value of the property if it is defined as get input.
