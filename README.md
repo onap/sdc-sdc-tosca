@@ -43,7 +43,7 @@ to use add the folowing depandency to your POM file:
 <dependency>
   <groupId>org.onap.sdc.sdc-tosca</groupId>
   <artifactId>sdc-tosca</artifactId>
-  <version>1.4.1</version>
+  <version>1.4.6</version>
 </dependency>
 ``` 
 
@@ -113,3 +113,8 @@ to use add the folowing depandency to your POM file:
 ### Features:
 1. **getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath API** The new Tosca Parser API resolves property value by path in the model (including nested nodes with # delimiter) and property name. 
 It resolves value of the property if it is defined as get input.
+
+## 1.4.6
+
+### Bug fix:
+1. **remove use of a snapshot dependency** update jtosca dependency version from snapshot to release. 
