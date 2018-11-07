@@ -111,8 +111,10 @@ to use add the folowing depandency to your POM file:
 ## 1.4.5
 
 ### Features:
-1. **getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath API** The new Tosca Parser API resolves property value by path in the model (including nested nodes with # delimiter) and property name. 
-It resolves value of the property if it is defined as get input.
+1. **getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath API** The new Tosca Parser API resolves property value by path in the model (including nested nodes with # delimiter) and property name.
+
+### Code change:
+1. Classes FilterType.java, JToscaValidationIssueType.java, SdcTypes.java have been moved from **org.onap.sdc.tosca.parser.impl** package to **org.onap.sdc.tosca.parser.enums** package.
 
 ## 1.4.6
 
