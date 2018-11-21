@@ -120,3 +120,8 @@ to use add the folowing depandency to your POM file:
 
 ### Bug fix:
 1. **remove use of a snapshot dependency** update jtosca dependency version from snapshot to release. 
+
+## 1.4.7
+
+### Bug fix:
+1. **validation fix**  Null value caused to NullPointerException in validate function in DataEntity
