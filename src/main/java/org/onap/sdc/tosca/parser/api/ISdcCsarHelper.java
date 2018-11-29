@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.onap.sdc.tosca.parser.elements.queries.TopologyTemplateQuery;
+import org.onap.sdc.tosca.parser.elements.queries.EntityQuery;
 import org.onap.sdc.tosca.parser.enums.SdcTypes;
 import org.onap.sdc.tosca.parser.enums.FilterType;
 import org.onap.sdc.toscaparser.api.*;
@@ -613,4 +615,16 @@ public interface ISdcCsarHelper {
 	List<String> getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath(String propertyNamePath, String nodeTemplatePath);
 
 	boolean isNodeTypeSupported(NodeTemplate nodeTemplate);
+
+	/**
+	 * Retrieves details of one or more entity templates according to provided query parameters from corresponding topology template
+	 * @param entityQuery Object describing the searched entity parameters. Includes one of following parameters: entity type,
+	 *                    SDC (node template) type, tosca type as well as optional customizationUUID and UUID
+	 * @param topologyTemplateQuery parameters of the topology template containing the above entity.
+	 *                  Includes SDC type of the container and optional customizationUUID
+	 * @param isRecursive indicates if the search is recursive or not
+	 * @return list of @{@link IEntityDetails} objects containing information about the found entities.
+	 * If either no entities found or the provided query is incorrect, an empty list is returned
+	 */
+	List<IEntityDetails> getEntity(EntityQuery entityQuery, TopologyTemplateQuery topologyTemplateQuery, boolean isRecursive);
 }
