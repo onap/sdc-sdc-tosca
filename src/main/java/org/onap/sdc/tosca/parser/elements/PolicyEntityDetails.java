@@ -10,8 +10,8 @@ public class PolicyEntityDetails extends EntityDetails {
 
     private final Policy policy;
 
-    PolicyEntityDetails(EntityTemplate entityTemplate, NodeTemplate parentNode) {
-        super(entityTemplate, parentNode);
+    PolicyEntityDetails(EntityTemplate entityTemplate) {
+        super(entityTemplate);
         policy = (Policy)getEntityTemplate();
     }
 

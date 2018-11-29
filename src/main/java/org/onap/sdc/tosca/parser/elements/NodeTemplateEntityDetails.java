@@ -9,8 +9,8 @@ public class NodeTemplateEntityDetails extends EntityDetails {
 
     private final NodeTemplate nodeTemplate;
 
-    NodeTemplateEntityDetails(EntityTemplate entityTemplate, NodeTemplate parentNode) {
-        super(entityTemplate, parentNode);
+    NodeTemplateEntityDetails(EntityTemplate entityTemplate) {
+        super(entityTemplate);
         nodeTemplate = (NodeTemplate)getEntityTemplate();
     }
 

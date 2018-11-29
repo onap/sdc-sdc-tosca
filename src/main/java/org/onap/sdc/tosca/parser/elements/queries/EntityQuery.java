@@ -1,11 +1,17 @@
 package org.onap.sdc.tosca.parser.elements.queries;
 
 import org.apache.commons.lang3.StringUtils;
+import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
 import org.onap.sdc.tosca.parser.enums.SdcTypes;
+import org.onap.sdc.tosca.parser.impl.SdcPropertyNames;
 import org.onap.sdc.toscaparser.api.EntityTemplate;
+import org.onap.sdc.toscaparser.api.NodeTemplate;
+import org.onap.sdc.toscaparser.api.elements.Metadata;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * This class describes an entity searched and retrieved by SDC Tosca Parser API
@@ -37,9 +43,7 @@ public abstract class EntityQuery {
         this.customizationUUID = customizationUUID;
     }
 
-    public abstract List<EntityTemplate> searchByTopologyTemplate(TopologyTemplateQuery topologyTemplateQuery);
-
-    public abstract EntityTemplateType getType();
+    public abstract List<IEntityDetails> getEntitiesFromTopologyTemplate(NodeTemplate nodeTemplate);
 
     public EntityTemplateType getEntityType() {
         return entityType;
@@ -63,6 +67,25 @@ public abstract class EntityQuery {
 
     public boolean searchAllEntities() {
         return StringUtils.isEmpty(toscaType) && nodeTemplateType == null;
+    }
+
+    public boolean isSearchCriteriaMatched(Metadata metadata, String toscaType) {
+        return Objects.nonNull(metadata) &&
+                isStringMatchingOrNull(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_UUID))
+                .test(getUUID())
+                && isStringMatchingOrNull(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID))
+                .test(getCustomizationUUID())
+                && isStringMatchingOrNull(toscaType)
+                .test(getToscaType());
+    }
+
+    static Predicate<String> isStringMatchingOrNull(String uid) {
+        if (uid == null) {
+            return u->false;
+        }
+        Predicate<String> uidFound = Objects::nonNull;
+        return uidFound.and(u->u.equals(uid))
+                .or(Objects::isNull);
     }
 
     public static EntityQueryBuilder newBuilder(EntityTemplateType entityTemplateType) {

@@ -12,10 +12,15 @@ import java.util.stream.Collectors;
 
 public class GroupEntityDetails extends EntityDetails {
     private final Group group;
+    private final List<IEntityDetails> memberNodes;
 
-    GroupEntityDetails(EntityTemplate entityTemplate, NodeTemplate parentNode)  {
-        super(entityTemplate,parentNode);
+    GroupEntityDetails(EntityTemplate entityTemplate)  {
+        super(entityTemplate);
         group = (Group)getEntityTemplate();
+        memberNodes = group.getMemberNodes()
+                .stream()
+                .map(m->EntityDetailsFactory.createEntityDetails(EntityTemplateType.NODE_TEMPLATE, m))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -25,10 +30,7 @@ public class GroupEntityDetails extends EntityDetails {
 
     @Override
     public List<IEntityDetails> getMemberNodes() {
-        return group.getMemberNodes()
-                .stream()
-                .map(m->EntityDetailsFactory.createEntityDetails(EntityTemplateType.NODE_TEMPLATE, m, null))
-                .collect(Collectors.toList());
+        return memberNodes;
     }
 
     @Override

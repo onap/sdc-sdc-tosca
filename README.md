@@ -125,3 +125,17 @@ to use add the folowing depandency to your POM file:
 
 ### Bug fix:
 1. **validation fix**  Null value caused to NullPointerException in validate function in DataEntity
+
+## 1.4.8
+
+### Features:
+1. A new API is declared:
+
+*List<IEntityDetails> getEntity(EntityQuery entityQuery, TopologyTemplateQuery topologyTemplateQuery, boolean isRecursive)*
+
+It is designed to retrieve details of one or more entity templates from corresponding topology template according to provided query parameters
+
+2. Mock-up version of **getEntity** API is implemented.
+
+### Note:
+This version is intended for SDN-C team usage only.

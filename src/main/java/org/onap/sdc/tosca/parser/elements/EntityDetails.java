@@ -13,12 +13,11 @@ import java.util.Map;
 public abstract class EntityDetails implements IEntityDetails {
 
     private final EntityTemplate entityTemplate;
+    private final IEntityDetails parentNodeTemplate;
 
-    private final IEntityDetails parentNode;
-
-    EntityDetails(EntityTemplate entityTemplate, NodeTemplate parentNode) {
+    EntityDetails(EntityTemplate entityTemplate) {
         this.entityTemplate = entityTemplate;
-        this.parentNode = EntityDetailsFactory.createEntityDetails(EntityTemplateType.NODE_TEMPLATE, parentNode, null);
+        this.parentNodeTemplate = EntityDetailsFactory.createEntityDetails(EntityTemplateType.NODE_TEMPLATE, entityTemplate.getParentNodeTemplate());
     }
 
     @Override
@@ -49,8 +48,7 @@ public abstract class EntityDetails implements IEntityDetails {
 
     @Override
     public IEntityDetails getParent() {
-        //todo - update after adding parent to the EntityTemplate class
-        return parentNode;
+        return parentNodeTemplate;
     }
 
     @Override
