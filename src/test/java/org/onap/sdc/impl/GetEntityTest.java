@@ -90,6 +90,20 @@ public class GetEntityTest {
     }
 
     @Test
+    public void getCpsFromVfRecursively() {
+        EntityQuery entityQuery = EntityQuery.newBuilder(SdcTypes.CP)
+                .build();
+        TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.VF)
+                .build();
+
+        List<IEntityDetails> entities = helper.getEntity(entityQuery, topologyTemplateQuery, true);
+
+        assertEquals(16, entities.size());
+        assertEquals("jenny vTSBC vlan VNF 0#abstract_rtp_msc", entities.get(2).getPath());
+        assertEquals("jenny vTSBC vlan VNF 0#abstract_rtp_msc#rtp_msc_rtp_msc_avpn_port_0_vlan_subinterface_rtp_msc_avpn", entities.get(7).getPath());
+    }
+
+    @Test
     public void getCpByUuidsFromCVFCRecursively() {
         EntityQuery entityQuery = EntityQuery.newBuilder(SdcTypes.CP)
                 .customizationUUID("d674b231-34ba-4777-b83a-78be33960a69")

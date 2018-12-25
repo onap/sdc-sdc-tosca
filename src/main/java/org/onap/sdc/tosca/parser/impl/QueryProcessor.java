@@ -92,31 +92,33 @@ class QueryProcessor {
         return topologyTemplateQuery.getNodeTemplateType() == SdcTypes.SERVICE;
     }
 
-    private List<NodeTemplate> getInternalTopologyTemplates(List<NodeTemplate> nodeTemplateList, boolean searchTypeOnly) {
+    private List<NodeTemplate> getInternalTopologyTemplates(List<NodeTemplate> nodeTemplateList, boolean isRecursive) {
         return nodeTemplateList
             .stream()
-            .map(child->getTopologyTemplatesByQuery(child, searchTypeOnly))
+            .map(child->getTopologyTemplatesByQuery(child, isRecursive))
             .flatMap(List::stream)
             .collect(Collectors.toList());
     }
 
-    private List<NodeTemplate> getTopologyTemplatesByQuery(NodeTemplate current, boolean searchTypeOnly) {
+    private List<NodeTemplate> getTopologyTemplatesByQuery(NodeTemplate current, boolean isRecursive) {
         List<NodeTemplate> topologyTemplateList = Lists.newArrayList();
 
-        boolean isTopologyTemplateFound = searchTypeOnly ?
-                topologyTemplateQuery.isSameSdcType(current.getMetaData()) : topologyTemplateQuery.isMatchingSearchCriteria(current);
+        boolean isTopologyTemplateFound = isRecursive ?
+                SdcTypes.isComplex(current.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))
+                : topologyTemplateQuery.isMatchingSearchCriteria(current);
         if (isTopologyTemplateFound) {
             topologyTemplateList.add(current);
-            if (!isServiceSearch()) {
+            if (!isRecursive) {
                 //recursion stop condition
                 return topologyTemplateList;
             }
         }
-        if (SdcTypes.isComplex(current.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)) && current.getSubMappingToscaTemplate() != null) {
-            //search the node template inside a given topology template
+        if (SdcTypes.isComplex(current.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)) &&
+               current.getSubMappingToscaTemplate() != null) {
+           //search the node template inside a given topology template
             topologyTemplateList.addAll(current.getSubMappingToscaTemplate().getNodeTemplates()
                     .stream()
-                    .map(nt->getTopologyTemplatesByQuery(nt, searchTypeOnly))
+                    .map(nt->getTopologyTemplatesByQuery(nt, isRecursive))
                     .flatMap(List::stream)
                     .collect(Collectors.toList()));
         }
