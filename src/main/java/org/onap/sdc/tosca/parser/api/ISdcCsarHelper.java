@@ -42,6 +42,7 @@ public interface ISdcCsarHelper {
 	 * @param nodeType - the TOSCA type of the node.
 	 * @return service node templates of this type.
 	 */
+	@Deprecated
 	public List<NodeTemplate> getServiceNodeTemplatesByType(String nodeType);
 
 	/**
@@ -49,6 +50,7 @@ public interface ISdcCsarHelper {
 	 *
 	 * @return service node templates.
 	 */
+	@Deprecated
 	public List<NodeTemplate> getServiceNodeTemplates();
 
 	/**
@@ -57,6 +59,7 @@ public interface ISdcCsarHelper {
 	 * @param vfCustomizationUuid - customizationUuid of VF instance.
 	 * @return list of vfModule groups.
 	 */
+	@Deprecated
 	public List<Group> getVfModulesByVf(String vfCustomizationUuid);
 
 
@@ -84,6 +87,7 @@ public interface ISdcCsarHelper {
 	 * @param pathToPropertyLeafValue - the full path of the required property.
 	 * @return the leaf value as String, or null if there's no such property, or it's not a leaf.
 	 */
+	@Deprecated
 	public String getNodeTemplatePropertyLeafValue(NodeTemplate nodeTemplate, String pathToPropertyLeafValue);
 
 	/**
@@ -110,6 +114,7 @@ public interface ISdcCsarHelper {
 	 * @param pathToPropertyLeafValue - the full path of the required property.
 	 * @return the leaf value as Object, or null if there's no such property. It's up to the caller to cast it to a proper type.
 	 */
+	@Deprecated
 	public Object getNodeTemplatePropertyValueAsObject(NodeTemplate nodeTemplate, String pathToPropertyLeafValue);
 
 	/**
@@ -119,6 +124,7 @@ public interface ISdcCsarHelper {
 	 * @param propertyName - the name of the required property.
 	 * @return the leaf value as String, or null if there's no such property, or it's not a leaf.
 	 */
+	@Deprecated
 	public String getGroupPropertyLeafValue(Group group, String propertyName);
 
 	/**
@@ -128,18 +134,21 @@ public interface ISdcCsarHelper {
 	 * @param propertyName - the name of the required property.
 	 * @return the leaf value as Object, or null if there's no such property. It's up to the caller to cast it to a proper type.
 	 */
+	@Deprecated
 	public Object getGroupPropertyAsObject(Group group, String propertyName);
 
 	/**
 	 * Get all VL node templates of the CSAR service.
 	 * @return - all VL node templates.
 	 */
+	@Deprecated
 	public List<NodeTemplate> getServiceVlList();
 
 	/**
 	 * Get all VF node templates of the CSAR service.
 	 * @return - all VF node templates.
 	 */
+	@Deprecated
 	public List<NodeTemplate> getServiceVfList();
 
 
@@ -169,6 +178,7 @@ public interface ISdcCsarHelper {
 	 * @param metadataPropertyName - the name of the metadata property.
 	 * @return metadata property value
 	 */
+	@Deprecated
 	public String getMetadataPropertyValue(Metadata metadata, String metadataPropertyName);
 	
 	
@@ -234,6 +244,7 @@ public interface ISdcCsarHelper {
 	 * @param vfCustomizationId - customizationUuid of the VF node template.
 	 * @return all VFC node templates from a specified VF
 	 */
+	@Deprecated
 	public List<NodeTemplate> getVfcListByVf(String vfCustomizationId);
 	
 	/**
@@ -241,6 +252,7 @@ public interface ISdcCsarHelper {
 	 * @param vfCustomizationId - customizationUuid of the VF node template.
 	 * @return all CP node templates from a specified VF
 	 */
+	@Deprecated
 	public List<NodeTemplate> getCpListByVf(String vfCustomizationId);
 	
 	/**
@@ -261,6 +273,7 @@ public interface ISdcCsarHelper {
 	 * @return node templates from vf with the names as in members section.
      * 
 	 */
+	@Deprecated
 	public List<NodeTemplate> getMembersOfVfModule(NodeTemplate vf, Group vfModule);
 	
 	
@@ -297,6 +310,7 @@ public interface ISdcCsarHelper {
 	 * Get all allotted node templates from this service.
 	 * @return all allotted node templates from this service.
 	 */
+	@Deprecated
 	public List<NodeTemplate> getAllottedResources();
 	
 	/**
@@ -313,6 +327,7 @@ public interface ISdcCsarHelper {
 	 * @param nodeTemplate - node template object
 	 * @return - node type string.
 	 */
+	@Deprecated
 	public String getTypeOfNodeTemplate(NodeTemplate nodeTemplate);
 
 	/**
@@ -355,6 +370,7 @@ public interface ISdcCsarHelper {
     * @param vfc - VFC node template to look for CP-related props.
     * @return map <b>CP node template name</b>  to a map of <b>property name</b> - <b> property value as object</b>.
     */
+    @Deprecated
     public Map<String, Map<String, Object>> getCpPropertiesFromVfcAsObject(NodeTemplate vfc);
 	
 	/**
@@ -362,6 +378,7 @@ public interface ISdcCsarHelper {
 	 * @param nt - node template
 	 * @return customization UUID of a node template.
 	 */
+	@Deprecated
 	public String getNodeTemplateCustomizationUuid(NodeTemplate nt);
 
     /**
@@ -380,6 +397,7 @@ public interface ISdcCsarHelper {
 	 * @param sdcType - the SDC type of the node.
 	 * @return node templates of this SDC type.
 	 */
+	@Deprecated
 	public List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType);
 
 	/**
@@ -388,6 +406,7 @@ public interface ISdcCsarHelper {
 	 * @param sdcType - the SDC type of the node (for example, CP, VF...).
 	 * @return service node templates of this SDC type.
 	 */
+	@Deprecated
 	public List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType);
 	
 	/**
@@ -395,6 +414,7 @@ public interface ISdcCsarHelper {
 	 * @param vfCustomizationUuid - the Customization UUID of the node.
 	 * @return VNF Configuration Node Template.
 	 */
+	@Deprecated
 	public NodeTemplate getVnfConfig(String vfCustomizationUuid);
 
 	/**
@@ -402,6 +422,7 @@ public interface ISdcCsarHelper {
 	 * @param nodeTemplate - Node Template to check
 	 * @return true if node template has topology template, false if not.
 	 */
+	@Deprecated
 	public boolean hasTopology(NodeTemplate nodeTemplate);
 
 	/**
@@ -409,6 +430,7 @@ public interface ISdcCsarHelper {
 	 * @param nodeTemplate - Node Template to get its children
 	 * @return return list of children node templates for node template.
 	 */
+	@Deprecated
 	public List<NodeTemplate> getNodeTemplateChildren(NodeTemplate nodeTemplate);
 
 	/**
@@ -416,6 +438,7 @@ public interface ISdcCsarHelper {
 	 * @param nodeName - the name of the node template.
 	 * @return service-level node template with this name, or null if no such node template was found.
 	 */
+	@Deprecated
 	public NodeTemplate getServiceNodeTemplateByNodeName(String nodeName);
 
 	/**
@@ -424,6 +447,7 @@ public interface ISdcCsarHelper {
 	 * @param nt - Node template to get its Metadata object.
 	 * @return Metadata for this node template, or null if not found.
 	 */
+	@Deprecated
 	public Metadata getNodeTemplateMetadata(NodeTemplate nt);
 
 	/**
@@ -434,6 +458,7 @@ public interface ISdcCsarHelper {
 	 * @return CapabilitiesAssignments that contains list of capability assignments for the node template.<br>
 	 * If none found, an empty list will be returned.
 	 */
+	@Deprecated
 	public CapabilityAssignments getCapabilitiesOf(NodeTemplate nt);
 
 	/**
@@ -444,6 +469,7 @@ public interface ISdcCsarHelper {
 	 * @return RequirementAssignments that contains list of requirement assignments for the node template.
 	 * If none found, an empty list will be returned.
 	 */
+	@Deprecated
 	public RequirementAssignments getRequirementsOf(NodeTemplate nt);
 
 	/**
@@ -453,12 +479,14 @@ public interface ISdcCsarHelper {
 	 * @param pathToPropertyLeafValue - the full path of the required property.
 	 * @return the leaf value as String, or null if there's no such property, or it's not a leaf.
 	 */
+	@Deprecated
 	public String getCapabilityPropertyLeafValue(CapabilityAssignment capability, String pathToPropertyLeafValue);
 	
 	/**
 	 * Get all the policies of the main topology template (either VF or service)
 	 * @return	the list of the policies
 	 */
+	@Deprecated
 	public List<Policy> getPoliciesOfTopologyTemplate();
 	
 	/**
@@ -466,6 +494,7 @@ public interface ISdcCsarHelper {
 	 * @param policyTypeName	the name of the policy type
 	 * @return					the list of the policies						
 	 */
+	@Deprecated
 	public List<Policy> getPoliciesOfTopologyTemplateByToscaPolicyType(String policyTypeName);
 	
 	/**
@@ -473,6 +502,7 @@ public interface ISdcCsarHelper {
 	 * @param nodeTemplate	the node template
 	 * @return				the list of the policies
 	 */
+	@Deprecated
 	public List<Policy> getPoliciesOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
 	
 	/**
@@ -481,6 +511,7 @@ public interface ISdcCsarHelper {
 	 * @param policyTypeName	the name of the policy type
 	 * @return					the list of the policies
 	 */
+	@Deprecated
 	List<Policy> getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
 	
 	/**
@@ -488,6 +519,7 @@ public interface ISdcCsarHelper {
 	 * @param policyName	the name of the policy
 	 * @return				the list of the node templates
 	 */
+	@Deprecated
 	List<NodeTemplate> getPolicyTargetsFromTopologyTemplate(String policyName);
 	
 	/**
@@ -496,6 +528,7 @@ public interface ISdcCsarHelper {
 	 * @param policyName	the name of the policy
 	 * @return				the list of the node templates
 	 */
+	@Deprecated
 	List<NodeTemplate> getPolicyTargetsFromOrigin(NodeTemplate nodeTemplate, String policyName);
 	
 	/**
@@ -503,6 +536,7 @@ public interface ISdcCsarHelper {
 	 * @param nodeTemplateName	the name of the node template
 	 * @return					the node template
 	 */
+	@Deprecated
 	NodeTemplate getNodeTemplateByName(String nodeTemplateName);
     
     /**
@@ -510,6 +544,7 @@ public interface ISdcCsarHelper {
      * @param targetNode	the node template
      * @return				the list of the policies
      */
+    @Deprecated
 	List<Policy> getPoliciesOfTarget(NodeTemplate targetNode);
 	
 	/**
@@ -518,6 +553,7 @@ public interface ISdcCsarHelper {
 	 * @param policyTypeName	the name of the policy type
 	 * @return					the list of the policies
 	 */
+	@Deprecated
     List<Policy> getPoliciesOfTargetByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName);
 
     /**
@@ -525,6 +561,7 @@ public interface ISdcCsarHelper {
      * @param               nodeTemplate  the node template
      * @return              the list of the groups
      */
+    @Deprecated
     ArrayList<Group> getGroupsOfOriginOfNodeTemplate(NodeTemplate nodeTemplate);
     
     /**
@@ -532,12 +569,14 @@ public interface ISdcCsarHelper {
      * @param groupType     the group type
      * @return              the list of the groups
      */
+    @Deprecated
     ArrayList<Group> getGroupsOfTopologyTemplateByToscaGroupType(String groupType);
     
     /**
      * Get all groups of this of the main topology template (either VF or service)
      * @return              the list of the groups
      */
+    @Deprecated
     ArrayList<Group> getGroupsOfTopologyTemplate();
     
     /**
@@ -546,6 +585,7 @@ public interface ISdcCsarHelper {
      * @param groupType     the group type
      * @return              the list of the groups
      */
+    @Deprecated
      ArrayList<Group> getGroupsOfOriginOfNodeTemplateByToscaGroupType(NodeTemplate nodeTemplate, String groupType);
     
     /**
@@ -553,6 +593,7 @@ public interface ISdcCsarHelper {
      * @param groupName     the name of the group
      * @return              the list of the node templates
      */
+    @Deprecated
     List<NodeTemplate> getGroupMembersFromTopologyTemplate(String groupName);
     
     /**
@@ -561,6 +602,7 @@ public interface ISdcCsarHelper {
      * @param groupName     the name of the group
      * @return              the list of the node templates
      */
+    @Deprecated
     List<NodeTemplate> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName);
     
     /**
@@ -612,6 +654,7 @@ public interface ISdcCsarHelper {
 	 *        Path is based on the collection of the node templates names delimited by #.
 	 * @return List of property values. If none found, empty list will be returned.
 	 */
+	@Deprecated
 	List<String> getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath(String propertyNamePath, String nodeTemplatePath);
 
 	boolean isNodeTypeSupported(NodeTemplate nodeTemplate);

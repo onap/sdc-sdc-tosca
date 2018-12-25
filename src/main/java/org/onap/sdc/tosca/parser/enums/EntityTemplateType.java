@@ -6,6 +6,7 @@ package org.onap.sdc.tosca.parser.enums;
 public enum EntityTemplateType {
     NODE_TEMPLATE,
     GROUP,
-    POLICY;
+    POLICY,
+    ALL;
 
 }
