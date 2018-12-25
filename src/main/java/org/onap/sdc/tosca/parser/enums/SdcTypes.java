@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
 
 public enum SdcTypes {
 
-    CP("CP"), VL("VL"), VF("VF"), CR("CR"), VFC("VFC"), PNF("PNF"), SERVICE("Service"), CVFC("CVFC"), SERVICE_PROXY("Service Proxy"), CONFIGURATION("Configuration");
+    CP("CP"), VL("VL"), VF("VF"), CR("CR"), VFC("VFC"), PNF("PNF"), SERVICE("Service"), CVFC("CVFC"),
+    SERVICE_PROXY("Service Proxy"), CONFIGURATION("Configuration"), VFC_ALLOTTED_RESOURCE("AllottedResource") ;
 
     private String value;
 
