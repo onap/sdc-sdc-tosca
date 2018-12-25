@@ -39,11 +39,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.config.ConfigurationManager;
-import org.onap.sdc.tosca.parser.elements.EntityDetailsFactory;
-import org.onap.sdc.tosca.parser.elements.NodeTemplateEntityDetails;
-import org.onap.sdc.tosca.parser.elements.queries.TopologyTemplateQuery;
 import org.onap.sdc.tosca.parser.elements.queries.EntityQuery;
-import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
+import org.onap.sdc.tosca.parser.elements.queries.TopologyTemplateQuery;
 import org.onap.sdc.tosca.parser.enums.FilterType;
 import org.onap.sdc.tosca.parser.enums.PropertySchemaType;
 import org.onap.sdc.tosca.parser.enums.SdcTypes;
@@ -1208,12 +1205,13 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     @Override
     public List<IEntityDetails> getEntity(EntityQuery entityQuery, TopologyTemplateQuery topologyTemplateQuery, boolean isRecursive) {
-        List<IEntityDetails> foundEntities = new ArrayList<>();
-        List<NodeTemplate> vfcList = getVfcListByVf("05e77410-a1d8-44fe-8440-b9410c8f98ee");
-        NodeTemplate vfc = getNodeTemplateByCustomizationUuid(vfcList, "1fdc9625-dfec-48e1-aaf8-7b92f78ca854");
-        NodeTemplate cp = getChildNodeTemplateByName(vfc, "ssc_ssc_avpn_port_0");
-        foundEntities.add(EntityDetailsFactory.createEntityDetails(EntityTemplateType.NODE_TEMPLATE, cp, vfc));
-        return foundEntities;
+
+        if (log.isDebugEnabled()) {
+            log.debug("getEntity request: EntityQuery <{}>, TopologyTemplateQuery <{}>,  isRecursive<{}>",
+                    entityQuery, topologyTemplateQuery, isRecursive);
+        }
+        return new QueryProcessor(toscaTemplate, entityQuery, topologyTemplateQuery, isRecursive).doQuery();
     }
+
 
 }
