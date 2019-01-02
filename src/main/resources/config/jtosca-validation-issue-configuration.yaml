@@ -47,6 +47,10 @@ validationIssues:
     JE010:
         - issueType: WARNING
           sinceCsarConformanceLevel: 3.0
+    #NodeTypeNotFound
+    JE11:
+        - issueType: CRITICAL
+        sinceCsarConformanceLevel: 3.0
     #InvalidTypeError
     JE136:
         - issueType: CRITICAL
