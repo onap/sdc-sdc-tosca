@@ -50,7 +50,7 @@ validationIssues:
     #NodeTypeNotFound
     JE11:
         - issueType: CRITICAL
-        sinceCsarConformanceLevel: 3.0
+          sinceCsarConformanceLevel: 3.0
     #InvalidTypeError
     JE136:
         - issueType: CRITICAL
