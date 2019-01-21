@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Tal  Gitelman <tal.gitelman@att.com>
+Code-Review+2: Ofir Sonsino <ofir.sonsino@intl.att.com>
+Submitted-by: Ofir Sonsino <ofir.sonsino@intl.att.com>
+Submitted-at: Mon, 21 Jan 2019 15:38:53 +0000
+Reviewed-on: https://gerrit.onap.org/r/75629
+Project: sdc/sdc-tosca
+Branch: refs/heads/master
