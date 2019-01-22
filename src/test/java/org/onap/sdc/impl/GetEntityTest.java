@@ -39,7 +39,7 @@ public class GetEntityTest {
         }
     }
 
-        @Test
+    @Test
     public void getCpEntitiesFromCVFC() {
         EntityQuery entityQuery = EntityQuery.newBuilder(SdcTypes.CP)
                 .build();
@@ -183,6 +183,7 @@ public class GetEntityTest {
         assertTrue(entities.get(0).getMemberNodes().get(0).getName().equals("abstract_rtp_msc") ||
                 entities.get(0).getMemberNodes().get(1).getName().equals("abstract_rtp_msc"));
         assertEquals(4, entities.get(0).getProperties().size());
+        assertEquals(2, entities.get(0).getMembers().size());
         assertTrue(entities.get(0).getRequirements().isEmpty());
 
     }
@@ -198,7 +199,11 @@ public class GetEntityTest {
         List<IEntityDetails> entities = helper.getEntity(entityQuery, topologyTemplateQuery, false);
 
         assertEquals(1, entities.size());
+        assertEquals("org.openecomp.groups.VfModule", entities.get(0).getToscaType());
+        assertTrue(entities.get(0).getPath().isEmpty());
+        assertTrue(entities.get(0).getMembers().isEmpty());
         assertNull(entities.get(0).getParent());
+        assertTrue(entities.get(0).getTargets().isEmpty());
     }
 
     @Test
@@ -211,7 +216,9 @@ public class GetEntityTest {
         List<IEntityDetails> entities = helper.getEntity(entityQuery, topologyTemplateQuery, true);
 
         assertEquals(19, entities.size());
-        assertTrue(entities.get(9).getTargetNodes().isEmpty());
+        assertTrue(entities.get(9).getTargetEntities().isEmpty());
+        assertEquals(1, entities.get(7).getMembers().size());
+        assertEquals("org.openecomp.groups.VfModule", entities.get(7).getToscaType());
         assertEquals("rtp_msc_subint_avpn_vmi_0", entities.get(5).getMemberNodes().get(0).getName());
     }
 
@@ -226,7 +233,9 @@ public class GetEntityTest {
 
         assertEquals(1, entities.size());
         assertEquals("jennyvtsbcvlanvnf..External..0", entities.get(0).getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_NAME));
-        assertEquals(EntityTemplateType.GROUP, entities.get(0).getTargetNodes().get(0).getType());
+        assertEquals(EntityTemplateType.GROUP, entities.get(0).getTargetEntities().get(0).getEntityType());
+        assertEquals("org.openecomp.policies.External", entities.get(0).getToscaType());
+        assertTrue(entities.get(0).getMembers().isEmpty());
         assertEquals("jenny vTSBC vlan VNF 0", entities.get(0).getPath());
     }
 
@@ -252,7 +261,8 @@ public class GetEntityTest {
         List<IEntityDetails> entities = helper.getEntity(entityQuery, topologyTemplateQuery, false);
 
         assertEquals(1, entities.size());
-        assertEquals(EntityTemplateType.GROUP, entities.get(0).getTargetNodes().get(0).getType());
+        assertEquals(EntityTemplateType.GROUP, entities.get(0).getTargetEntities().get(0).getEntityType());
+        assertTrue(entities.get(0).getMembers().isEmpty());
         assertTrue(entities.get(0).getRequirements().isEmpty());
         assertTrue(entities.get(0).getCapabilities().isEmpty());
         assertEquals("jenny vTSBC vlan VNF 0", entities.get(0).getPath());
@@ -290,6 +300,8 @@ public class GetEntityTest {
 
         List<IEntityDetails> entities = helper.getEntity(null, topologyTemplateQuery, false);
         assertEquals(5, entities.size());
+        assertEquals("org.openecomp.resource.vf.JennyVtsbcVlanVnf", entities.get(4).getToscaType());
+        assertEquals("org.openecomp.groups.VfModule", entities.get(0).getToscaType());
     }
 
 
@@ -310,7 +322,15 @@ public class GetEntityTest {
 
         List<IEntityDetails> entities = helper.getEntity(null, topologyTemplateQuery, false);
         assertEquals(2, entities.size());
-        assertTrue("ssc_subint_mis_vmi_0".equals(entities.get(0).getName()) || "ssc_subint_mis_vmi_0".equals(entities.get(1).getName()));
+        assertTrue(entities.get(1).getMembers().isEmpty());
+        assertEquals("ssc_subint_mis_vmi_0", entities.get(0).getMembers().get(0));
+        assertTrue("ssc_subint_mis_vmi_0".equals(entities.get(1).getName()));
+        assertTrue("vlan_subinterface_ssc_mis_group".equals(entities.get(0).getName()));
+        assertEquals("org.openecomp.resource.cp.nodes.heat.network.v2.contrailV2.VLANSubInterface",
+                entities.get(1).getToscaType());
+        assertEquals("org.openecomp.groups.heat.HeatStack", entities.get(0).getToscaType());
+        assertTrue(entities.get(0).getTargetEntities().isEmpty());
+
     }
 
     @Test

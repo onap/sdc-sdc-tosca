@@ -665,7 +665,7 @@ public interface ISdcCsarHelper {
 	 *                    SDC (node template) type, tosca type as well as optional customizationUUID and UUID
 	 * @param topologyTemplateQuery parameters of the topology template containing the above entity.
 	 *                  Includes SDC type of the container and optional customizationUUID
-	 * @param isRecursive indicates if the search within the required topology template is recursive.
+	 * @param isRecursive indicates if the search is recursive starting from the required topology template .
 	 * @return list of @{@link IEntityDetails} objects containing information about the found entities.
 	 * If either no entities found or the provided query is incorrect, an empty list is returned
 	 */

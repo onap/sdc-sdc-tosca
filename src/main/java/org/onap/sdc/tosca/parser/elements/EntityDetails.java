@@ -68,7 +68,7 @@ public abstract class EntityDetails implements IEntityDetails {
     }
 
     @Override
-    public List<IEntityDetails> getTargetNodes() {
+    public List<IEntityDetails> getTargetEntities() {
         return Collections.emptyList();
     }
 
@@ -86,6 +86,14 @@ public abstract class EntityDetails implements IEntityDetails {
         }
         return pathBld.toString();
     }
+
+    @Override
+    public String getToscaType() {
+        return entityTemplate.getType();
+    }
+
+    @Override
+    public List<String> getMembers() { return Collections.emptyList(); }
 
 
 

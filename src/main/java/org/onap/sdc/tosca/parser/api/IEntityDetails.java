@@ -14,12 +14,17 @@ public interface IEntityDetails {
      * Retrieves entity instance template type.
      * @return {@link EntityTemplateType} enum entry describing given object type
      */
-    EntityTemplateType getType();
+    EntityTemplateType getEntityType();
 
     /**
      * Retrieves entity instance name
      */
     String getName();
+
+    /**
+     * Retrieves entity Tosca type
+     */
+    String getToscaType();
 
     /**
      * Retrieves entity {@link Metadata} object
@@ -31,6 +36,12 @@ public interface IEntityDetails {
      * @return map of entity property names and corresponding {@link Property} object instances
      */
     Map<String, Property> getProperties();
+
+    /**
+     * Retrieves member names of the entity instance
+     * @return List of member names
+     */
+    List<String> getMembers();
 
     /**
      * Retrieves member nodes of the entity instance
@@ -72,5 +83,5 @@ public interface IEntityDetails {
     /**
      * Retrieves list of policy target entity instances (groups or node templates)
      */
-    List<IEntityDetails> getTargetNodes();
+    List<IEntityDetails> getTargetEntities();
 }

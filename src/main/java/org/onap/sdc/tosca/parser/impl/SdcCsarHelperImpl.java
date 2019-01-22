@@ -130,15 +130,22 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 	
 	@Override
 	public List<NodeTemplate> getPolicyTargetsFromOrigin(NodeTemplate nodeTemplate, String policyName) {
-		Optional<Policy> policyOpt = null;
     	if(StringUtils.isNotEmpty(nodeTemplate.getName())){
-    		policyOpt = getNodeTemplateByName(nodeTemplate.getName()).getOriginComponentTemplate().getPolicies().stream().filter(p -> p.getName().equals(policyName)).findFirst();
-    	}
-    	if(policyOpt.isPresent()){
-    		List<String> targets = policyOpt.get().getTargets();
-    		return nodeTemplate.getOriginComponentTemplate().getNodeTemplates()
-    				.stream()
-    				.filter(nt -> targets.contains(nt.getName())).collect(Collectors.toList());
+            Optional<Policy> policyOpt = getNodeTemplateByName(nodeTemplate.getName())
+                    .getOriginComponentTemplate()
+                    .getPolicies()
+                    .stream()
+                    .filter(p -> p.getName()
+                            .equals(policyName))
+                    .findFirst();
+            if(policyOpt.isPresent()){
+                List<String> targets = policyOpt.get().getTargets();
+                if (targets != null) {
+                    return nodeTemplate.getOriginComponentTemplate().getNodeTemplates()
+                            .stream()
+                            .filter(nt -> targets.contains(nt.getName())).collect(Collectors.toList());
+                }
+            }
     	}
     	return new ArrayList<>();
     }
@@ -178,7 +185,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     		return new ArrayList<>();
     	return toscaTemplate.getPolicies()
     	.stream()
-    	.filter(p -> p.getTargets().contains(nodeTemplateName))
+    	.filter(p -> p.getTargets()!= null && p.getTargets().contains(nodeTemplateName))
     	.collect(toList());
     }
     

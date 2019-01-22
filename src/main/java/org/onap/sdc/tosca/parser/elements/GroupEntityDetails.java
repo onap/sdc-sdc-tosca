@@ -29,7 +29,7 @@ public class GroupEntityDetails extends EntityDetails {
     }
 
     @Override
-    public EntityTemplateType getType() {
+    public EntityTemplateType getEntityType() {
         return EntityTemplateType.GROUP;
     }
 
@@ -41,5 +41,13 @@ public class GroupEntityDetails extends EntityDetails {
     @Override
     public Metadata getMetadata() {
         return group.getMetadata();
+    }
+
+    @Override
+    public List<String> getMembers() {
+        if (group.getMembers() != null) {
+            return group.getMembers();
+        }
+        return super.getMembers();
     }
 }

@@ -21,7 +21,7 @@ public class PolicyEntityDetails extends EntityDetails {
     }
 
     @Override
-    public EntityTemplateType getType() {
+    public EntityTemplateType getEntityType() {
         return EntityTemplateType.POLICY;
     }
 
@@ -39,7 +39,7 @@ public class PolicyEntityDetails extends EntityDetails {
     }
 
     @Override
-    public List<IEntityDetails> getTargetNodes() {
+    public List<IEntityDetails> getTargetEntities() {
         if (policy.getTargetsType().equals(NODE_TEMPLATES_TARGET_TYPE)) {
             return policy.getTargetsList()
                     .stream()

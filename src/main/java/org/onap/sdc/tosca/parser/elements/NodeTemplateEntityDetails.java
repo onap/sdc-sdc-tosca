@@ -15,7 +15,7 @@ public class NodeTemplateEntityDetails extends EntityDetails {
     }
 
     @Override
-    public EntityTemplateType getType() {
+    public EntityTemplateType getEntityType() {
         return EntityTemplateType.NODE_TEMPLATE;
     }
 

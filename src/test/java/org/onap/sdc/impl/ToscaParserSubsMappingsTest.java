@@ -81,7 +81,7 @@ public class ToscaParserSubsMappingsTest extends SdcToscaParserBasicTest {
 //
 //				CapabilityAssignment cCp = lCapabilitys.get(CPkeys.get(i));
 //				CapabilityTypeDef CpDef = cCp.getDefinition();
-//				CapabilitiesTypes.add(CpDef.getType());
+//				CapabilitiesTypes.add(CpDef.getEntityType());
 //
 //				//LinkedHashMap<String,Object> lProperties = cCp.getDefinition().getProperties();
 //				LinkedHashMap<String, Property> lPropertiesR = cCp.getProperties();
@@ -93,7 +93,7 @@ public class ToscaParserSubsMappingsTest extends SdcToscaParserBasicTest {
 //	  			Property p = lPropertiesR.get(CP_Propkeys.get(j));
 //
 //				if(p !=  null){
-//	  				String sPType = p.getType();
+//	  				String sPType = p.getEntityType();
 //	  				Boolean bPRequired = p.isRequired();
 //
 //	  				System.out.println(sPType + "  " + bPRequired);
