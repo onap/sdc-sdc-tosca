@@ -140,3 +140,10 @@ It is designed to retrieve details of one or more entity templates from correspo
 
 ### Note:
 This version is intended for SDN-C team usage only.
+
+## 1.5.0
+
+### Changes:
+1. Bug fix in Policy metadata object getter (Jtosca)
+2. NPE fix in Policy getTargets method (sdc-tosca)
+3. Adding more getters to IEntityDetails interface for getEntity API introduced on 1.4.8 version. 
