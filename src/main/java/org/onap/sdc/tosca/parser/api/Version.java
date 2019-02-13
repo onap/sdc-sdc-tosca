@@ -35,6 +35,14 @@ public class Version implements Comparable<Version> {
         return 0;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((version == null) ? 0 : version.hashCode());
+        return result;
+    }
+
     @Override public boolean equals(Object that) {
         if(this == that)
             return true;
