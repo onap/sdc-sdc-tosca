@@ -146,4 +146,22 @@ This version is intended for SDN-C team usage only.
 ### Changes:
 1. Bug fix in Policy metadata object getter (Jtosca)
 2. NPE fix in Policy getTargets method (sdc-tosca)
-3. Adding more getters to IEntityDetails interface for getEntity API introduced on 1.4.8 version. 
+3. Adding more getters to IEntityDetails interface for getEntity API introduced in 1.4.8 version:
+
+ **getEntity** API retrieves details of one or more entity templates according to provided query parameters from corresponding topology template.
+ 
+ **entityQuery** Object describing the searched entity parameters. Includes one of following parameters: entity type,
+ SDC (node template) type, tosca type as well as optional customizationUUID and UUID
+ If the parameter is null, the returned result will contain *all* entities that types are supported by SDC.
+ 
+ **topologyTemplateQuery** parameters of the topology template containing the above entity.
+ Includes SDC type of the container and optional customizationUUID.
+ 
+ **isRecursive** indicates if the search is recursive starting from the required topology template.
+ 
+ Returns list of **IEntityDetails** objects containing information about the found entities.
+ If either no entities found or the provided query is incorrect, an empty list is returned.
+ 
+ 		List<IEntityDetails> getEntity(EntityQuery entityQuery, TopologyTemplateQuery topologyTemplateQuery, boolean isRecursive);
+
+ 
