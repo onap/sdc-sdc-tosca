@@ -58,6 +58,7 @@ import org.onap.sdc.toscaparser.api.RequirementAssignments;
 import org.onap.sdc.toscaparser.api.SubstitutionMappings;
 import org.onap.sdc.toscaparser.api.TopologyTemplate;
 import org.onap.sdc.toscaparser.api.ToscaTemplate;
+import org.onap.sdc.toscaparser.api.elements.DataType;
 import org.onap.sdc.toscaparser.api.elements.InterfacesDef;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
 import org.onap.sdc.toscaparser.api.elements.NodeType;
@@ -1220,5 +1221,9 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return new QueryProcessor(toscaTemplate, entityQuery, topologyTemplateQuery, isRecursive).doQuery();
     }
 
+    @Override
+    public List<DataType> getDataTypes() {
+        return toscaTemplate.getDataTypes();
+    }
 
-}
+ }

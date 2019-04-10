@@ -29,6 +29,7 @@ import org.onap.sdc.tosca.parser.elements.queries.EntityQuery;
 import org.onap.sdc.tosca.parser.enums.SdcTypes;
 import org.onap.sdc.tosca.parser.enums.FilterType;
 import org.onap.sdc.toscaparser.api.*;
+import org.onap.sdc.toscaparser.api.elements.DataType;
 import org.onap.sdc.toscaparser.api.elements.InterfacesDef;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
 import org.onap.sdc.toscaparser.api.parameters.Input;
@@ -670,4 +671,10 @@ public interface ISdcCsarHelper {
 	 * If either no entities found or the provided query is incorrect, an empty list is returned
 	 */
 	List<IEntityDetails> getEntity(EntityQuery entityQuery, TopologyTemplateQuery topologyTemplateQuery, boolean isRecursive);
+
+	/**
+	 * Get the data_types
+	 * @return 	list of data_type value
+	 */
+	List<DataType> getDataTypes();
 }
