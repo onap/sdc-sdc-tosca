@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c60e601_2fd63366",
+        "filename": "src/test/java/org/onap/sdc/impl/ToscaParserDataTypeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 2331
+      },
+      "writtenOn": "2019-04-18T12:24:22Z",
+      "side": 1,
+      "message": "Please add the required open source text .",
+      "revId": "2ebfd9ee6fdea2cae86a5e100deb3a119f838179",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfdf3e16_a73ad5ae",
+        "filename": "src/test/java/org/onap/sdc/impl/ToscaParserDataTypeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2331
+      },
+      "writtenOn": "2019-04-18T12:24:22Z",
+      "side": 1,
+      "message": "Please rename the file with a name that give context to the data types",
+      "revId": "2ebfd9ee6fdea2cae86a5e100deb3a119f838179",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9479f14_dc274dbf",
+        "filename": "src/test/java/org/onap/sdc/impl/ToscaParserDataTypeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 2331
+      },
+      "writtenOn": "2019-04-18T12:24:22Z",
+      "side": 1,
+      "message": "Please consider using AssertThat rather than Assert",
+      "revId": "2ebfd9ee6fdea2cae86a5e100deb3a119f838179",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d09b1968_256e24da",
+        "filename": "src/test/java/org/onap/sdc/impl/ToscaParserDataTypeTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 2331
+      },
+      "writtenOn": "2019-04-18T12:24:22Z",
+      "side": 1,
+      "message": "Please use constants and reuse.",
+      "revId": "2ebfd9ee6fdea2cae86a5e100deb3a119f838179",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
