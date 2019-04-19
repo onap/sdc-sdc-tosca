@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,7 @@ import org.onap.sdc.toscaparser.api.RequirementAssignments;
 import org.onap.sdc.toscaparser.api.SubstitutionMappings;
 import org.onap.sdc.toscaparser.api.TopologyTemplate;
 import org.onap.sdc.toscaparser.api.ToscaTemplate;
+import org.onap.sdc.toscaparser.api.elements.DataType;
 import org.onap.sdc.toscaparser.api.elements.InterfacesDef;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
 import org.onap.sdc.toscaparser.api.elements.NodeType;
@@ -1220,5 +1222,9 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return new QueryProcessor(toscaTemplate, entityQuery, topologyTemplateQuery, isRecursive).doQuery();
     }
 
+    @Override
+    public HashSet<DataType> getDataTypes() {
+        return toscaTemplate.getDataTypes();
+    }
 
-}
+ }

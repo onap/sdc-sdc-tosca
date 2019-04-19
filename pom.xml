@@ -118,7 +118,7 @@
 		<dependency>
 			<groupId>org.onap.sdc.jtosca</groupId>
 			<artifactId>jtosca</artifactId>
-			<version>1.5.1-SNAPSHOT</version>
+			<version>1.5.1</version>
 		</dependency>
 
 
