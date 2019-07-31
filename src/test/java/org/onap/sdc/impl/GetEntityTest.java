@@ -88,9 +88,9 @@ public class GetEntityTest {
         assertEquals("ssc_ssc_avpn_port_0", entities.get(0).getName());
         assertEquals(18, entities.get(0).getProperties().size());
         assertEquals(1, entities.get(0).getRequirements().size());
-        assertEquals(13, entities.get(0).getCapabilities().entrySet().size());
-        Map<String, CapabilityAssignment> capAssignments = entities.get(0).getCapabilities();
-        CapabilityAssignment capabilityAssignment = capAssignments.get("network.outgoing.packets.rate");
+        assertEquals(13, entities.get(0).getCapabilities().size());
+        List<CapabilityAssignment> capAssignments = entities.get(0).getCapabilities();
+        CapabilityAssignment capabilityAssignment = capAssignments.stream().filter(p -> p.getName().equals("network.outgoing.packets.rate")).findAny().orElse(null);
         assertEquals("org.openecomp.capabilities.metric.Ceilometer", capabilityAssignment.getDefinition().getType());
 
     }
