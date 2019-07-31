@@ -87,13 +87,13 @@ public interface IEntityDetails {
      * Retrieves map of requirements of the entity instance
      * @return map of entity requirement names and corresponding {@link RequirementAssignment} object instances
      */
-    Map<String, RequirementAssignment> getRequirements();
+    List<RequirementAssignment> getRequirements();
 
     /**
      * Retrieves map of capabilities of the entity instance
      * @return map of entity capability names and corresponding {@link CapabilityAssignment} object instances
      */
-    Map<String, CapabilityAssignment> getCapabilities();
+    List<CapabilityAssignment> getCapabilities();
 
     /**
      * Retrieves list of policy target names
