@@ -67,19 +67,15 @@ public abstract class EntityDetails implements IEntityDetails {
     }
 
     @Override
-    public Map<String, RequirementAssignment> getRequirements() {
+    public List<RequirementAssignment> getRequirements() {
         return entityTemplate.getRequirements()
-                .getAll()
-                .stream()
-                .collect(Collectors.toMap(RequirementAssignment::getName, ra->ra));
+                .getAll();
     }
 
     @Override
-    public Map<String, CapabilityAssignment> getCapabilities() {
+    public List<CapabilityAssignment> getCapabilities() {
         return entityTemplate.getCapabilities()
-                .getAll()
-                .stream()
-                .collect(Collectors.toMap(CapabilityAssignment::getName, ca->ca));
+                .getAll();
     }
 
     @Override

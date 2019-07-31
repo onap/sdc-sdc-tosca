@@ -115,21 +115,17 @@ public class GetEntityPortMirroringTest {
         assertEquals(2, proxyNodes.size());
         assertEquals(1, configurationNodes.size());
 
-        Map<String, RequirementAssignment> reqMap = configurationNodes.get(0).getRequirements();
-        assertEquals(cap0, reqMap.get("source").getCapabilityName());
-        assertEquals(cap1, reqMap.get("collector").getCapabilityName());
+        List<RequirementAssignment> reqMap = configurationNodes.get(0).getRequirements();
+        assertEquals(cap0, reqMap.stream().filter(f -> f.getName().equals("source")).findAny().get().getCapabilityName());
+        assertEquals(cap1, reqMap.stream().filter(f -> f.getName().equals("collector")).findAny().get().getCapabilityName());
 
         assertTrue(isCapabilityFound(proxyNodes.get(0), cap0));
         assertTrue(isCapabilityFound(proxyNodes.get(1), cap1));
     }
 
     private boolean isCapabilityFound(IEntityDetails nodeDetails, String capName) {
-        List<CapabilityAssignment> assignments = nodeDetails.getCapabilities()
-                .values()
-                .stream()
-                .filter(ca->capName.equals(ca.getDefinition()
-                        .getName()))
-                .collect(Collectors.toList());
-        return assignments.size() == 1;
+        List<CapabilityAssignment> assignments = nodeDetails.getCapabilities();
+        CapabilityAssignment capabilityAssignment = assignments.stream().filter(f -> f.getDefinition().getName().equals(capName)).findAny().orElse(null);
+        return capabilityAssignment != null;
     }
 }
