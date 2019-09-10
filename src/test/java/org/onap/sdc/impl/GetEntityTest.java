@@ -24,6 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
+import org.onap.sdc.tosca.parser.elements.EntityDetails;
 import org.onap.sdc.tosca.parser.elements.queries.EntityQuery;
 import org.onap.sdc.tosca.parser.elements.queries.TopologyTemplateQuery;
 import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
@@ -33,6 +34,7 @@ import org.onap.sdc.tosca.parser.impl.SdcPropertyNames;
 import org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory;
 import org.onap.sdc.toscaparser.api.CapabilityAssignment;
 import org.onap.sdc.toscaparser.api.Property;
+import org.onap.sdc.toscaparser.api.parameters.Input;
 
 import java.net.URL;
 import java.util.List;
@@ -89,6 +91,7 @@ public class GetEntityTest {
         assertEquals(18, entities.get(0).getProperties().size());
         assertEquals(1, entities.get(0).getRequirements().size());
         assertEquals(13, entities.get(0).getCapabilities().size());
+        assertEquals(0, entities.get(0).getInputs().size());
         List<CapabilityAssignment> capAssignments = entities.get(0).getCapabilities();
         CapabilityAssignment capabilityAssignment = capAssignments.stream().filter(p -> p.getName().equals("network.outgoing.packets.rate")).findAny().orElse(null);
         assertEquals("org.openecomp.capabilities.metric.Ceilometer", capabilityAssignment.getDefinition().getType());
@@ -166,6 +169,7 @@ public class GetEntityTest {
         assertEquals(4, entities.size());
         assertTrue(entities.get(0).getRequirements().isEmpty());
         assertTrue(entities.get(1).getCapabilities().isEmpty());
+        assertEquals(0, entities.get(0).getInputs().size());
         assertTrue(entities.get(0).getPath().isEmpty() && entities.get(1).getPath().isEmpty() &&
                 entities.get(2).getPath().isEmpty() && entities.get(3).getPath().isEmpty());
     }
@@ -257,6 +261,7 @@ public class GetEntityTest {
         assertEquals("org.openecomp.policies.External", entities.get(0).getToscaType());
         assertTrue(entities.get(0).getMembers().isEmpty());
         assertEquals("jenny vTSBC vlan VNF 0", entities.get(0).getPath());
+        assertEquals(0, entities.get(0).getInputs().size());
     }
 
     @Test
@@ -398,4 +403,15 @@ public class GetEntityTest {
         assertEquals("false", valueList.get(0));
     }
 
+
+    @Test
+    public void getServiceInputs() {
+        EntityQuery entityQuery = EntityQuery.newBuilder(EntityTemplateType.NODE_TEMPLATE)
+                .build();
+        TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
+                .build();
+
+        List<IEntityDetails> entities = helper.getEntity(entityQuery, topologyTemplateQuery, false);
+        assertEquals(163, entities.get(0).getInputs().size());
+    }
 }

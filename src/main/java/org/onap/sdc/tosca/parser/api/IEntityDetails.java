@@ -25,6 +25,7 @@ import org.onap.sdc.toscaparser.api.CapabilityAssignment;
 import org.onap.sdc.toscaparser.api.Property;
 import org.onap.sdc.toscaparser.api.RequirementAssignment;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
+import org.onap.sdc.toscaparser.api.parameters.Input;
 
 import java.util.List;
 import java.util.Map;
@@ -104,4 +105,9 @@ public interface IEntityDetails {
      * Retrieves list of policy target entity instances (groups or node templates)
      */
     List<IEntityDetails> getTargetEntities();
+
+    /**
+     * Retrieves list of inputs
+     */
+    List<Input> getInputs();
 }

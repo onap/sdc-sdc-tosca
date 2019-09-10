@@ -24,6 +24,9 @@ import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
 import org.onap.sdc.toscaparser.api.EntityTemplate;
 import org.onap.sdc.toscaparser.api.NodeTemplate;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
+import org.onap.sdc.toscaparser.api.parameters.Input;
+
+import java.util.List;
 
 public class NodeTemplateEntityDetails extends EntityDetails {
 
@@ -42,5 +45,13 @@ public class NodeTemplateEntityDetails extends EntityDetails {
     @Override
     public Metadata getMetadata() {
         return nodeTemplate.getMetaData();
+    }
+
+    @Override
+    public List<Input> getInputs(){
+        if (nodeTemplate.getSubMappingToscaTemplate()!= null) {
+            return nodeTemplate.getSubMappingToscaTemplate().getInputs();
+        }
+        return super.getInputs();
     }
 }

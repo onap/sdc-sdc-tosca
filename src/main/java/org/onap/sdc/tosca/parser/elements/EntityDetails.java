@@ -26,6 +26,7 @@ import org.onap.sdc.toscaparser.api.CapabilityAssignment;
 import org.onap.sdc.toscaparser.api.EntityTemplate;
 import org.onap.sdc.toscaparser.api.Property;
 import org.onap.sdc.toscaparser.api.RequirementAssignment;
+import org.onap.sdc.toscaparser.api.parameters.Input;
 
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +48,7 @@ public abstract class EntityDetails implements IEntityDetails {
         return entityTemplate.getName();
     }
 
-    EntityTemplate getEntityTemplate() {
+    public EntityTemplate getEntityTemplate() {
         return entityTemplate;
     }
 
@@ -109,7 +110,13 @@ public abstract class EntityDetails implements IEntityDetails {
     }
 
     @Override
-    public List<String> getMembers() { return Collections.emptyList(); }
+    public List<String> getMembers()
+    { return Collections.emptyList(); }
+
+    @Override
+    public List<Input> getInputs(){
+        return Collections.emptyList();
+    }
 
 
 
