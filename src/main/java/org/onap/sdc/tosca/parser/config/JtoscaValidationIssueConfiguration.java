@@ -29,18 +29,18 @@ public class JtoscaValidationIssueConfiguration {
     private Map<String, List<JToscaValidationIssueInfo>> validationIssues;
 
     public Map<String, List<JToscaValidationIssueInfo>> getValidationIssues() {
-		return validationIssues;
-	}
+        return validationIssues;
+    }
 
-	public void setValidationIssues(Map<String, List<JToscaValidationIssueInfo>> validationIssues) {
-		this.validationIssues = validationIssues;
-	}
-	
-	public List<JToscaValidationIssueInfo> getJtoscaValidationIssueInfo(String key) {
+    public void setValidationIssues(Map<String, List<JToscaValidationIssueInfo>> validationIssues) {
+        this.validationIssues = validationIssues;
+    }
+
+    public List<JToscaValidationIssueInfo> getJtoscaValidationIssueInfo(String key) {
         List<JToscaValidationIssueInfo> clone = new ArrayList<>();
         List<JToscaValidationIssueInfo> other = validationIssues.get(key);
         if (other != null) {
-            for (JToscaValidationIssueInfo item: other) {
+            for (JToscaValidationIssueInfo item : other) {
                 JToscaValidationIssueInfo cloneitem = new JToscaValidationIssueInfo();
                 cloneitem.cloneData(item);
                 clone.add(cloneitem);

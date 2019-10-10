@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,18 +20,18 @@
 
 package org.onap.sdc.tosca.parser.elements.queries;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+import static org.testng.Assert.assertFalse;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.onap.sdc.tosca.parser.api.NodeTemplate;
+import org.onap.sdc.tosca.parser.elements.Metadata;
 import org.onap.sdc.tosca.parser.enums.SdcTypes;
 import org.onap.sdc.tosca.parser.impl.SdcPropertyNames;
-import org.onap.sdc.toscaparser.api.NodeTemplate;
-import org.onap.sdc.toscaparser.api.elements.Metadata;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertFalse;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TopologyTemplateQueryTest {
@@ -42,16 +42,16 @@ public class TopologyTemplateQueryTest {
     @Mock
     private NodeTemplate nodeTemplate;
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void objectIsNotTopologyTemplate() {
-       TopologyTemplateQuery.newBuilder(SdcTypes.CP)
-               .build();
+        TopologyTemplateQuery.newBuilder(SdcTypes.CP)
+            .build();
     }
 
     @Test
     public void templateIsFoundByTypeOnly() {
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
-                .build();
+            .build();
         when(nodeTemplate.getMetaData()).thenReturn(metadata);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID)).thenReturn("345");
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)).thenReturn(SdcTypes.SERVICE.getValue());
@@ -61,7 +61,7 @@ public class TopologyTemplateQueryTest {
     @Test
     public void templateIsNotFoundWhenMetadataIsNull() {
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.VF)
-                .build();
+            .build();
         when(nodeTemplate.getMetaData()).thenReturn(null);
         assertFalse(topologyTemplateQuery.isMatchingSearchCriteria(nodeTemplate));
     }
@@ -69,7 +69,7 @@ public class TopologyTemplateQueryTest {
     @Test
     public void templateIsFoundIfItIsService() {
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
-                .build();
+            .build();
         when(nodeTemplate.getMetaData()).thenReturn(metadata);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)).thenReturn(SdcTypes.SERVICE.getValue());
         assertTrue(topologyTemplateQuery.isMatchingSearchCriteria(nodeTemplate));
@@ -78,8 +78,8 @@ public class TopologyTemplateQueryTest {
     @Test
     public void templateIsFoundByTypeAndCUUID() {
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.CVFC)
-                .customizationUUID("345")
-                .build();
+            .customizationUUID("345")
+            .build();
         when(nodeTemplate.getMetaData()).thenReturn(metadata);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)).thenReturn(SdcTypes.CVFC.getValue());
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID)).thenReturn("345");
@@ -89,7 +89,7 @@ public class TopologyTemplateQueryTest {
     @Test
     public void templateIsNotFoundWhenTypeIsNotMatchedAndCuuidIsNotSet() {
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.CVFC)
-                .build();
+            .build();
         when(nodeTemplate.getMetaData()).thenReturn(metadata);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)).thenReturn(SdcTypes.VF.getValue());
         assertFalse(topologyTemplateQuery.isMatchingSearchCriteria(nodeTemplate));
@@ -98,8 +98,8 @@ public class TopologyTemplateQueryTest {
     @Test
     public void templateIsFoundWhenTypeIsMatchedCuuidIsProvidedAndCuuidIsNullInMetadata() {
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.VF)
-                .customizationUUID("2345")
-                .build();
+            .customizationUUID("2345")
+            .build();
         when(nodeTemplate.getMetaData()).thenReturn(metadata);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID)).thenReturn(null);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)).thenReturn(SdcTypes.VF.getValue());
@@ -109,7 +109,7 @@ public class TopologyTemplateQueryTest {
     @Test
     public void templateIsFoundWhenTypeIsMatchedAndCuuidIsNullInMetadata() {
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.VF)
-                .build();
+            .build();
         when(nodeTemplate.getMetaData()).thenReturn(metadata);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID)).thenReturn(null);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)).thenReturn(SdcTypes.VF.getValue());
@@ -119,8 +119,8 @@ public class TopologyTemplateQueryTest {
     @Test
     public void templateIsNotFoundWhenTypeIsMatchedAndCuuidIsSet() {
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.CVFC)
-                .customizationUUID("345")
-                .build();
+            .customizationUUID("345")
+            .build();
         when(nodeTemplate.getMetaData()).thenReturn(metadata);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)).thenReturn(SdcTypes.CVFC.getValue());
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID)).thenReturn("345");
@@ -130,8 +130,8 @@ public class TopologyTemplateQueryTest {
     @Test
     public void templateIsNotFoundWhenTypeIsNotMatchedAndCuuidIsSet() {
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.CR)
-                .customizationUUID("345")
-                .build();
+            .customizationUUID("345")
+            .build();
         when(nodeTemplate.getMetaData()).thenReturn(metadata);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)).thenReturn(SdcTypes.CVFC.getValue());
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID)).thenReturn("345");

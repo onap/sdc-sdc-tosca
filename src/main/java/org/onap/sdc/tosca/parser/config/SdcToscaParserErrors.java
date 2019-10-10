@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,18 +22,17 @@ package org.onap.sdc.tosca.parser.config;
 
 import java.util.EnumMap;
 import java.util.Map;
-
-import org.onap.sdc.toscaparser.api.utils.JToscaErrorCodes;
+import org.onap.sdc.tosca.parser.utils.JToscaErrorCodes;
 
 public enum SdcToscaParserErrors {
 
     BAD_FORMAT, CONFORMANCE_LEVEL_ERROR, FILE_NOT_FOUND, GENERAL_ERROR;
 
-    private static final  Map<JToscaErrorCodes, SdcToscaParserErrors> JTOSCA_ERRORS =
+    private static final Map<JToscaErrorCodes, SdcToscaParserErrors> JTOSCA_ERRORS =
         new EnumMap<JToscaErrorCodes, SdcToscaParserErrors>(JToscaErrorCodes.class) {{
 
             put(JToscaErrorCodes.GENERAL_ERROR, GENERAL_ERROR);
-            
+
             put(JToscaErrorCodes.PATH_NOT_VALID, FILE_NOT_FOUND);
             //CSAR contents problems
             put(JToscaErrorCodes.MISSING_META_FILE, BAD_FORMAT);
@@ -42,7 +41,7 @@ public enum SdcToscaParserErrors {
             put(JToscaErrorCodes.MISSING_ENTRY_DEFINITION_FILE, BAD_FORMAT);
             put(JToscaErrorCodes.CSAR_TOSCA_VALIDATION_ERROR, BAD_FORMAT);
             put(JToscaErrorCodes.INVALID_CSAR_FORMAT, BAD_FORMAT);
-    }};
+        }};
 
     public static SdcToscaParserErrors getSdcErrorByJToscaError(JToscaErrorCodes jToscaErrorCode) {
         return JTOSCA_ERRORS.get(jToscaErrorCode);

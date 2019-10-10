@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,22 +20,21 @@
 
 package org.onap.sdc.tosca.parser.elements.queries;
 
+import java.util.List;
+import java.util.Objects;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
+import org.onap.sdc.tosca.parser.api.NodeTemplate;
+import org.onap.sdc.tosca.parser.api.ToscaTemplate;
+import org.onap.sdc.tosca.parser.elements.Metadata;
 import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
 import org.onap.sdc.tosca.parser.enums.SdcTypes;
 import org.onap.sdc.tosca.parser.impl.SdcPropertyNames;
-import org.onap.sdc.toscaparser.api.NodeTemplate;
-import org.onap.sdc.toscaparser.api.ToscaTemplate;
-import org.onap.sdc.toscaparser.api.elements.Metadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Objects;
-
 /**
- * This class describes an entity searched and retrieved by SDC Tosca Parser API
- * It is used as the API input parameter. See the {@link org.onap.sdc.tosca.parser.api.ISdcCsarHelper}
+ * This class describes an entity searched and retrieved by SDC Tosca Parser API It is used as the API input parameter.
+ * See the {@link org.onap.sdc.tosca.parser.api.ISdcCsarHelper}
  */
 public abstract class EntityQuery {
 
@@ -57,12 +56,20 @@ public abstract class EntityQuery {
         this.toscaType = toscaType;
     }
 
-    void setUUID(String uUID) {
-        this.uUID = uUID;
+    static boolean isStringMatchingOrNull(String currentUid, String uidInQuery) {
+        return uidInQuery == null || uidInQuery.equals(currentUid);
     }
 
-    void setCustomizationUUID(String customizationUUID) {
-        this.customizationUUID = customizationUUID;
+    public static EntityQueryBuilder newBuilder(EntityTemplateType entityTemplateType) {
+        return new EntityQueryBuilder(entityTemplateType);
+    }
+
+    public static EntityQueryBuilder newBuilder(SdcTypes sdcType) {
+        return new EntityQueryBuilder(sdcType);
+    }
+
+    public static EntityQueryBuilder newBuilder(String toscaType) {
+        return new EntityQueryBuilder(toscaType);
     }
 
     public abstract List<IEntityDetails> getEntitiesFromTopologyTemplate(NodeTemplate nodeTemplate);
@@ -85,54 +92,48 @@ public abstract class EntityQuery {
         return uUID;
     }
 
+    void setUUID(String uUID) {
+        this.uUID = uUID;
+    }
+
     public String getCustomizationUUID() {
         return customizationUUID;
     }
 
+    void setCustomizationUUID(String customizationUUID) {
+        this.customizationUUID = customizationUUID;
+    }
+
     boolean isSearchCriteriaMatched(Metadata metadata, String toscaType, String uuidKeyName, String cuuidKeyName) {
         return Objects.nonNull(metadata)
-                && isStringMatchingOrNull(metadata.getValue(uuidKeyName), getUUID())
-                && isStringMatchingOrNull(metadata.getValue(cuuidKeyName), getCustomizationUUID())
-                && isStringMatchingOrNull(toscaType, getToscaType());
+            && isStringMatchingOrNull(metadata.getValue(uuidKeyName), getUUID())
+            && isStringMatchingOrNull(metadata.getValue(cuuidKeyName), getCustomizationUUID())
+            && isStringMatchingOrNull(toscaType, getToscaType());
     }
 
     boolean isSearchCriteriaMatched(Metadata metadata, String toscaType) {
-        return isSearchCriteriaMatched(metadata, toscaType, SdcPropertyNames.PROPERTY_NAME_UUID, SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID);
-    }
-
-    static boolean isStringMatchingOrNull(String currentUid, String uidInQuery) {
-        return uidInQuery == null || uidInQuery.equals(currentUid);
-    }
-
-    public static EntityQueryBuilder newBuilder(EntityTemplateType entityTemplateType) {
-        return new EntityQueryBuilder(entityTemplateType);
-    }
-
-    public static EntityQueryBuilder newBuilder(SdcTypes sdcType) {
-        return new EntityQueryBuilder(sdcType);
+        return isSearchCriteriaMatched(metadata, toscaType, SdcPropertyNames.PROPERTY_NAME_UUID,
+            SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID);
     }
 
     @Override
     public String toString() {
         return String.format("EntityType=%s, nodeTemplateType=%s, toscaType=%s, uUID=%s, customizationUUID=%s",
-                entityType, nodeTemplateType, toscaType, uUID, customizationUUID);
-    }
-
-    public static EntityQueryBuilder newBuilder(String toscaType) {
-        return new EntityQueryBuilder(toscaType);
+            entityType, nodeTemplateType, toscaType, uUID, customizationUUID);
     }
 
     /**
      * Builds instance of EntityQuery object according to provided parameters
      */
     public static class EntityQueryBuilder {
+
         private static final String GROUPS_NAME_SPACE = ".groups.";
         private static final String POLICIES_NAME_SPACE = ".policies.";
 
         private EntityQuery entityQuery;
 
         private EntityQueryBuilder(EntityTemplateType entityTemplateType) {
-            switch(entityTemplateType) {
+            switch (entityTemplateType) {
                 case NODE_TEMPLATE:
                     entityQuery = new NodeTemplateEntityQuery();
                     break;
@@ -140,7 +141,7 @@ public abstract class EntityQuery {
                     entityQuery = new GroupEntityQuery();
                     break;
                 case POLICY:
-                    entityQuery =  new PolicyEntityQuery();
+                    entityQuery = new PolicyEntityQuery();
                     break;
                 case ALL:
                     entityQuery = new AllEntitiesQuery();
@@ -159,11 +160,9 @@ public abstract class EntityQuery {
         private EntityQueryBuilder(String toscaType) {
             if (toscaType.contains(GROUPS_NAME_SPACE)) {
                 entityQuery = new GroupEntityQuery(toscaType);
-            }
-            else if (toscaType.contains(POLICIES_NAME_SPACE)) {
+            } else if (toscaType.contains(POLICIES_NAME_SPACE)) {
                 entityQuery = new PolicyEntityQuery(toscaType);
-            }
-            else {
+            } else {
                 entityQuery = new NodeTemplateEntityQuery(toscaType);
             }
         }
@@ -182,7 +181,6 @@ public abstract class EntityQuery {
             return entityQuery;
         }
     }
-
 
 
 }

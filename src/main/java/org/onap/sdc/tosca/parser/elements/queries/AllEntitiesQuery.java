@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,12 +21,11 @@
 package org.onap.sdc.tosca.parser.elements.queries;
 
 import com.google.common.collect.Lists;
-import org.onap.sdc.tosca.parser.api.IEntityDetails;
-import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
-import org.onap.sdc.toscaparser.api.NodeTemplate;
-import org.onap.sdc.toscaparser.api.ToscaTemplate;
-
 import java.util.List;
+import org.onap.sdc.tosca.parser.api.IEntityDetails;
+import org.onap.sdc.tosca.parser.api.NodeTemplate;
+import org.onap.sdc.tosca.parser.api.ToscaTemplate;
+import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
 
 /**
  * Implements EntityQuery object for NodeTemplates, Groups and Policies
@@ -42,11 +41,14 @@ public class AllEntitiesQuery extends EntityQuery {
     public List<IEntityDetails> getEntitiesFromTopologyTemplate(NodeTemplate nodeTemplate) {
         List<IEntityDetails> allEntities = Lists.newArrayList();
         if (nodeTemplate.getSubMappingToscaTemplate() != null) {
-            allEntities.addAll(GroupEntityQuery.convertGroupLisToEntityDetailsList(nodeTemplate.getSubMappingToscaTemplate().getGroups().stream()));
-            allEntities.addAll(NodeTemplateEntityQuery.convertNodeTemplatesListToEntityDetailsList(nodeTemplate.getSubMappingToscaTemplate().getNodeTemplates().stream()));
+            allEntities.addAll(GroupEntityQuery
+                .convertGroupLisToEntityDetailsList(nodeTemplate.getSubMappingToscaTemplate().getGroups().stream()));
+            allEntities.addAll(NodeTemplateEntityQuery.convertNodeTemplatesListToEntityDetailsList(
+                nodeTemplate.getSubMappingToscaTemplate().getNodeTemplates().stream()));
         }
         if (nodeTemplate.getOriginComponentTemplate() != null) {
-            allEntities.addAll(PolicyEntityQuery.convertPolicyLisToEntityDetailsList(nodeTemplate.getOriginComponentTemplate().getPolicies().stream()));
+            allEntities.addAll(PolicyEntityQuery
+                .convertPolicyLisToEntityDetailsList(nodeTemplate.getOriginComponentTemplate().getPolicies().stream()));
         }
         return allEntities;
     }
@@ -56,7 +58,8 @@ public class AllEntitiesQuery extends EntityQuery {
     public List<IEntityDetails> getEntitiesFromService(ToscaTemplate toscaTemplate) {
         List<IEntityDetails> allEntities = Lists.newArrayList();
         allEntities.addAll(GroupEntityQuery.convertGroupLisToEntityDetailsList(toscaTemplate.getGroups().stream()));
-        allEntities.addAll(NodeTemplateEntityQuery.convertNodeTemplatesListToEntityDetailsList(toscaTemplate.getNodeTemplates().stream()));
+        allEntities.addAll(NodeTemplateEntityQuery
+            .convertNodeTemplatesListToEntityDetailsList(toscaTemplate.getNodeTemplates().stream()));
         allEntities.addAll(PolicyEntityQuery.convertPolicyLisToEntityDetailsList(toscaTemplate.getPolicies().stream()));
         return allEntities;
     }

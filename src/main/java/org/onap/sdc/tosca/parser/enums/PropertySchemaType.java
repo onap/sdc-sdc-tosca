@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,12 +21,12 @@
 package org.onap.sdc.tosca.parser.enums;
 
 
-import java.util.Arrays;
-import java.util.NoSuchElementException;
-
 import static org.onap.sdc.tosca.parser.enums.PropertySchemaType.PropertySchemaComplexity.Complex;
 import static org.onap.sdc.tosca.parser.enums.PropertySchemaType.PropertySchemaComplexity.DataType;
 import static org.onap.sdc.tosca.parser.enums.PropertySchemaType.PropertySchemaComplexity.Simple;
+
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public enum PropertySchemaType {
 
@@ -53,6 +53,28 @@ public enum PropertySchemaType {
         this.schemaType = schemaType;
     }
 
+    public static PropertySchemaType getEnumByValue(String type) {
+        if (type == null) {
+            throwNoSuchElementException(null);
+        }
+
+        if (type.contains(DATATYPE.getSchemaTypeName())) {
+            return DATATYPE;
+        }
+        PropertySchemaType propertySchemaType = Arrays.stream(PropertySchemaType.values())
+            .filter(v -> v.getSchemaTypeName().equals(type))
+            .findFirst().orElse(null);
+        if (propertySchemaType == null) {
+            throwNoSuchElementException(type);
+        }
+        return propertySchemaType;
+    }
+
+    private static void throwNoSuchElementException(String type) {
+        throw new NoSuchElementException(
+            String.format("Value %s is not defined in %s", type, PropertySchemaType.class.getName()));
+    }
+
     public PropertySchemaComplexity getSchemaTypeComplexity() {
         return complexity;
     }
@@ -63,27 +85,6 @@ public enum PropertySchemaType {
 
     public enum PropertySchemaComplexity {
         Simple, Complex, DataType
-    }
-
-    public static PropertySchemaType getEnumByValue(String type){
-        if (type == null) {
-            throwNoSuchElementException(null);
-        }
-
-        if (type.contains(DATATYPE.getSchemaTypeName())) {
-            return DATATYPE;
-        }
-        PropertySchemaType propertySchemaType = Arrays.stream(PropertySchemaType.values())
-                .filter(v->v.getSchemaTypeName().equals(type))
-                .findFirst().orElse(null);
-        if (propertySchemaType == null) {
-            throwNoSuchElementException(type);
-        }
-        return propertySchemaType;
-    }
-
-    private static void throwNoSuchElementException(String type) {
-        throw new NoSuchElementException(String.format("Value %s is not defined in %s", type, PropertySchemaType.class.getName()));
     }
 
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,18 +20,16 @@
 
 package org.onap.sdc.tosca.parser.elements;
 
-import org.onap.sdc.tosca.parser.api.IEntityDetails;
-import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
-import org.onap.sdc.toscaparser.api.CapabilityAssignment;
-import org.onap.sdc.toscaparser.api.EntityTemplate;
-import org.onap.sdc.toscaparser.api.Property;
-import org.onap.sdc.toscaparser.api.RequirementAssignment;
-import org.onap.sdc.toscaparser.api.parameters.Input;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import org.onap.sdc.tosca.parser.api.CapabilityAssignment;
+import org.onap.sdc.tosca.parser.api.EntityTemplate;
+import org.onap.sdc.tosca.parser.api.IEntityDetails;
+import org.onap.sdc.tosca.parser.api.Property;
+import org.onap.sdc.tosca.parser.api.RequirementAssignment;
+import org.onap.sdc.tosca.parser.api.parameters.Input;
+import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
 
 public abstract class EntityDetails implements IEntityDetails {
 
@@ -40,7 +38,8 @@ public abstract class EntityDetails implements IEntityDetails {
 
     EntityDetails(EntityTemplate entityTemplate) {
         this.entityTemplate = entityTemplate;
-        this.parentNodeTemplate = EntityDetailsFactory.createEntityDetails(EntityTemplateType.NODE_TEMPLATE, entityTemplate.getParentNodeTemplate());
+        this.parentNodeTemplate = EntityDetailsFactory
+            .createEntityDetails(EntityTemplateType.NODE_TEMPLATE, entityTemplate.getParentNodeTemplate());
     }
 
     @Override
@@ -70,13 +69,13 @@ public abstract class EntityDetails implements IEntityDetails {
     @Override
     public List<RequirementAssignment> getRequirements() {
         return entityTemplate.getRequirements()
-                .getAll();
+            .getAll();
     }
 
     @Override
     public List<CapabilityAssignment> getCapabilities() {
         return entityTemplate.getCapabilities()
-                .getAll();
+            .getAll();
     }
 
     @Override
@@ -96,7 +95,7 @@ public abstract class EntityDetails implements IEntityDetails {
 
         while (currentEntityParent != null) {
             if (pathBld.length() != 0) {
-                pathBld.insert(0,"#");
+                pathBld.insert(0, "#");
             }
             pathBld.insert(0, currentEntityParent.getName());
             currentEntityParent = currentEntityParent.getParentNodeTemplate();
@@ -110,14 +109,14 @@ public abstract class EntityDetails implements IEntityDetails {
     }
 
     @Override
-    public List<String> getMembers()
-    { return Collections.emptyList(); }
-
-    @Override
-    public List<Input> getInputs(){
+    public List<String> getMembers() {
         return Collections.emptyList();
     }
 
+    @Override
+    public List<Input> getInputs() {
+        return Collections.emptyList();
+    }
 
 
 }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,13 +20,11 @@
 
 package org.onap.sdc.tosca.parser.elements;
 
-import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
-import org.onap.sdc.toscaparser.api.EntityTemplate;
-import org.onap.sdc.toscaparser.api.NodeTemplate;
-import org.onap.sdc.toscaparser.api.elements.Metadata;
-import org.onap.sdc.toscaparser.api.parameters.Input;
-
 import java.util.List;
+import org.onap.sdc.tosca.parser.api.EntityTemplate;
+import org.onap.sdc.tosca.parser.api.NodeTemplate;
+import org.onap.sdc.tosca.parser.api.parameters.Input;
+import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
 
 public class NodeTemplateEntityDetails extends EntityDetails {
 
@@ -34,7 +32,7 @@ public class NodeTemplateEntityDetails extends EntityDetails {
 
     NodeTemplateEntityDetails(EntityTemplate entityTemplate) {
         super(entityTemplate);
-        nodeTemplate = (NodeTemplate)getEntityTemplate();
+        nodeTemplate = (NodeTemplate) getEntityTemplate();
     }
 
     @Override
@@ -48,8 +46,8 @@ public class NodeTemplateEntityDetails extends EntityDetails {
     }
 
     @Override
-    public List<Input> getInputs(){
-        if (nodeTemplate.getSubMappingToscaTemplate()!= null) {
+    public List<Input> getInputs() {
+        if (nodeTemplate.getSubMappingToscaTemplate() != null) {
             return nodeTemplate.getSubMappingToscaTemplate().getInputs();
         }
         return super.getInputs();

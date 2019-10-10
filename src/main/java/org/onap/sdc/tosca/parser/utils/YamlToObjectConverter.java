@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,106 +21,105 @@
 package org.onap.sdc.tosca.parser.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.Yaml;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
 
 public class YamlToObjectConverter {
 
-	private static Logger log = LoggerFactory
-			.getLogger(YamlToObjectConverter.class.getName());
+    private static Logger log = LoggerFactory
+        .getLogger(YamlToObjectConverter.class.getName());
 
-	private static HashMap<String, Yaml> yamls = new HashMap<String, Yaml>();
+    private static HashMap<String, Yaml> yamls = new HashMap<String, Yaml>();
 
-	private static Yaml defaultYaml = new Yaml();
+    private static Yaml defaultYaml = new Yaml();
 
-	private static <T> Yaml getYamlByClassName(Class<T> className) {
+    private static <T> Yaml getYamlByClassName(Class<T> className) {
 
-		Yaml yaml = yamls.get(className.getName());
-		if (yaml == null) {
-			yaml = defaultYaml;
-		}
+        Yaml yaml = yamls.get(className.getName());
+        if (yaml == null) {
+            yaml = defaultYaml;
+        }
 
-		return yaml;
-	}
+        return yaml;
+    }
 
-	public <T> T convert(String dirPath, Class<T> className,
-			String configFileName) {
+    public <T> T convert(String dirPath, Class<T> className,
+                         String configFileName) {
 
-		T config = null;
+        T config = null;
 
-		try {
+        try {
 
-			String fullFileName = dirPath + File.separator + configFileName;
+            String fullFileName = dirPath + File.separator + configFileName;
 
-			config = convert(fullFileName, className);
+            config = convert(fullFileName, className);
 
-		} catch (Exception e) {
-			log.error("Failed to convert yaml file " + configFileName
-					+ " to object.", e);
-		} 
+        } catch (Exception e) {
+            log.error("Failed to convert yaml file " + configFileName
+                + " to object.", e);
+        }
 
-		return config;
-	}
+        return config;
+    }
 
-	public <T> T convert(String fullFileName, Class<T> className) {
+    public <T> T convert(String fullFileName, Class<T> className) {
 
-		T config = null;
+        T config = null;
 
-		Yaml yaml = getYamlByClassName(className);
+        Yaml yaml = getYamlByClassName(className);
 
-		InputStream in = null;
-		try {
+        InputStream in = null;
+        try {
 
-			File f = new File(fullFileName);
-			if (false == f.exists()) {
-				log.warn("The file " + fullFileName
-						+ " cannot be found. Ignore reading configuration.");
-				return null;
-			}
-			in = Files.newInputStream(Paths.get(fullFileName));
+            File f = new File(fullFileName);
+            if (false == f.exists()) {
+                log.warn("The file " + fullFileName
+                    + " cannot be found. Ignore reading configuration.");
+                return null;
+            }
+            in = Files.newInputStream(Paths.get(fullFileName));
 
-			config = yaml.loadAs(in, className);
+            config = yaml.loadAs(in, className);
 
-			// System.out.println(config.toString());
-		} catch (Exception e) {
-			log.error("Failed to convert yaml file " + fullFileName
-					+ " to object.", e);
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
+            // System.out.println(config.toString());
+        } catch (Exception e) {
+            log.error("Failed to convert yaml file " + fullFileName
+                + " to object.", e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
 
-		return config;
-	}
+        return config;
+    }
 
-	public <T> T convertFromString(String yamlContents, Class<T> className) {
+    public <T> T convertFromString(String yamlContents, Class<T> className) {
 
-		T config = null;
-		Yaml yaml = new Yaml();
-		try {
-			Object data = yaml.load(yamlContents);
+        T config = null;
+        Yaml yaml = new Yaml();
+        try {
+            Object data = yaml.load(yamlContents);
             // convert it manually with jackson instead of using snakeyaml auto converter,
             // because of problematic complex objects like JtoscaValidationIssueConfiguration
-			ObjectMapper mapper = new ObjectMapper(); 
-			config = mapper.convertValue(data, className);
-		} catch (Exception e){
-			log.error("Failed to convert YAML {} to object." , yamlContents, e);
-		}
+            ObjectMapper mapper = new ObjectMapper();
+            config = mapper.convertValue(data, className);
+        } catch (Exception e) {
+            log.error("Failed to convert YAML {} to object.", yamlContents, e);
+        }
 
-		return config;
-	}
+        return config;
+    }
 }

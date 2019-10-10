@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,14 +20,12 @@
 
 package org.onap.sdc.tosca.parser.elements;
 
-import org.onap.sdc.tosca.parser.api.IEntityDetails;
-import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
-import org.onap.sdc.toscaparser.api.EntityTemplate;
-import org.onap.sdc.toscaparser.api.Policy;
-import org.onap.sdc.toscaparser.api.elements.Metadata;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.onap.sdc.tosca.parser.api.EntityTemplate;
+import org.onap.sdc.tosca.parser.api.IEntityDetails;
+import org.onap.sdc.tosca.parser.api.Policy;
+import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
 
 public class PolicyEntityDetails extends EntityDetails {
 
@@ -37,7 +35,7 @@ public class PolicyEntityDetails extends EntityDetails {
 
     PolicyEntityDetails(EntityTemplate entityTemplate) {
         super(entityTemplate);
-        policy = (Policy)getEntityTemplate();
+        policy = (Policy) getEntityTemplate();
     }
 
     @Override
@@ -62,13 +60,14 @@ public class PolicyEntityDetails extends EntityDetails {
     public List<IEntityDetails> getTargetEntities() {
         if (policy.getTargetsType().equals(NODE_TEMPLATES_TARGET_TYPE)) {
             return policy.getTargetsList()
-                    .stream()
-                    .map(o->EntityDetailsFactory.createEntityDetails(EntityTemplateType.NODE_TEMPLATE, (EntityTemplate)o))
-                    .collect(Collectors.toList());
+                .stream()
+                .map(
+                    o -> EntityDetailsFactory.createEntityDetails(EntityTemplateType.NODE_TEMPLATE, (EntityTemplate) o))
+                .collect(Collectors.toList());
         }
         return policy.getTargetsList()
-                .stream()
-                .map(o->EntityDetailsFactory.createEntityDetails(EntityTemplateType.GROUP, (EntityTemplate)o))
-                .collect(Collectors.toList());
+            .stream()
+            .map(o -> EntityDetailsFactory.createEntityDetails(EntityTemplateType.GROUP, (EntityTemplate) o))
+            .collect(Collectors.toList());
     }
 }
