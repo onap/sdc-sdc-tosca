@@ -4,88 +4,52 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.onap.sdc.sdc-tosca</groupId>
-  <artifactId>sdc-tosca-jtosca</artifactId>
-  <name>sdc-tosca-jtosca</name>
+  <artifactId>sdc-tosca</artifactId>
+  <name>sdc-tosca</name>
   <description>SDC Tosca Parser JAR file for use by consumers</description>
-  <version>1.6.5-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
 
   <parent>
-    <groupId>org.onap.oparent</groupId>
-    <artifactId>oparent</artifactId>
-    <version>2.0.0</version>
-    <relativePath/>
+    <groupId>org.onap.sdc.sdc-tosca</groupId>
+    <artifactId>sdc-tosca-jtosca</artifactId>
+    <version>1.6.5-SNAPSHOT</version>
   </parent>
 
-  <modules>
-    <module>sdc-tosca</module>
-    <module>jtosca</module>
-  </modules>
-
-  <properties>
-
-    <!-- ==================== -->
-    <!-- Generic properties -->
-    <!-- ==================== -->
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <!-- ==================== -->
-    <!-- Versions -->
-    <hamcrest.version>2.1</hamcrest.version>
-    <!-- ==================== -->
-    <!-- Global project version -->
-
-    <!-- Dependencies projects version -->
-    <!--<sonar.skipDesign>true</sonar.skipDesign>-->
-    <!--<sonar.projectBaseDir>${project.basedir}</sonar.projectBaseDir>-->
-    <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
-    <nexus.proxy>https://nexus.onap.org</nexus.proxy>
-    <sitePath>/content/sites/site/org/onap/sdc/sdc-tosca/${project.version}</sitePath>
-    <snapshots.path>snapshots</snapshots.path>
-    <releases.path>releases</releases.path>
-    <!-- Sonar properties -->
-    <sonar.sourceEncoding>${project.build.sourceEncoding}</sonar.sourceEncoding>
-    <sonar.skipDesign>true</sonar.skipDesign>
-    <sonar.projectBaseDir>${project.basedir}</sonar.projectBaseDir>
-    <sonar.sources>.</sonar.sources>
-    <sonar.exclusions>**/scripts/**/*</sonar.exclusions>
-    <sonar.test.exclusions>**/test/**/*,**/tests/**/*</sonar.test.exclusions>
-    <sonar.inclusions>app/**/*.js,server-mock/**/*.js,src/**/*.js,src/main/**/*.java
-    </sonar.inclusions>
-    <sonar.branch>${project.version}</sonar.branch>
-
-  </properties>
-
   <dependencies>
+    <!-- jtosca Tosca Parser -->
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.25</version>
+      <groupId>org.onap.sdc.sdc-tosca</groupId>
+      <artifactId>jtosca</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.9.9</version>
+    </dependency>
+
+    <!-- Apache Commons -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.5</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- TEST -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.10.19</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <scope>compile</scope>
-      <version>25.1-jre</version>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>6.11</version>
+      <scope>test</scope>
     </dependency>
-
-    <!-- YAML parser -->
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>1.14</version>
-      <scope>compile</scope>
-    </dependency>
-
   </dependencies>
 
   <reporting>
