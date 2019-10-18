@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47f54506_d59270ad",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 5565
+      },
+      "writtenOn": "2019-10-18T12:07:16Z",
+      "side": 1,
+      "message": "I just don\u0027t know if it\u0027s a good name for the artifact. Maybe Ofir can suggest a better one.",
+      "range": {
+        "startLine": 8,
+        "startChar": 14,
+        "endLine": 8,
+        "endChar": 27
+      },
+      "revId": "c29c3d951f9c41583d82c7d3f3318392a471e194",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
