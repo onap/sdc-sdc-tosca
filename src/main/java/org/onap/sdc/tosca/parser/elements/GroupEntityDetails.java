@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 public class GroupEntityDetails extends EntityDetails {
     private final Group group;
-    private final List<IEntityDetails> memberNodes;
+    private List<IEntityDetails> memberNodes;
 
     GroupEntityDetails(EntityTemplate entityTemplate)  {
         super(entityTemplate);
@@ -56,6 +56,10 @@ public class GroupEntityDetails extends EntityDetails {
     @Override
     public List<IEntityDetails> getMemberNodes() {
         return memberNodes;
+    }
+
+    public void setMemberNodes(List<IEntityDetails> memberNodes) {
+       this.memberNodes = memberNodes;
     }
 
     @Override

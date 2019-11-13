@@ -90,10 +90,12 @@ public abstract class EntityQuery {
     }
 
     boolean isSearchCriteriaMatched(Metadata metadata, String toscaType, String uuidKeyName, String cuuidKeyName) {
-        return Objects.nonNull(metadata)
-                && isStringMatchingOrNull(metadata.getValue(uuidKeyName), getUUID())
-                && isStringMatchingOrNull(metadata.getValue(cuuidKeyName), getCustomizationUUID())
-                && isStringMatchingOrNull(toscaType, getToscaType());
+        return  Objects.nonNull(metadata)
+                    && isStringMatchingOrNull(metadata.getValue(uuidKeyName), getUUID())
+                    && isStringMatchingOrNull(metadata.getValue(cuuidKeyName), getCustomizationUUID())
+                    && isStringMatchingOrNull(toscaType, getToscaType()) ||
+                Objects.isNull(metadata)
+                    && isStringMatchingOrNull(toscaType, getToscaType());
     }
 
     boolean isSearchCriteriaMatched(Metadata metadata, String toscaType) {
