@@ -1,4 +1,0 @@
-distribution_type: 'maven'
-version: '1.6.1'
-project: 'sdc-tosca'
-log_dir: 'sdc-sdc-tosca-maven-stage-master/53/'
