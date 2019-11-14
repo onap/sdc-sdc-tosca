@@ -1,0 +1,389 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "796c29d9_3b69cb31",
+        "filename": "src/main/java/org/onap/sdc/tosca/parser/elements/EntityDetails.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "flip .equals() to prevent NPE",
+      "range": {
+        "startLine": 125,
+        "startChar": 17,
+        "endLine": 125,
+        "endChar": 23
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b24409b_39aaa5f6",
+        "filename": "src/main/java/org/onap/sdc/tosca/parser/elements/EntityDetails.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "flip .equals() to prevent NPE",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 39
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bef10546_793a27d9",
+        "filename": "src/main/java/org/onap/sdc/tosca/parser/elements/queries/EntityQuery.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "2 TCs failed with this change:\nEntityQueryTest.findEntityWhenMetadataIsNull\nEntityQueryTest.findEntityWhenMetadataIsNullAndUuidsAreProvided",
+      "range": {
+        "startLine": 92,
+        "startChar": 114,
+        "endLine": 99,
+        "endChar": 5
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dc80154_c0eada72",
+        "filename": "src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "field initialization is redundant.",
+      "range": {
+        "startLine": 16,
+        "startChar": 43,
+        "endLine": 16,
+        "endChar": 47
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "484aff9a_14f2448d",
+        "filename": "src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "remove the SET of static variable",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 98
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6144ae71_8de38ff0",
+        "filename": "src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "avoid printing stacktrace, replace with logger",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 32
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac198ebc_ee77fc7d",
+        "filename": "src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "extract string constant and reuse it",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 110
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a1f1e46_13b352bc",
+        "filename": "src/test/java/org/onap/sdc/impl/GetForwardingPathTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "remove the SET of static variable",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 98
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3d70e03_3fa3414b",
+        "filename": "src/test/java/org/onap/sdc/impl/GetForwardingPathTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "avoid printing stacktrace, replace with logger",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 32
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1268f3b4_3bc30ff6",
+        "filename": "src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "missing header.",
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "887e6da3_224b6ca6",
+        "filename": "src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "remove the SET of static variable",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 98
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff5691f2_83c9d65b",
+        "filename": "src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "avoid printing stacktrace, replace with logger",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 32
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "989aa6ed_34601566",
+        "filename": "src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "reuse repeated strings",
+      "range": {
+        "startLine": 47,
+        "startChar": 49,
+        "endLine": 47,
+        "endChar": 75
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59fd97b4_dd34eed2",
+        "filename": "src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "missing default case",
+      "range": {
+        "startLine": 77,
+        "startChar": 25,
+        "endLine": 78,
+        "endChar": 13
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09427524_d72f12b2",
+        "filename": "src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "missing default case",
+      "range": {
+        "startLine": 106,
+        "startChar": 25,
+        "endLine": 107,
+        "endChar": 13
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7249e648_aab3214e",
+        "filename": "src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "missing default case",
+      "range": {
+        "startLine": 138,
+        "startChar": 25,
+        "endLine": 139,
+        "endChar": 13
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec0ac28f_ce389ca7",
+        "filename": "src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-14T14:44:41Z",
+      "side": 1,
+      "message": "missing default case",
+      "range": {
+        "startLine": 176,
+        "startChar": 25,
+        "endLine": 177,
+        "endChar": 13
+      },
+      "revId": "0570010676dd9be632edf73eff2d76f5ee9c26bc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
