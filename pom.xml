@@ -174,9 +174,6 @@
         <version>2.19.1</version>
         <configuration>
           <argLine>${argLine} -Xmx2048m</argLine>
-          <includes>
-            <include>**/ToscaParser***Test.class</include>
-          </includes>
         </configuration>
       </plugin>
 
