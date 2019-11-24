@@ -51,7 +51,7 @@ public class EntityQueryTest {
     public void findEntityWhenMetadataIsNull() {
         EntityQuery entityQuery =  EntityQuery.newBuilder(EntityTemplateType.GROUP)
                 .build();
-        assertFalse(entityQuery.isSearchCriteriaMatched(null,"abc"));
+        assertTrue(entityQuery.isSearchCriteriaMatched(null,"abc"));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class EntityQueryTest {
                 .customizationUUID("2345")
                 .uUID("9700")
                 .build();
-        assertFalse(entityQuery.isSearchCriteriaMatched(null, ""));
+        assertTrue(entityQuery.isSearchCriteriaMatched(null, ""));
     }
 
     @Test

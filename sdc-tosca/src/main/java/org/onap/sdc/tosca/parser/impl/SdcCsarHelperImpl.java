@@ -20,19 +20,19 @@
 
 package org.onap.sdc.tosca.parser.impl;
 
-import static java.util.stream.Collectors.toList;
-
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -40,6 +40,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.config.ConfigurationManager;
+import org.onap.sdc.tosca.parser.elements.GroupEntityDetails;
 import org.onap.sdc.tosca.parser.elements.queries.EntityQuery;
 import org.onap.sdc.tosca.parser.elements.queries.TopologyTemplateQuery;
 import org.onap.sdc.tosca.parser.enums.FilterType;
@@ -72,6 +73,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     private static final String PATH_DELIMITER = "#";
     private static final String CUSTOMIZATION_UUID = "customizationUUID";
+    private static final String GROUPS_VF_MODULE = "org.openecomp.groups.VfModule";
     private ToscaTemplate toscaTemplate;
     private ConfigurationManager configurationManager;
     private static Logger log = LoggerFactory.getLogger(SdcCsarHelperImpl.class.getName());
@@ -418,7 +420,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             if (serviceLevelGroups != null) {
                 return serviceLevelGroups
                         .stream()
-                        .filter(x -> "org.openecomp.groups.VfModule".equals(x.getTypeDefinition().getType()) && x.getName().startsWith(normaliseComponentInstanceName))
+                        .filter(x -> GROUPS_VF_MODULE.equals(x.getTypeDefinition().getType()) && x.getName().startsWith(normaliseComponentInstanceName))
                         .collect(toList());
             }
         }
@@ -1225,6 +1227,89 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     @Override
     public HashSet<DataType> getDataTypes() {
         return toscaTemplate.getDataTypes();
+    }
+
+    @Override
+    public List<IEntityDetails> getVFModule(String cuuid){
+        String normalisedComponentInstanceName = SdcToscaUtility.normaliseComponentInstanceName(getVfiNameByCuuid(cuuid));
+        List<IEntityDetails> vfModulesFromVf = getVfModulesFromVf(cuuid);
+        List<IEntityDetails> vfModulesFromService = getVfModulesFromService().stream()
+                .filter(v->v.getName().startsWith(normalisedComponentInstanceName))
+                .collect(toList());
+        addMembersToVfModuleInstances(vfModulesFromVf, vfModulesFromService);
+        return vfModulesFromService;
+    }
+
+    @Override
+    public List<IEntityDetails> getVFModule() {
+        List<IEntityDetails> vfModules = new ArrayList<>();
+        List<IEntityDetails> vfModuleInstances = new ArrayList<>();
+
+        getVfModulesFromVf().forEach(vfmodule -> {
+            if (Objects.isNull(vfmodule.getParent())){
+                vfModuleInstances.add(vfmodule);
+            } else {
+                vfModules.add(vfmodule);
+            }
+        });
+
+        addMembersToVfModuleInstances(vfModules,vfModuleInstances);
+        return vfModuleInstances;
+    }
+
+    private void addMembersToVfModuleInstances(List<IEntityDetails> vfModules, List<IEntityDetails> vfModuleInstances) {
+        for(IEntityDetails vfModuleInstance : vfModuleInstances){
+            String origGroupName = getOriginalGroupName(vfModuleInstance);
+            setVFModuleMembers(vfModules, vfModuleInstance, origGroupName);
+        }
+    }
+
+    private void setVFModuleMembers(List<IEntityDetails> vfModules, IEntityDetails vfModuleInstance, String origGroupName) {
+        for (IEntityDetails vfModule : vfModules){
+            if (vfModuleInstance instanceof GroupEntityDetails && vfModule.getName().equals(origGroupName)){
+                List<IEntityDetails> memberNodes = vfModule.getMemberNodes();
+                ((GroupEntityDetails)vfModuleInstance).setMemberNodes(memberNodes);
+            }
+        }
+    }
+
+    private String getOriginalGroupName(IEntityDetails vfModuleInstance) {
+        String groupName = vfModuleInstance.getName();
+        return groupName.substring(groupName.indexOf('.') + 2);
+    }
+
+    private List<IEntityDetails> getVfModulesFromService() {
+        EntityQuery entityQuery = EntityQuery.newBuilder(GROUPS_VF_MODULE)
+                .build();
+        TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
+                .build();
+        return getEntity(entityQuery, topologyTemplateQuery, false);
+    }
+
+    private List<IEntityDetails> getVfModulesFromVf(String cuuid) {
+        EntityQuery entityQuery = EntityQuery.newBuilder(GROUPS_VF_MODULE)
+                .build();
+        TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.VF)
+                .customizationUUID(cuuid)
+                .build();
+        return getEntity(entityQuery, topologyTemplateQuery, false);
+    }
+
+    private List<IEntityDetails> getVfModulesFromVf() {
+        EntityQuery entityQuery = EntityQuery.newBuilder(GROUPS_VF_MODULE)
+                .build();
+        TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
+                .build();
+        return getEntity(entityQuery, topologyTemplateQuery, true);
+    }
+
+    private String getVfiNameByCuuid(String cuuid) {
+        EntityQuery entityQuery = EntityQuery.newBuilder(SdcTypes.VF)
+                .customizationUUID(cuuid)
+                .build();
+        TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
+                .build();
+        return getEntity(entityQuery, topologyTemplateQuery, true).get(0).getName();
     }
 
  }

@@ -110,4 +110,9 @@ public interface IEntityDetails {
      * Retrieves list of inputs
      */
     List<Input> getInputs();
+
+    /**
+     * Retrieves list of CVFC members of a VfModule that contain VFC
+     */
+    List<IEntityDetails> getMemberNodesCVFCWithVFC();
 }

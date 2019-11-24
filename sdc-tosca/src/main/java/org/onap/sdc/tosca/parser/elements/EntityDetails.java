@@ -22,21 +22,22 @@ package org.onap.sdc.tosca.parser.elements;
 
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
-import org.onap.sdc.toscaparser.api.CapabilityAssignment;
-import org.onap.sdc.toscaparser.api.EntityTemplate;
-import org.onap.sdc.toscaparser.api.Property;
-import org.onap.sdc.toscaparser.api.RequirementAssignment;
+import org.onap.sdc.tosca.parser.enums.SdcTypes;
+import org.onap.sdc.toscaparser.api.*;
 import org.onap.sdc.toscaparser.api.parameters.Input;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public abstract class EntityDetails implements IEntityDetails {
 
     private final EntityTemplate entityTemplate;
     private final IEntityDetails parentNodeTemplate;
+    private static final String TYPE = "type";
 
     EntityDetails(EntityTemplate entityTemplate) {
         this.entityTemplate = entityTemplate;
@@ -48,7 +49,7 @@ public abstract class EntityDetails implements IEntityDetails {
         return entityTemplate.getName();
     }
 
-    public EntityTemplate getEntityTemplate() {
+    EntityTemplate getEntityTemplate() {
         return entityTemplate;
     }
 
@@ -118,6 +119,21 @@ public abstract class EntityDetails implements IEntityDetails {
         return Collections.emptyList();
     }
 
+    @Override
+    public List<IEntityDetails> getMemberNodesCVFCWithVFC() {
+        return getMemberNodes().stream()
+                .filter(m -> SdcTypes.CVFC.getValue().equals(m.getMetadata().getValue(TYPE)))
+                .filter(this::isCvfcsWithVfc)
+                .distinct()
+                .collect(toList());
+    }
 
-
+    private boolean isCvfcsWithVfc(IEntityDetails member) {
+        List<NodeTemplate> children =((NodeTemplate) ((NodeTemplateEntityDetails)member).getEntityTemplate())
+                .getSubMappingToscaTemplate().getNodeTemplates();
+        List<NodeTemplate> vfcChildren = children.stream()
+                .filter(c -> SdcTypes.VFC.getValue().equals(c.getMetaData().getValue(TYPE)))
+                .collect(toList());
+        return !vfcChildren.isEmpty();
+    }
 }
