@@ -27,6 +27,7 @@ import org.onap.sdc.toscaparser.api.elements.Metadata;
 import org.onap.sdc.toscaparser.api.parameters.Input;
 
 import java.util.List;
+import java.util.Objects;
 
 public class NodeTemplateEntityDetails extends EntityDetails {
 
@@ -53,5 +54,18 @@ public class NodeTemplateEntityDetails extends EntityDetails {
             return nodeTemplate.getSubMappingToscaTemplate().getInputs();
         }
         return super.getInputs();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NodeTemplateEntityDetails)) return false;
+        NodeTemplateEntityDetails that = (NodeTemplateEntityDetails) o;
+        return nodeTemplate.equals(that.nodeTemplate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nodeTemplate);
     }
 }

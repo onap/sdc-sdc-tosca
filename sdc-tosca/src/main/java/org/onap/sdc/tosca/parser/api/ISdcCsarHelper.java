@@ -678,4 +678,17 @@ public interface ISdcCsarHelper {
 	 * @return 	list of data_type value
 	 */
 	HashSet<DataType> getDataTypes();
+
+	/**
+	 * Get VfModule groups of service that belong to a specific VF on this service,
+	 * when members from VFModule groups on the relevant VF are added to each group respectively.
+	 * @return list of VfModule group entities
+	 * */
+	List<IEntityDetails> getVFModule(String cuuid);
+
+	/**
+	 * Get VfModule groups of service when members from VFModule groups on VFs are added to each group respectively.
+	 * @return list of VfModule group entities
+	 * */
+	List<IEntityDetails> getVFModule();
 }
