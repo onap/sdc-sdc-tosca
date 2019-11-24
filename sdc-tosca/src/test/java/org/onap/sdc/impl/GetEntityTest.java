@@ -24,7 +24,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
-import org.onap.sdc.tosca.parser.elements.EntityDetails;
 import org.onap.sdc.tosca.parser.elements.queries.EntityQuery;
 import org.onap.sdc.tosca.parser.elements.queries.TopologyTemplateQuery;
 import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
@@ -34,11 +33,9 @@ import org.onap.sdc.tosca.parser.impl.SdcPropertyNames;
 import org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory;
 import org.onap.sdc.toscaparser.api.CapabilityAssignment;
 import org.onap.sdc.toscaparser.api.Property;
-import org.onap.sdc.toscaparser.api.parameters.Input;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -405,7 +402,7 @@ public class GetEntityTest {
 
 
     @Test
-    public void getServiceInputs() {
+    public void getServiceInputsTest() {
         EntityQuery entityQuery = EntityQuery.newBuilder(EntityTemplateType.NODE_TEMPLATE)
                 .build();
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
