@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9649b853_51374918",
+        "filename": "sdc-tosca/src/main/java/org/onap/sdc/tosca/parser/elements/EntityDetails.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T14:09:26Z",
+      "side": 1,
+      "message": "@Override\n    public List\u003cIEntityDetails\u003e getMemberNodesCVFCWithVFC() {\n        return getMemberNodes().stream()\n            .filter(m -\u003e SdcTypes.CVFC.getValue().equals(m.getMetadata().getValue(TYPE)))\n            .filter(this::isCvfcsWithVfc)\n            .distinct()\n            .collect(toList());\n    }",
+      "parentUuid": "d5e7961a_2d0dca27",
+      "range": {
+        "startLine": 126,
+        "startChar": 17,
+        "endLine": 130,
+        "endChar": 63
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2a4782e_bac572a9",
         "filename": "sdc-tosca/src/main/java/org/onap/sdc/tosca/parser/elements/EntityDetails.java",
         "patchSetId": 2
@@ -153,6 +177,30 @@
       "side": 1,
       "message": "Hi Vasyl,\nI am going to fix it as follows, please verify:\nlog.error(String.format(\"Failed to create ISdcCsarHelper object from %s. Exception: %s\", path, e));",
       "parentUuid": "b08fb9e4_8cc75e48",
+      "range": {
+        "startLine": 49,
+        "startChar": 16,
+        "endLine": 51,
+        "endChar": 9
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f05e5c6_45aba625",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T14:09:26Z",
+      "side": 1,
+      "message": "no, I\u0027d suggest to replace with\nlog.error(\"Failed to create ISdcCsarHelper object from {}.\", path, e);",
+      "parentUuid": "647f206c_650e0716",
       "range": {
         "startLine": 49,
         "startChar": 16,
