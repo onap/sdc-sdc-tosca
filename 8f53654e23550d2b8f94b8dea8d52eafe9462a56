@@ -141,6 +141,30 @@
     },
     {
       "key": {
+        "uuid": "647f206c_650e0716",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 5076
+      },
+      "writtenOn": "2019-11-25T13:46:52Z",
+      "side": 1,
+      "message": "Hi Vasyl,\nI am going to fix it as follows, please verify:\nlog.error(String.format(\"Failed to create ISdcCsarHelper object from %s. Exception: %s\", path, e));",
+      "parentUuid": "b08fb9e4_8cc75e48",
+      "range": {
+        "startLine": 49,
+        "startChar": 16,
+        "endLine": 51,
+        "endChar": 9
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "de296045_9a02c23c",
         "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
         "patchSetId": 2
