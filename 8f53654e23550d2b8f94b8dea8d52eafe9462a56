@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17731790_fd3471d3",
+        "filename": "sdc-tosca/src/main/java/org/onap/sdc/tosca/parser/elements/EntityDetails.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "could be merged.",
+      "range": {
+        "startLine": 126,
+        "startChar": 17,
+        "endLine": 130,
+        "endChar": 63
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2a4782e_bac572a9",
+        "filename": "sdc-tosca/src/main/java/org/onap/sdc/tosca/parser/elements/EntityDetails.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "could be broader (List)",
+      "range": {
+        "startLine": 137,
+        "startChar": 8,
+        "endLine": 137,
+        "endChar": 17
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77870a38_008f1d6a",
+        "filename": "sdc-tosca/src/main/java/org/onap/sdc/tosca/parser/elements/EntityDetails.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "could be merged.",
+      "range": {
+        "startLine": 140,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 37
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33457cb8_fe8c2223",
+        "filename": "sdc-tosca/src/main/java/org/onap/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "No wildcard imports are allowed:\nhttps://wiki.onap.org/display/DW/Java+code+style",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b08fb9e4_8cc75e48",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "log the exception,\nreplace concatenation with {}",
+      "range": {
+        "startLine": 49,
+        "startChar": 16,
+        "endLine": 51,
+        "endChar": 9
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de296045_9a02c23c",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "re-use duplicated strings",
+      "range": {
+        "startLine": 59,
+        "startChar": 6,
+        "endLine": 101,
+        "endChar": 5
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4545902_f7a06ab0",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetForwardingPathTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "log the exception,\nreplace concatenation with {}",
+      "range": {
+        "startLine": 49,
+        "startChar": 16,
+        "endLine": 50,
+        "endChar": 77
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10664a83_bffd9472",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "re-use duplicated strings",
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae17f5fa_8cc97c56",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "No wildcard imports are allowed:\nhttps://wiki.onap.org/display/DW/Java+code+style",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 19
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaab605e_05a89dfd",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "log the exception,\nreplace concatenation with {}",
+      "range": {
+        "startLine": 54,
+        "startChar": 10,
+        "endLine": 56,
+        "endChar": 9
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b4ca867_9101f8a9",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetVfModulesWithMembersTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T11:29:41Z",
+      "side": 1,
+      "message": "remove useless curly braces",
+      "range": {
+        "startLine": 234,
+        "startChar": 50,
+        "endLine": 236,
+        "endChar": 11
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
