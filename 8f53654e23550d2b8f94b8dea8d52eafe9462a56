@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2fe4eeec_081d04a1",
+        "filename": "sdc-tosca/src/main/java/org/onap/sdc/tosca/parser/elements/EntityDetails.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2019-11-25T14:10:12Z",
+      "side": 1,
+      "message": "same here",
+      "parentUuid": "77870a38_008f1d6a",
+      "range": {
+        "startLine": 140,
+        "startChar": 16,
+        "endLine": 144,
+        "endChar": 37
+      },
+      "revId": "8f53654e23550d2b8f94b8dea8d52eafe9462a56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33457cb8_fe8c2223",
         "filename": "sdc-tosca/src/main/java/org/onap/sdc/tosca/parser/impl/SdcCsarHelperImpl.java",
         "patchSetId": 2
