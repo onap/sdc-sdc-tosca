@@ -37,23 +37,21 @@
     <!-- Global project version -->
 
     <!-- Dependencies projects version -->
-    <!--<sonar.skipDesign>true</sonar.skipDesign>-->
-    <!--<sonar.projectBaseDir>${project.basedir}</sonar.projectBaseDir>-->
     <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
     <nexus.proxy>https://nexus.onap.org</nexus.proxy>
     <sitePath>/content/sites/site/org/onap/sdc/sdc-tosca/${project.version}</sitePath>
     <snapshots.path>snapshots</snapshots.path>
     <releases.path>releases</releases.path>
+
     <!-- Sonar properties -->
+    <sonar.language>java</sonar.language>
     <sonar.sourceEncoding>${project.build.sourceEncoding}</sonar.sourceEncoding>
-    <sonar.skipDesign>true</sonar.skipDesign>
     <sonar.projectBaseDir>${project.basedir}</sonar.projectBaseDir>
     <sonar.sources>.</sonar.sources>
     <sonar.exclusions>**/scripts/**/*</sonar.exclusions>
     <sonar.test.exclusions>**/test/**/*,**/tests/**/*</sonar.test.exclusions>
     <sonar.inclusions>app/**/*.js,server-mock/**/*.js,src/**/*.js,src/main/**/*.java
     </sonar.inclusions>
-    <sonar.branch>${project.version}</sonar.branch>
 
   </properties>
 
@@ -194,7 +192,7 @@
       <plugin>
         <groupId>org.sonarsource.scanner.maven</groupId>
         <artifactId>sonar-maven-plugin</artifactId>
-        <version>3.0.2</version>
+        <version>3.7.0.1746</version>
       </plugin>
 
       <plugin>
