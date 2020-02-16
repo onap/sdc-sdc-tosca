@@ -37,21 +37,22 @@
     <!-- Global project version -->
 
     <!-- Dependencies projects version -->
-    <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
     <nexus.proxy>https://nexus.onap.org</nexus.proxy>
     <sitePath>/content/sites/site/org/onap/sdc/sdc-tosca/${project.version}</sitePath>
     <snapshots.path>snapshots</snapshots.path>
     <releases.path>releases</releases.path>
-
+	
     <!-- Sonar properties -->
-    <sonar.language>java</sonar.language>
+	<sonar.language>java</sonar.language>
+	<sonar.coverage.jacoco.xmlReportPaths>
+		${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml
+	</sonar.coverage.jacoco.xmlReportPaths>
     <sonar.sourceEncoding>${project.build.sourceEncoding}</sonar.sourceEncoding>
     <sonar.projectBaseDir>${project.basedir}</sonar.projectBaseDir>
     <sonar.sources>.</sonar.sources>
     <sonar.exclusions>**/scripts/**/*</sonar.exclusions>
     <sonar.test.exclusions>**/test/**/*,**/tests/**/*</sonar.test.exclusions>
-    <sonar.inclusions>app/**/*.js,server-mock/**/*.js,src/**/*.js,src/main/**/*.java
-    </sonar.inclusions>
+    <sonar.inclusions>app/**/*.js,server-mock/**/*.js,src/**/*.js,src/main/**/*.java</sonar.inclusions>
 
   </properties>
 

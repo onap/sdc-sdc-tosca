@@ -109,7 +109,7 @@
               <goal>prepare-agent</goal>
             </goals>
             <configuration>
-              <destFile>target/jacoco.exec</destFile>
+              <destFile>${sonar.jacoco.reportPath}</destFile>
             </configuration>
           </execution>
         </executions>
