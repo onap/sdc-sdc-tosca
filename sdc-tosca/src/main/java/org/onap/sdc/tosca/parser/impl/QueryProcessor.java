@@ -21,6 +21,9 @@
 package org.onap.sdc.tosca.parser.impl;
 
 import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.elements.queries.EntityQuery;
 import org.onap.sdc.tosca.parser.elements.queries.TopologyTemplateQuery;
@@ -30,10 +33,6 @@ import org.onap.sdc.toscaparser.api.NodeTemplate;
 import org.onap.sdc.toscaparser.api.ToscaTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Performs search for entity templates inside node template according to query criteria
@@ -113,11 +112,14 @@ class QueryProcessor {
     }
 
     private List<NodeTemplate> getInternalTopologyTemplates(List<NodeTemplate> nodeTemplateList, boolean isRecursive) {
-        return nodeTemplateList
-            .stream()
-            .map(child->getTopologyTemplatesByQuery(child, isRecursive))
-            .flatMap(List::stream)
-            .collect(Collectors.toList());
+        if (nodeTemplateList != null) {
+            return nodeTemplateList
+                .stream()
+                .map(child -> getTopologyTemplatesByQuery(child, isRecursive))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        }
+        return Lists.newArrayList();
     }
 
     private List<NodeTemplate> getTopologyTemplatesByQuery(NodeTemplate current, boolean isRecursive) {
@@ -144,6 +146,5 @@ class QueryProcessor {
         }
         return topologyTemplateList;
     }
-
 
 }
