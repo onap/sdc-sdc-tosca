@@ -3,5 +3,3 @@
 89d362029514c4ee83998322389ebd87042c5519                                      	saml/lf-gerrit-transfer
 a17ed73bcb957367f752578bfc0c456da24ad80d                                      	saml/onap-gerrit-sdc-sdc-tosca-committers
 daebbf523be390041a1a9c0e340a6d833aae5043                                      	GitHub Replication
-ldap:cn=lf-gerrit-transfer,ou=Groups,dc=freestandards,dc=org                  	ldap/lf-gerrit-transfer
-ldap:cn=onap-gerrit-sdc-sdc-tosca-committers,ou=Groups,dc=freestandards,dc=org	ldap/onap-gerrit-sdc-sdc-tosca-committers
