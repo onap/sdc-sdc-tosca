@@ -8,7 +8,7 @@
   <artifactId>sdc-tosca-jtosca</artifactId>
   <name>sdc-tosca-jtosca</name>
   <description>SDC Tosca Parser JAR file for use by consumers</description>
-  <version>1.6.5-SNAPSHOT</version>
+  <version>1.6.6-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <parent>
@@ -74,14 +74,14 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <scope>compile</scope>
-      <version>25.1-jre</version>
+      <version>30.0-jre</version>
     </dependency>
 
     <!-- YAML parser -->
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
-      <version>1.14</version>
+      <version>1.28</version>
       <scope>compile</scope>
     </dependency>
 
@@ -149,7 +149,7 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.7.8</version>
+        <version>0.8.6</version>
         <executions>
           <!-- Unit-Tests -->
           <execution>
