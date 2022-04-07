@@ -1,220 +1,205 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>sdc-tosca</artifactId>
-  <name>sdc-tosca</name>
-  <description>SDC Tosca Parser JAR file for use by consumers</description>
-  <packaging>jar</packaging>
+    <artifactId>sdc-tosca</artifactId>
+    <name>sdc-tosca</name>
+    <description>SDC Tosca Parser JAR file for use by consumers</description>
+    <packaging>jar</packaging>
 
-  <parent>
-    <groupId>org.onap.sdc.sdc-tosca</groupId>
-    <artifactId>sdc-tosca-jtosca</artifactId>
-    <version>1.6.6-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>org.onap.sdc.sdc-tosca</groupId>
+        <artifactId>sdc-tosca-jtosca</artifactId>
+        <version>1.6.6-SNAPSHOT</version>
+    </parent>
 
-  <dependencies>
-    <!-- jtosca Tosca Parser -->
-    <dependency>
-      <groupId>org.onap.sdc.sdc-tosca</groupId>
-      <artifactId>jtosca</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- jtosca Tosca Parser -->
+        <dependency>
+            <groupId>org.onap.sdc.sdc-tosca</groupId>
+            <artifactId>jtosca</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.12.3</version>
-    </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.2.2</version>
+        </dependency>
 
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>2.12.3</version>
-    </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.13.2</version>
+        </dependency>
 
-    <!-- Apache Commons -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.5</version>
-      <scope>compile</scope>
-    </dependency>
+        <!-- Apache Commons -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+            <scope>compile</scope>
+        </dependency>
 
-    <!-- TEST -->
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.10.19</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>6.11</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+        <!-- TEST -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.5</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Provides everything you need to write JUnit 5 Jupiter tests. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Enables any legacy JUnit 3 and JUnit 4 tests you may have. Not needed for JUnit 5 tests. -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.4</version>
-        <configuration>
-          <failOnError>false</failOnError>
-          <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
-          <docletArtifact>
-            <groupId>org.umlgraph</groupId>
-            <artifactId>umlgraph</artifactId>
-            <version>5.6</version>
-          </docletArtifact>
-          <additionalparam>-views</additionalparam>
-          <useStandardDocletOptions>true</useStandardDocletOptions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+                    <docletArtifact>
+                        <groupId>org.umlgraph</groupId>
+                        <artifactId>umlgraph</artifactId>
+                        <version>5.6</version>
+                    </docletArtifact>
+                    <additionalparam>-views</additionalparam>
+                    <useStandardDocletOptions>true</useStandardDocletOptions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>3.4</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.maven.wagon</groupId>
-            <artifactId>wagon-webdav-jackrabbit</artifactId>
-            <version>2.10</version>
-          </dependency>
-        </dependencies>
-      </plugin>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+                    <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+                </configuration>
+            </plugin>
 
-      <plugin>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.17</version>
-        <configuration>
-          <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
-          <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
-        </configuration>
-      </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.6</version>
+                <executions>
+                    <!-- Unit-Tests -->
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${sonar.jacoco.reportPath}</destFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.6</version>
-        <executions>
-          <!-- Unit-Tests -->
-          <execution>
-            <id>prepare-agent</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-            <configuration>
-              <destFile>${sonar.jacoco.reportPath}</destFile>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+            <!-- Test -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>${argLine} -Xmx2048m</argLine>
+                    <includes>
+                        <include>**/ToscaParser***Test.class</include>
+                    </includes>
+                </configuration>
+            </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.5.1</version>
-        <inherited>true</inherited>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.3</version>
-        <configuration/>
-      </plugin>
-      <!-- Test -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.19.1</version>
-        <configuration>
-          <argLine>${argLine} -Xmx2048m</argLine>
-          <includes>
-            <include>**/ToscaParser***Test.class</include>
-          </includes>
-        </configuration>
-      </plugin>
+            <plugin>
+                <groupId>com.github.sylvainlaurent.maven</groupId>
+                <artifactId>yaml-json-validator-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                        <configuration>
+                            <validationSets>
+                                <validationSet>
+                                    <includes>
+                                        <include>src/main/resources/**/*.y*ml</include>
+                                        <include>src/test/resources/**/*.y*ml</include>
+                                    </includes>
+                                </validationSet>
+                                <validationSet>
+                                    <includes>
+                                        <include>src/main/resources/**/*.json</include>
+                                        <include>src/test/resources/**/*.json</include>
+                                    </includes>
+                                </validationSet>
+                            </validationSets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
-      <plugin>
-        <groupId>com.github.sylvainlaurent.maven</groupId>
-        <artifactId>yaml-json-validator-maven-plugin</artifactId>
-        <version>1.0.1</version>
-        <executions>
-          <execution>
-            <id>validate</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>validate</goal>
-            </goals>
-            <configuration>
-              <validationSets>
-                <validationSet>
-                  <includes>
-                    <include>src/main/resources/**/*.y*ml</include>
-                    <include>src/test/resources/**/*.y*ml</include>
-                  </includes>
-                </validationSet>
-                <validationSet>
-                  <includes>
-                    <include>src/main/resources/**/*.json</include>
-                    <include>src/test/resources/**/*.json</include>
-                  </includes>
-                </validationSet>
-              </validationSets>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Official Maven repository</name>
+            <url>http://repo2.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>ecomp-releases</id>
+            <name>Release Repository</name>
+            <url>${nexus.proxy}/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>ecomp-snapshots</id>
+            <name>Snapshots Repository</name>
+            <url>${nexus.proxy}/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
 
-  <repositories>
-    <repository>
-      <id>central</id>
-      <name>Official Maven repository</name>
-      <url>http://repo2.maven.org/maven2/</url>
-    </repository>
-    <repository>
-      <id>ecomp-releases</id>
-      <name>Release Repository</name>
-      <url>${nexus.proxy}/content/repositories/releases/</url>
-    </repository>
-    <repository>
-      <id>ecomp-snapshots</id>
-      <name>Snapshots Repository</name>
-      <url>${nexus.proxy}/content/repositories/snapshots/</url>
-    </repository>
-  </repositories>
-
-  <distributionManagement>
-    <repository>
-      <id>ecomp-releases</id>
-      <name>Release Repository</name>
-      <url>${nexus.proxy}/content/repositories/${releases.path}/</url>
-    </repository>
-    <snapshotRepository>
-      <id>ecomp-snapshots</id>
-      <name>Snapshot Repository</name>
-      <url>${nexus.proxy}/content/repositories/${snapshots.path}/</url>
-    </snapshotRepository>
-    <site>
-      <id>ecomp-site</id>
-      <url>dav:${nexus.proxy}${sitePath}</url>
-    </site>
-  </distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>ecomp-releases</id>
+            <name>Release Repository</name>
+            <url>${nexus.proxy}/content/repositories/${releases.path}/</url>
+        </repository>
+        <snapshotRepository>
+            <id>ecomp-snapshots</id>
+            <name>Snapshot Repository</name>
+            <url>${nexus.proxy}/content/repositories/${snapshots.path}/</url>
+        </snapshotRepository>
+        <site>
+            <id>ecomp-site</id>
+            <url>dav:${nexus.proxy}${sitePath}</url>
+        </site>
+    </distributionManagement>
 </project>
