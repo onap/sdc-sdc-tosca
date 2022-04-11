@@ -20,7 +20,17 @@
 
 package org.onap.sdc.toscaparser.api;
 
+import static org.onap.sdc.toscaparser.api.elements.EntityType.TOSCA_DEF;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 import org.onap.sdc.toscaparser.api.common.JToscaValidationIssue;
+import org.onap.sdc.toscaparser.api.elements.ArtifactTypeDef;
 import org.onap.sdc.toscaparser.api.elements.EntityType;
 import org.onap.sdc.toscaparser.api.elements.InterfacesDef;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
@@ -29,15 +39,9 @@ import org.onap.sdc.toscaparser.api.elements.RelationshipType;
 import org.onap.sdc.toscaparser.api.utils.CopyUtils;
 import org.onap.sdc.toscaparser.api.utils.ThreadLocalsHolder;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.onap.sdc.toscaparser.api.elements.EntityType.TOSCA_DEF;
-
 public class NodeTemplate extends EntityTemplate {
 
+    private static final String METADATA = "metadata";
     private LinkedHashMap<String, Object> templates;
     private LinkedHashMap<String, Object> customDef;
     private ArrayList<RelationshipTemplate> availableRelTpls;
@@ -45,19 +49,23 @@ public class NodeTemplate extends EntityTemplate {
     private LinkedHashMap<NodeTemplate, RelationshipType> related;
     private ArrayList<RelationshipTemplate> relationshipTpl;
     private LinkedHashMap<RelationshipType, NodeTemplate> _relationships;
+    @Getter
+    @Setter
     private SubstitutionMappings subMappingToscaTemplate;
+    @Getter
+    @Setter
     private TopologyTemplate originComponentTemplate;
+    @Getter
+    @Setter
     private Metadata metadata;
-
-    private static final String METADATA = "metadata";
+    private Map<String, ArtifactTypeDef> artifacts;
 
     public NodeTemplate(String name,
                         LinkedHashMap<String, Object> ntnodeTemplates,
                         LinkedHashMap<String, Object> ntcustomDef,
                         ArrayList<RelationshipTemplate> ntavailableRelTpls,
                         LinkedHashMap<String, Object> ntavailableRelTypes) {
-        this(name, ntnodeTemplates, ntcustomDef, ntavailableRelTpls,
-                ntavailableRelTypes, null);
+        this(name, ntnodeTemplates, ntcustomDef, ntavailableRelTpls, ntavailableRelTypes, null);
     }
 
     @SuppressWarnings("unchecked")
@@ -68,8 +76,7 @@ public class NodeTemplate extends EntityTemplate {
                         LinkedHashMap<String, Object> ntavailableRelTypes,
                         NodeTemplate parentNodeTemplate) {
 
-        super(name, (LinkedHashMap<String, Object>) ntnodeTemplates.get(name),
-                "node_type", ntcustomDef, parentNodeTemplate);
+        super(name, (LinkedHashMap<String, Object>) ntnodeTemplates.get(name), "node_type", ntcustomDef, parentNodeTemplate);
 
         templates = ntnodeTemplates;
         _validateFields((LinkedHashMap<String, Object>) templates.get(name));
@@ -81,6 +88,19 @@ public class NodeTemplate extends EntityTemplate {
         _relationships = new LinkedHashMap<RelationshipType, NodeTemplate>();
         subMappingToscaTemplate = null;
         metadata = _metaData();
+        artifacts = artifacts((LinkedHashMap<String, Object>) templates.get(name));
+    }
+
+    private Map<String, ArtifactTypeDef> artifacts(Map<String, Object> nodetemplate) {
+        if (nodetemplate.get("artifacts") != null) {
+            final Map<String, ArtifactTypeDef> artifactsMap = new HashMap<>();
+            ((LinkedHashMap<String, Object>) nodetemplate.get("artifacts")).forEach((name, value) -> {
+                artifactsMap.put(name, new ArtifactTypeDef((String) ((LinkedHashMap) value).get("type"), (LinkedHashMap<String, Object>) value));
+            });
+            return artifactsMap;
+        } else {
+            return null;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -126,13 +146,13 @@ public class NodeTemplate extends EntityTemplate {
             }
             if (bFound || customDef.get(node) != null) {
                 ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE205", String.format(
-                        "NotImplementedError: Lookup by TOSCA types is not supported. Requirement for \"%s\" can not be full-filled",
-                        getName())));
+                    "NotImplementedError: Lookup by TOSCA types is not supported. Requirement for \"%s\" can not be full-filled",
+                    getName())));
                 return null;
             }
             if (templates.get(node) == null) {
                 ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE206", String.format(
-                        "KeyError: Node template \"%s\" was not found", node)));
+                    "KeyError: Node template \"%s\" was not found", node)));
                 return null;
             }
             NodeTemplate relatedTpl = new NodeTemplate(node, templates, customDef, null, null);
@@ -144,7 +164,8 @@ public class NodeTemplate extends EntityTemplate {
             if (relationship == null) {
                 ArrayList<Object> parentReqs = ((NodeType) typeDefinition).getAllRequirements();
                 if (parentReqs == null) {
-                    ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE207", "ValidationError: parent_req is null"));
+                    ThreadLocalsHolder.getCollector()
+                        .appendValidationIssue(new JToscaValidationIssue("JE207", "ValidationError: parent_req is null"));
                 } else {
 //					for(String key: req.keySet()) {
 //						boolean bFoundRel = false;
@@ -194,15 +215,15 @@ public class NodeTemplate extends EntityTemplate {
                         relationshipString = (String) ((LinkedHashMap<String, Object>) relationship).get("type");
                         if (relationshipString != null) {
                             if (availableRelTypes != null && !availableRelTypes.isEmpty() &&
-                                    availableRelTypes.get(relationshipString) != null) {
+                                availableRelTypes.get(relationshipString) != null) {
                                 ;
                             } else if (!(relationshipString).startsWith(relPrfx)) {
                                 relationshipString = relPrfx + relationshipString;
                             }
                         } else {
                             ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE208", String.format(
-                                    "MissingRequiredFieldError: \"relationship\" used in template \"%s\" is missing required field \"type\"",
-                                    relatedTpl.getName())));
+                                "MissingRequiredFieldError: \"relationship\" used in template \"%s\" is missing required field \"type\"",
+                                relatedTpl.getName())));
                         }
                     }
                     for (RelationshipType rtype : ((NodeType) typeDefinition).getRelationship().keySet()) {
@@ -320,7 +341,7 @@ public class NodeTemplate extends EntityTemplate {
         if (requires != null) {
             if (!(requires instanceof ArrayList)) {
                 ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE209", String.format(
-                        "TypeMismatchError: \"requirements\" of template \"%s\" are not of type \"list\"", name)));
+                    "TypeMismatchError: \"requirements\" of template \"%s\" are not of type \"list\"", name)));
             } else {
                 for (Object ro : requires) {
                     LinkedHashMap<String, Object> req = (LinkedHashMap<String, Object>) ro;
@@ -361,10 +382,10 @@ public class NodeTemplate extends EntityTemplate {
             DataEntity.validateDatatype("Integer", val, null, null, null);
         }
         if (occurrences.size() != 2 ||
-                !(0 <= (int) occurrences.get(0) && (int) occurrences.get(0) <= (int) occurrences.get(1)) ||
-                (int) occurrences.get(1) == 0) {
+            !(0 <= (int) occurrences.get(0) && (int) occurrences.get(0) <= (int) occurrences.get(1)) ||
+            (int) occurrences.get(1) == 0) {
             ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE210", String.format(
-                    "InvalidPropertyValueError: property has invalid value %s", occurrences.toString())));
+                "InvalidPropertyValueError: property has invalid value %s", occurrences.toString())));
         }
     }
 
@@ -379,15 +400,14 @@ public class NodeTemplate extends EntityTemplate {
             }
             if (!bFound) {
                 ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE211", String.format(
-                        "UnknownFieldError: \"requirements\" of template \"%s\" contains unknown field \"%s\"", name, key)));
+                    "UnknownFieldError: \"requirements\" of template \"%s\" contains unknown field \"%s\"", name, key)));
             }
         }
     }
 
     @SuppressWarnings("unchecked")
     private void _validateInterfaces() {
-        LinkedHashMap<String, Object> ifaces = (LinkedHashMap<String, Object>)
-                ((NodeType) typeDefinition).getValue(INTERFACES, entityTpl, false);
+        LinkedHashMap<String, Object> ifaces = (LinkedHashMap<String, Object>) ((NodeType) typeDefinition).getValue(INTERFACES, entityTpl, false);
         if (ifaces != null) {
             for (Map.Entry<String, Object> me : ifaces.entrySet()) {
                 String iname = me.getKey();
@@ -410,7 +430,7 @@ public class NodeTemplate extends EntityTemplate {
                     _commonValidateField(value, _collectCustomIfaceOperations(iname), "interfaces");
                 } else {
                     ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE212", String.format(
-                            "UnknownFieldError: \"interfaces\" of template \"%s\" contains unknown field %s", name, iname)));
+                        "UnknownFieldError: \"interfaces\" of template \"%s\" contains unknown field %s", name, iname)));
                 }
             }
         }
@@ -419,8 +439,7 @@ public class NodeTemplate extends EntityTemplate {
     @SuppressWarnings("unchecked")
     private ArrayList<String> _collectCustomIfaceOperations(String iname) {
         ArrayList<String> allowedOperations = new ArrayList<>();
-        LinkedHashMap<String, Object> nodetypeIfaceDef = (LinkedHashMap<String, Object>) ((NodeType)
-                typeDefinition).getInterfaces().get(iname);
+        LinkedHashMap<String, Object> nodetypeIfaceDef = (LinkedHashMap<String, Object>) ((NodeType) typeDefinition).getInterfaces().get(iname);
         allowedOperations.addAll(nodetypeIfaceDef.keySet());
         String ifaceType = (String) nodetypeIfaceDef.get("type");
         if (ifaceType != null) {
@@ -503,28 +522,9 @@ public class NodeTemplate extends EntityTemplate {
             }
             if (!bFound) {
                 ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE213", String.format(
-                        "UnknownFieldError: Node template \"%s\" has unknown field \"%s\"", name, ntname)));
+                    "UnknownFieldError: Node template \"%s\" has unknown field \"%s\"", name, ntname)));
             }
         }
-    }
-
-    // getter/setter
-
-    // multilevel nesting
-    public SubstitutionMappings getSubMappingToscaTemplate() {
-        return subMappingToscaTemplate;
-    }
-
-    public void setSubMappingToscaTemplate(SubstitutionMappings sm) {
-        subMappingToscaTemplate = sm;
-    }
-
-    public Metadata getMetaData() {
-        return metadata;
-    }
-
-    public void setMetaData(Metadata metadata) {
-        this.metadata = metadata;
     }
 
     @Override
@@ -532,293 +532,4 @@ public class NodeTemplate extends EntityTemplate {
         return getName();
     }
 
-    public TopologyTemplate getOriginComponentTemplate() {
-        return originComponentTemplate;
-    }
-
-    public void setOriginComponentTemplate(TopologyTemplate originComponentTemplate) {
-        this.originComponentTemplate = originComponentTemplate;
-    }
-
 }
-
-/*python
-
-from toscaparser.common.exception import ValidationIssueCollector
-from toscaparser.common.exception import InvalidPropertyValueError
-from toscaparser.common.exception import MissingRequiredFieldError
-from toscaparser.common.exception import TypeMismatchError
-from toscaparser.common.exception import UnknownFieldError
-from toscaparser.common.exception import ValidationError
-from toscaparser.dataentity import DataEntity
-from toscaparser.elements.interfaces import CONFIGURE
-from toscaparser.elements.interfaces import CONFIGURE_SHORTNAME
-from toscaparser.elements.interfaces import INTERFACE_DEF_RESERVED_WORDS
-from toscaparser.elements.interfaces import InterfacesDef
-from toscaparser.elements.interfaces import LIFECYCLE
-from toscaparser.elements.interfaces import LIFECYCLE_SHORTNAME
-from toscaparser.elements.relationshiptype import RelationshipType
-from toscaparser.entity_template import EntityTemplate
-from toscaparser.relationship_template import RelationshipTemplate
-from toscaparser.utils.gettextutils import _
-
-log = logging.getLogger('tosca')
-
-
-class NodeTemplate(EntityTemplate):
-    '''Node template from a Tosca profile.'''
-    def __init__(self, name, node_templates, custom_def=None,
-                 available_rel_tpls=None, available_rel_types=None):
-        super(NodeTemplate, self).__init__(name, node_templates[name],
-                                           'node_type',
-                                           custom_def)
-        self.templates = node_templates
-        self._validate_fields(node_templates[name])
-        self.custom_def = custom_def
-        self.related = {}
-        self.relationship_tpl = []
-        self.available_rel_tpls = available_rel_tpls
-        self.available_rel_types = available_rel_types
-        self._relationships = {}
-        self.sub_mapping_tosca_template = None
-
-    @property
-    def relationships(self):
-        if not self._relationships:
-            requires = self.requirements
-            if requires and isinstance(requires, list):
-                for r in requires:
-                    for r1, value in r.items():
-                        explicit = self._get_explicit_relationship(r, value)
-                        if explicit:
-                            for key, value in explicit.items():
-                                self._relationships[key] = value
-        return self._relationships
-
-    def _get_explicit_relationship(self, req, value):
-        """Handle explicit relationship
-
-        For example,
-        - req:
-            node: DBMS
-            relationship: tosca.relationships.HostedOn
-        """
-        explicit_relation = {}
-        node = value.get('node') if isinstance(value, dict) else value
-
-        if node:
-            # TO-DO(spzala) implement look up once Glance meta data is available
-            # to find a matching TOSCA node using the TOSCA types
-            msg = _('Lookup by TOSCA types is not supported. '
-                    'Requirement for "%s" can not be full-filled.') % self.name
-            if (node in list(self.type_definition.TOSCA_DEF.keys())
-               or node in self.custom_def):
-                ValidationIssueCollector.appendException(NotImplementedError(msg))
-                return
-
-            if node not in self.templates:
-                ValidationIssueCollector.appendException(
-                    KeyError(_('Node template "%s" was not found.') % node))
-                return
-
-            related_tpl = NodeTemplate(node, self.templates, self.custom_def)
-            relationship = value.get('relationship') \
-                if isinstance(value, dict) else None
-            # check if it's type has relationship defined
-            if not relationship:
-                parent_reqs = self.type_definition.get_all_requirements()
-                if parent_reqs is None:
-                    ValidationIssueCollector.appendException(
-                        ValidationError(message='parent_req is ' +
-                                        str(parent_reqs)))
-                else:
-                    for key in req.keys():
-                        for req_dict in parent_reqs:
-                            if key in req_dict.keys():
-                                relationship = (req_dict.get(key).
-                                                get('relationship'))
-                                break
-            if relationship:
-                found_relationship_tpl = False
-                # apply available relationship templates if found
-                if self.available_rel_tpls:
-                    for tpl in self.available_rel_tpls:
-                        if tpl.name == relationship:
-                            rtype = RelationshipType(tpl.type, None,
-                                                     self.custom_def)
-                            explicit_relation[rtype] = related_tpl
-                            tpl.target = related_tpl
-                            tpl.source = self
-                            self.relationship_tpl.append(tpl)
-                            found_relationship_tpl = True
-                # create relationship template object.
-                rel_prfx = self.type_definition.RELATIONSHIP_PREFIX
-                if not found_relationship_tpl:
-                    if isinstance(relationship, dict):
-                        relationship = relationship.get('type')
-                        if relationship:
-                            if self.available_rel_types and \
-                               relationship in self.available_rel_types.keys():
-                                pass
-                            elif not relationship.startswith(rel_prfx):
-                                relationship = rel_prfx + relationship
-                        else:
-                            ValidationIssueCollector.appendException(
-                                MissingRequiredFieldError(
-                                    what=_('"relationship" used in template '
-                                           '"%s"') % related_tpl.name,
-                                    required=self.TYPE))
-                    for rtype in self.type_definition.relationship.keys():
-                        if rtype.type == relationship:
-                            explicit_relation[rtype] = related_tpl
-                            related_tpl._add_relationship_template(req,
-                                                                   rtype.type,
-                                                                   self)
-                        elif self.available_rel_types:
-                            if relationship in self.available_rel_types.keys():
-                                rel_type_def = self.available_rel_types.\
-                                    get(relationship)
-                                if 'derived_from' in rel_type_def:
-                                    super_type = \
-                                        rel_type_def.get('derived_from')
-                                    if not super_type.startswith(rel_prfx):
-                                        super_type = rel_prfx + super_type
-                                    if rtype.type == super_type:
-                                        explicit_relation[rtype] = related_tpl
-                                        related_tpl.\
-                                            _add_relationship_template(
-                                                req, rtype.type, self)
-        return explicit_relation
-
-    def _add_relationship_template(self, requirement, rtype, source):
-        req = requirement.copy()
-        req['type'] = rtype
-        tpl = RelationshipTemplate(req, rtype, self.custom_def, self, source)
-        self.relationship_tpl.append(tpl)
-
-    def get_relationship_template(self):
-        return self.relationship_tpl
-
-    def _add_next(self, nodetpl, relationship):
-        self.related[nodetpl] = relationship
-
-    @property
-    def related_nodes(self):
-        if not self.related:
-            for relation, node in self.type_definition.relationship.items():
-                for tpl in self.templates:
-                    if tpl == node.type:
-                        self.related[NodeTemplate(tpl)] = relation
-        return self.related.keys()
-
-    def validate(self, tosca_tpl=None):
-        self._validate_capabilities()
-        self._validate_requirements()
-        self._validate_properties(self.entity_tpl, self.type_definition)
-        self._validate_interfaces()
-        for prop in self.get_properties_objects():
-            prop.validate()
-
-    def _validate_requirements(self):
-        type_requires = self.type_definition.get_all_requirements()
-        allowed_reqs = ["template"]
-        if type_requires:
-            for treq in type_requires:
-                for key, value in treq.items():
-                    allowed_reqs.append(key)
-                    if isinstance(value, dict):
-                        for key in value:
-                            allowed_reqs.append(key)
-
-        requires = self.type_definition.get_value(self.REQUIREMENTS,
-                                                  self.entity_tpl)
-        if requires:
-            if not isinstance(requires, list):
-                ValidationIssueCollector.appendException(
-                    TypeMismatchError(
-                        what='"requirements" of template "%s"' % self.name,
-                        type='list'))
-            else:
-                for req in requires:
-                    for r1, value in req.items():
-                        if isinstance(value, dict):
-                            self._validate_requirements_keys(value)
-                            self._validate_requirements_properties(value)
-                            allowed_reqs.append(r1)
-                    self._common_validate_field(req, allowed_reqs,
-                                                'requirements')
-
-    def _validate_requirements_properties(self, requirements):
-        # TO-DO(anyone): Only occurrences property of the requirements is
-        # validated here. Validation of other requirement properties are being
-        # validated in different files. Better to keep all the requirements
-        # properties validation here.
-        for key, value in requirements.items():
-            if key == 'occurrences':
-                self._validate_occurrences(value)
-                break
-
-    def _validate_occurrences(self, occurrences):
-        DataEntity.validate_datatype('list', occurrences)
-        for value in occurrences:
-            DataEntity.validate_datatype('integer', value)
-        if len(occurrences) != 2 or not (0 <= occurrences[0] <= occurrences[1]) \
-                or occurrences[1] == 0:
-            ValidationIssueCollector.appendException(
-                InvalidPropertyValueError(what=(occurrences)))
-
-    def _validate_requirements_keys(self, requirement):
-        for key in requirement.keys():
-            if key not in self.REQUIREMENTS_SECTION:
-                ValidationIssueCollector.appendException(
-                    UnknownFieldError(
-                        what='"requirements" of template "%s"' % self.name,
-                        field=key))
-
-    def _validate_interfaces(self):
-        ifaces = self.type_definition.get_value(self.INTERFACES,
-                                                self.entity_tpl)
-        if ifaces:
-            for name, value in ifaces.items():
-                if name in (LIFECYCLE, LIFECYCLE_SHORTNAME):
-                    self._common_validate_field(
-                        value, InterfacesDef.
-                        interfaces_node_lifecycle_operations,
-                        'interfaces')
-                elif name in (CONFIGURE, CONFIGURE_SHORTNAME):
-                    self._common_validate_field(
-                        value, InterfacesDef.
-                        interfaces_relationship_configure_operations,
-                        'interfaces')
-                elif name in self.type_definition.interfaces.keys():
-                    self._common_validate_field(
-                        value,
-                        self._collect_custom_iface_operations(name),
-                        'interfaces')
-                else:
-                    ValidationIssueCollector.appendException(
-                        UnknownFieldError(
-                            what='"interfaces" of template "%s"' %
-                            self.name, field=name))
-
-    def _collect_custom_iface_operations(self, name):
-        allowed_operations = []
-        nodetype_iface_def = self.type_definition.interfaces[name]
-        allowed_operations.extend(nodetype_iface_def.keys())
-        if 'type' in nodetype_iface_def:
-            iface_type = nodetype_iface_def['type']
-            if iface_type in self.type_definition.custom_def:
-                iface_type_def = self.type_definition.custom_def[iface_type]
-            else:
-                iface_type_def = self.type_definition.TOSCA_DEF[iface_type]
-            allowed_operations.extend(iface_type_def.keys())
-        allowed_operations = [op for op in allowed_operations if
-                              op not in INTERFACE_DEF_RESERVED_WORDS]
-        return allowed_operations
-
-    def _validate_fields(self, nodetemplate):
-        for name in nodetemplate.keys():
-            if name not in self.SECTIONS and name not in self.SPECIAL_SECTIONS:
-                ValidationIssueCollector.appendException(
-                    UnknownFieldError(what='Node template "%s"' % self.name,
-                                      field=name))*/

@@ -563,7 +563,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
     public void testGetVnfConfig() {
     	NodeTemplate vnfConfig = nfodCsarHlper.getVnfConfig("9bb2ef82-f8f6-4391-bc71-db063f15bf57");
     	assertNotNull(vnfConfig);
-    	assertEquals("vnfConfiguration", vnfConfig.getMetaData().getValue("name"));
+    	assertEquals("vnfConfiguration", vnfConfig.getMetadata().getValue("name"));
     }
     
     @Test
@@ -657,9 +657,9 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
 		children.sort(Comparator.comparing(NodeTemplate::getName));
 
 		assertEquals("DNT_FW_RSG_SI_1", children.get(1).getName());
-		assertEquals("VFC", children.get(1).getMetaData().getValue("type"));
+		assertEquals("VFC", children.get(1).getMetadata().getValue("type"));
 		assertEquals("DNT_PORT", children.get(2).getName());
-		assertEquals("CP", children.get(2).getMetaData().getValue("type"));
+		assertEquals("CP", children.get(2).getMetadata().getValue("type"));
 	}
 
 	@Test
@@ -671,7 +671,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
 		vfChildren.sort(Comparator.comparing(NodeTemplate::getName));
 		assertEquals("VFC1 DUMMY", vfChildren.get(0).getName());
 		assertEquals("VF_VNF", vfChildren.get(1).getName());
-		assertEquals("CVFC", vfChildren.get(1).getMetaData().getValue("type"));
+		assertEquals("CVFC", vfChildren.get(1).getMetadata().getValue("type"));
 
 
 		List<NodeTemplate> vfcChildren = nestedVfcCsarHlper.getNodeTemplateChildren(vfChildren.get(1));
@@ -697,7 +697,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
     public void testGetVnfConfigGetProperties() {
     	NodeTemplate vnfConfig = nfodCsarHlper.getVnfConfig("9bb2ef82-f8f6-4391-bc71-db063f15bf57");
     	assertNotNull(vnfConfig);
-    	assertEquals("vnfConfiguration", vnfConfig.getMetaData().getValue("name"));
+    	assertEquals("vnfConfiguration", vnfConfig.getMetadata().getValue("name"));
 
     	String manufacturer_reference_number = nfodCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#ATT_part_12345_for_FortiGate-VM00#vendor_info#manufacturer_reference_number");
     	String num_cpus = nfodCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#ATT_part_67890_for_FortiGate-VM01#compute_flavor#num_cpus");
@@ -728,7 +728,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
     public void testNewGetVnfConfigGetProperties() {
     	NodeTemplate vnfConfig = nfodNEWCsarHlper.getVnfConfig("a6587663-b27f-4e88-8a86-604604302ce6");
     	assertNotNull(vnfConfig);
-    	assertEquals("vnfConfiguration", vnfConfig.getMetaData().getValue("name"));
+    	assertEquals("vnfConfiguration", vnfConfig.getMetadata().getValue("name"));
 
     	//Deployment flavor 1
     	String manufacturer_reference_number = nfodNEWCsarHlper.getNodeTemplatePropertyLeafValue(vnfConfig, "allowed_flavors#123456#vendor_info#manufacturer_reference_number");
@@ -770,7 +770,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
 		NodeTemplate nodeTemplate = fdntCsarHelper.getServiceNodeTemplateByNodeName("FDNT 1");
 		assertNotNull(nodeTemplate);
 		assertEquals(nodeTemplate.getName(), "FDNT 1");
-		assertEquals(nodeTemplate.getMetaData().getValue("type"), "VF");
+		assertEquals(nodeTemplate.getMetadata().getValue("type"), "VF");
 	}
 
 	@Test
@@ -942,7 +942,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
 		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("VF_1_V_port_1 0");
 		assertNotNull(nodeTemplate);
 		assertEquals(nodeTemplate.getName(), "VF_1_V_port_1 0");
-		assertEquals(nodeTemplate.getMetaData().getValue("type"), "VF");
+		assertEquals(nodeTemplate.getMetadata().getValue("type"), "VF");
 	}
 	
 	@Test
@@ -950,7 +950,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
 		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtVL 0");
 		assertNotNull(nodeTemplate);
 		assertEquals(nodeTemplate.getName(), "ExtVL 0");
-		assertEquals(nodeTemplate.getMetaData().getValue("type"), "VL");
+		assertEquals(nodeTemplate.getMetadata().getValue("type"), "VL");
 	}
 	
 	@Test
@@ -958,7 +958,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
 		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtCP 0");
 		assertNotNull(nodeTemplate);
 		assertEquals(nodeTemplate.getName(), "ExtCP 0");
-		assertEquals(nodeTemplate.getMetaData().getValue("type"), "CP");
+		assertEquals(nodeTemplate.getMetadata().getValue("type"), "CP");
 	}
 	
 	@Test
@@ -966,7 +966,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
 		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("PNF TEST 0");
 		assertNotNull(nodeTemplate);
 		assertEquals(nodeTemplate.getName(), "PNF TEST 0");
-		assertEquals(nodeTemplate.getMetaData().getValue("type"), "PNF");
+		assertEquals(nodeTemplate.getMetadata().getValue("type"), "PNF");
 	}
 	
 	//QA region  getServiceNodeTemplateBySdcType tests 
@@ -975,7 +975,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
 	public void getServiceNodeTemplateBySdcType_VF() {
 		List<NodeTemplate> vfList = QAServiceForToscaParserTests.getServiceNodeTemplatesByType("org.openecomp.resource.vf.Vf1VPort1");
 		assertEquals(2, vfList.size());
-		assertEquals("VF_1_V_port_1", vfList.get(0).getMetaData().getValue("name"));
+		assertEquals("VF_1_V_port_1", vfList.get(0).getMetadata().getValue("name"));
 	}
 	// endregion Added by QA - Continue with testings of resolve get_input
 
@@ -1006,7 +1006,7 @@ import org.onap.sdc.toscaparser.api.parameters.Input;
 		NodeTemplate nodeTemplate = csarHelperServiceWithCrs.getServiceNodeTemplateByNodeName("chaya best cr 0");
 		List<NodeTemplate> crCpChildren = csarHelperServiceWithCrs.getNodeTemplateBySdcType(nodeTemplate, SdcTypes.CP);
 		assertEquals(crCpChildren.get(0).getName(), "ContrailPort 0");
-		assertEquals(crCpChildren.get(0).getMetaData().getValue("type"), SdcTypes.CP.name());
+		assertEquals(crCpChildren.get(0).getMetadata().getValue("type"), SdcTypes.CP.name());
 	}
 
 	@Test

@@ -178,7 +178,7 @@ public class ToscaParserNodeTemplateMockTest {
 
     @Test
     public void verifyNodeTypeIsNotSupported() {
-        when(nodeTemplate.getMetaData()).thenReturn(metadata);
+        when(nodeTemplate.getMetadata()).thenReturn(metadata);
         when(metadata.getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)).thenReturn("VFC-TEST");
 
         ISdcCsarHelper sdcCsarHelper = new SdcCsarHelperImpl(toscaTemplate);
