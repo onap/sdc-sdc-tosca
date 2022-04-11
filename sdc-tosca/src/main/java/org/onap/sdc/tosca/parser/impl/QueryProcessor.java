@@ -126,7 +126,7 @@ class QueryProcessor {
         final List<NodeTemplate> topologyTemplateList = Collections.emptyList();
 
         boolean isTopologyTemplateFound = isRecursive ?
-                SdcTypes.isComplex(current.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))
+                SdcTypes.isComplex(current.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))
                 : topologyTemplateQuery.isMatchingSearchCriteria(current);
         if (isTopologyTemplateFound) {
             topologyTemplateList.add(current);
@@ -135,7 +135,7 @@ class QueryProcessor {
                 return topologyTemplateList;
             }
         }
-        if (SdcTypes.isComplex(current.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)) &&
+        if (SdcTypes.isComplex(current.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)) &&
                current.getSubMappingToscaTemplate() != null) {
            //search the node template inside a given topology template
             topologyTemplateList.addAll(current.getSubMappingToscaTemplate().getNodeTemplates()
