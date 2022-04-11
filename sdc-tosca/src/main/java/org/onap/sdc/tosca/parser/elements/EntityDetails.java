@@ -26,7 +26,6 @@ import org.onap.sdc.tosca.parser.enums.SdcTypes;
 import org.onap.sdc.toscaparser.api.*;
 import org.onap.sdc.toscaparser.api.parameters.Input;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -132,7 +131,7 @@ public abstract class EntityDetails implements IEntityDetails {
         List<NodeTemplate> children =((NodeTemplate) ((NodeTemplateEntityDetails)member).getEntityTemplate())
                 .getSubMappingToscaTemplate().getNodeTemplates();
         List<NodeTemplate> vfcChildren = children.stream()
-                .filter(c -> SdcTypes.VFC.getValue().equals(c.getMetaData().getValue(TYPE)))
+                .filter(c -> SdcTypes.VFC.getValue().equals(c.getMetadata().getValue(TYPE)))
                 .collect(toList());
         return !vfcChildren.isEmpty();
     }
