@@ -20,14 +20,14 @@
 
 package org.onap.sdc.impl;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 public class ToscaParserSimpleYaml12Test {
 

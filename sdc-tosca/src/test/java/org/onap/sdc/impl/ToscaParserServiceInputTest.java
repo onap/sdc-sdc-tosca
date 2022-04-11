@@ -20,16 +20,18 @@
 
 package org.onap.sdc.impl;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.sdc.toscaparser.api.parameters.Input;
 
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class ToscaParserServiceInputTest extends SdcToscaParserBasicTest {
+@ExtendWith({SdcToscaParserBasicTest.class})
+ class ToscaParserServiceInputTest extends SdcToscaParserBasicTest {
 
     //region getServiceInputs
     @Test

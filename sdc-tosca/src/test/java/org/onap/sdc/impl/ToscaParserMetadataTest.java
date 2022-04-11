@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,21 +20,23 @@
 
 package org.onap.sdc.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.config.ConfigurationManager;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory;
 import org.onap.sdc.toscaparser.api.NodeTemplate;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
-import org.testng.annotations.Test;
 
-import java.util.List;
-import java.util.Map;
-
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-
+@ExtendWith({SdcToscaParserBasicTest.class})
 public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
 
     //region getServiceMetadata
@@ -77,7 +79,7 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
 
     @Test
     public void testGetMetadataByEmptyPropertyValue() {
-        Metadata metadata =  rainyCsarHelperMultiVfs.getServiceMetadata();
+        Metadata metadata = rainyCsarHelperMultiVfs.getServiceMetadata();
         String value = rainyCsarHelperMultiVfs.getMetadataPropertyValue(metadata, "");
         assertNull(value);
     }
@@ -114,8 +116,8 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
     public void testServiceMetadataPropertiesMap() {
         Map<String, Object> metadata = fdntCsarHelper.getServiceMetadataProperties();
         assertNotNull(metadata);
-        assertEquals(metadata.size(),9);
-        assertEquals(metadata.get("namingPolicy"),"test");
+        assertEquals(metadata.size(), 9);
+        assertEquals(metadata.get("namingPolicy"), "test");
     }
     //endregion
 
@@ -130,8 +132,8 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
     public void testServiceMetadataAllPropertiesMap() {
         Map<String, String> metadata = fdntCsarHelper.getServiceMetadataAllProperties();
         assertNotNull(metadata);
-        assertEquals(metadata.size(),9);
-        assertEquals(metadata.get("namingPolicy"),"test");
+        assertEquals(metadata.size(), 9);
+        assertEquals(metadata.get("namingPolicy"), "test");
     }
     //endregion
 
@@ -151,54 +153,54 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
         assertNull(metadata);
     }
     //endregion
-    
+
     //QA tests region for US 319197 -port mirroring
-    
-   	//getNodeTemplateMetadata (All Types)
-   	@Test
+
+    //getNodeTemplateMetadata (All Types)
+    @Test
    	public void GetServiceNodeTemplateMetadataTypeVF() {
-   		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("VF_1_V_port_1 0");
-   		Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
-   		assertNotNull(nodeTemplateMetadata);
-   		assertEquals(nodeTemplateMetadata.getValue("resourceVendorRelease"), "12-12-12");
-   		assertEquals(nodeTemplateMetadata.getValue("type"), "VF");
-   	}
-   	
-   	@Test
+        NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("VF_1_V_port_1 0");
+        Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
+        assertNotNull(nodeTemplateMetadata);
+        assertEquals(nodeTemplateMetadata.getValue("resourceVendorRelease"), "12-12-12");
+        assertEquals(nodeTemplateMetadata.getValue("type"), "VF");
+    }
+
+    @Test
    	public void GetServiceNodeTemplateMetadataTypeVL() {
-   		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtVL 0");
-   		Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
-   		assertNotNull(nodeTemplateMetadata);
-   		assertEquals(nodeTemplateMetadata.getValue("resourceVendorRelease"), "1.0.0.wd03");
-   		assertEquals(nodeTemplateMetadata.getValue("type"), "VL");
-   	}
-   	
-   	@Test
+        NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtVL 0");
+        Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
+        assertNotNull(nodeTemplateMetadata);
+        assertEquals(nodeTemplateMetadata.getValue("resourceVendorRelease"), "1.0.0.wd03");
+        assertEquals(nodeTemplateMetadata.getValue("type"), "VL");
+    }
+
+    @Test
    	public void GetServiceNodeTemplateMetadataTypeCP() {
-   		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtCP 0");
-   		Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
-   		assertNotNull(nodeTemplateMetadata);
-   		assertEquals(nodeTemplateMetadata.getValue("UUID"), "7a883088-5cab-4bfb-8d55-307d3ffd0758");
-   		assertEquals(nodeTemplateMetadata.getValue("type"), "CP");
-   	}
-   	
-   	@Test
+        NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("ExtCP 0");
+        Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
+        assertNotNull(nodeTemplateMetadata);
+        assertEquals(nodeTemplateMetadata.getValue("UUID"), "7a883088-5cab-4bfb-8d55-307d3ffd0758");
+        assertEquals(nodeTemplateMetadata.getValue("type"), "CP");
+    }
+
+    @Test
    	public void GetServiceNodeTemplateMetadataTypePNF() {
-   		NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("PNF TEST 0");
-   		Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
-   		assertNotNull(nodeTemplateMetadata);
-   		assertEquals(nodeTemplateMetadata.getValue("resourceVendorModelNumber"), "");
-   		assertEquals(nodeTemplateMetadata.getValue("type"), "PNF");
-   	}
-   	
-   	//QA end region for US 319197 -port mirroring
-   	
+        NodeTemplate nodeTemplate = QAServiceForToscaParserTests.getServiceNodeTemplateByNodeName("PNF TEST 0");
+        Metadata nodeTemplateMetadata = QAServiceForToscaParserTests.getNodeTemplateMetadata(nodeTemplate);
+        assertNotNull(nodeTemplateMetadata);
+        assertEquals(nodeTemplateMetadata.getValue("resourceVendorModelNumber"), "");
+        assertEquals(nodeTemplateMetadata.getValue("type"), "PNF");
+    }
+
+    //QA end region for US 319197 -port mirroring
+
     // Added by QA  //region getServiceMetadataAllProperties
 
     @Test
     public void testGetAllMetadataProperties() {
-    	Metadata serviceMetadata = fdntCsarHelper.getServiceMetadata();
-    	assertNotNull(serviceMetadata);
+        Metadata serviceMetadata = fdntCsarHelper.getServiceMetadata();
+        assertNotNull(serviceMetadata);
         Map<String, String> allProperties = serviceMetadata.getAllProperties();
         assertNotNull(allProperties);
         String invariantUUID = allProperties.get("invariantUUID");
@@ -223,33 +225,32 @@ public class ToscaParserMetadataTest extends SdcToscaParserBasicTest {
     }
     //endregion
 
-  @Test
-  public void testCSARMissingConformanceLevelWithCustomErrorConfig() throws
-      SdcToscaParserException {
+    @Test
+    public void testCSARMissingConformanceLevelWithCustomErrorConfig() throws SdcToscaParserException {
 
-    ConfigurationManager configurationManager = ConfigurationManager.getInstance();
-    try {
-      configurationManager.setErrorConfiguration("error-configuration-test.yaml");
-      SdcToscaParserFactory.setConfigurationManager(configurationManager);
-      ISdcCsarHelper missingCSARMetaCsarCustomConfig = getCsarHelper
-          ("csars/service-missing-csar-meta-file.csar");
-      String conformanceLevel = missingCSARMetaCsarCustomConfig.getConformanceLevel();
-      assertNotNull(conformanceLevel);
-      assertEquals(conformanceLevel, configurationManager.getConfiguration().getConformanceLevel()
-          .getMaxVersion());
+        ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+        try {
+            configurationManager.setErrorConfiguration("error-configuration-test.yaml");
+            SdcToscaParserFactory.setConfigurationManager(configurationManager);
+            ISdcCsarHelper missingCSARMetaCsarCustomConfig = getCsarHelper
+                ("csars/service-missing-csar-meta-file.csar");
+            String conformanceLevel = missingCSARMetaCsarCustomConfig.getConformanceLevel();
+            assertNotNull(conformanceLevel);
+            assertEquals(conformanceLevel, configurationManager.getConfiguration().getConformanceLevel()
+                .getMaxVersion());
+        } finally {
+            configurationManager.setErrorConfiguration("error-configuration.yaml");
+            SdcToscaParserFactory.setConfigurationManager(configurationManager);
+        }
+
     }
-    finally {
-      configurationManager.setErrorConfiguration("error-configuration.yaml");
-      SdcToscaParserFactory.setConfigurationManager(configurationManager);
+
+    @Test
+    void testCSARMissingConformanceLevelWithDefaultErrorConfig() {
+        assertThrows(SdcToscaParserException.class, () -> {
+            ISdcCsarHelper missingCSARMetaCsarDefaultConfig = getCsarHelper("csars/service-missing-csar-meta-file.csar");
+            missingCSARMetaCsarDefaultConfig.getConformanceLevel();
+        });
     }
 
-  }
-
-  @Test(expectedExceptions = SdcToscaParserException.class)
-  public void testCSARMissingConformanceLevelWithDefaultErrorConfig() throws
-      SdcToscaParserException {
-    ISdcCsarHelper missingCSARMetaCsarDefaultConfig = getCsarHelper("csars/service-missing-csar-meta-file.csar");
-    missingCSARMetaCsarDefaultConfig.getConformanceLevel();
-  }
-   
 }

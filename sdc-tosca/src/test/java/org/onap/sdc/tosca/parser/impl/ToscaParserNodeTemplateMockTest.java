@@ -38,8 +38,8 @@ import java.util.LinkedHashMap;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
-import static org.testng.Assert.assertFalse;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ToscaParserNodeTemplateMockTest {

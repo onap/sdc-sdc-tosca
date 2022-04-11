@@ -54,12 +54,6 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.5</version>
-            <scope>test</scope>
-        </dependency>
         <!-- Provides everything you need to write JUnit 5 Jupiter tests. -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

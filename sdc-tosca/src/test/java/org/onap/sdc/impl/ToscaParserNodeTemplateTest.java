@@ -20,16 +20,19 @@
 
 package org.onap.sdc.impl;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.onap.sdc.tosca.parser.enums.FilterType;
 import org.onap.sdc.tosca.parser.enums.SdcTypes;
@@ -41,9 +44,9 @@ import org.onap.sdc.toscaparser.api.Policy;
 import org.onap.sdc.toscaparser.api.Property;
 import org.onap.sdc.toscaparser.api.parameters.Annotation;
 import org.onap.sdc.toscaparser.api.parameters.Input;
-import org.testng.annotations.Test;
 
-public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
+@ExtendWith({SdcToscaParserBasicTest.class})
+ class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 
 	//region getServiceVfList
 	@Test
@@ -1327,5 +1330,3 @@ public class ToscaParserNodeTemplateTest extends SdcToscaParserBasicTest {
 	}
 
 }
-
-

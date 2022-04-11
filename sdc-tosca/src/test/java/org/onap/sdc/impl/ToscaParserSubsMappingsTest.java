@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,24 +20,20 @@
 
 package org.onap.sdc.impl;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
-import org.onap.sdc.toscaparser.api.CapabilityAssignment;
 import org.onap.sdc.toscaparser.api.NodeTemplate;
 import org.onap.sdc.toscaparser.api.RequirementAssignment;
-import org.onap.sdc.toscaparser.api.elements.CapabilityTypeDef;
-//import org.testng.ReporterConfig.Property;
-import org.testng.annotations.Test;
-import org.onap.sdc.toscaparser.api.Property;
 
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertNull;
-
-public class ToscaParserSubsMappingsTest extends SdcToscaParserBasicTest {
+@ExtendWith({SdcToscaParserBasicTest.class})
+ class ToscaParserSubsMappingsTest extends SdcToscaParserBasicTest {
 
     //region getServiceSubstitutionMappingsTypeName
     @Test
@@ -52,9 +48,9 @@ public class ToscaParserSubsMappingsTest extends SdcToscaParserBasicTest {
         assertNull(substitutionMappingsTypeName);
     }
     //endregion
-    
-  //Added by QA - Check for Capabilities in VF level (Capabilities QTY and Names).
-		//@Test // - BUG 283369
+
+    //Added by QA - Check for Capabilities in VF level (Capabilities QTY and Names).
+    //@Test // - BUG 283369
 //		public void testCapabilitiesofVFNames_QTY() throws SdcToscaParserException {
 //			List<NodeTemplate> serviceVfList = fdntCsarHelper.getServiceVfList();
 //			String sName = serviceVfList.get(0).getName();
@@ -82,9 +78,9 @@ public class ToscaParserSubsMappingsTest extends SdcToscaParserBasicTest {
 //
 //			assertEquals(fdntCsarHelper_Data.get("FDNT").get("capabilities").size(), CapabilitiesNames.size()); // Compare capabilities qty expected vs actual
 //		}
-		
-	//Added by QA - Check for Capabilities in VF level (Capabilities Types and Properties).
-		//@Test 
+
+    //Added by QA - Check for Capabilities in VF level (Capabilities Types and Properties).
+    //@Test
 //		public void testCapabilitiesofVFTypes_Properties() throws SdcToscaParserException {
 //			List<NodeTemplate> serviceVfList = fdntCsarHelper.getServiceVfList();
 //			String sName = serviceVfList.get(0).getName();
@@ -130,20 +126,20 @@ public class ToscaParserSubsMappingsTest extends SdcToscaParserBasicTest {
 //
 //			assertEquals(fdntCsarHelper_Data.get("FDNT").get("capabilitiesTypes").size(), CapabilitiesTypes.size()); // Compare capabilities qty expected vs actual
 //		}
-		
-	    //@Test // - BUG 283387
-		public void testRequirmentsofVF() throws SdcToscaParserException {
-			List<NodeTemplate> serviceVfList = fdntCsarHelper.getServiceVfList();
-			String sName = serviceVfList.get(0).getName();
-			assertEquals(sName,"FDNT 1");
-			
-			List<String> ActualReqsValues = new ArrayList<>(Arrays.asList( ));
-			
-			List<RequirementAssignment> lRequirements = serviceVfList.get(0).getRequirements().getAll();
-			
-			assertEquals(fdntCsarHelper_Data.get("FDNT").get("requirements").size(),lRequirements.size()); //
-			
-			// Continue from here after bug is fixed ! ! ! !  - Test the Requirements values
-		}
+
+    //@Test // - BUG 283387
+    public void testRequirmentsofVF() throws SdcToscaParserException {
+        List<NodeTemplate> serviceVfList = fdntCsarHelper.getServiceVfList();
+        String sName = serviceVfList.get(0).getName();
+        assertEquals(sName, "FDNT 1");
+
+        List<String> ActualReqsValues = new ArrayList<>(Arrays.asList());
+
+        List<RequirementAssignment> lRequirements = serviceVfList.get(0).getRequirements().getAll();
+
+        assertEquals(fdntCsarHelper_Data.get("FDNT").get("requirements").size(), lRequirements.size()); //
+
+        // Continue from here after bug is fixed ! ! ! !  - Test the Requirements values
+    }
 
 }
