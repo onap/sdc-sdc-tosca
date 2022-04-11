@@ -29,7 +29,6 @@ public class ArtifactTypeDef extends StatefulEntityType {
     private LinkedHashMap<String, Object> properties;
     private LinkedHashMap<String, Object> parentArtifacts;
 
-
     public ArtifactTypeDef(String type, LinkedHashMap<String, Object> customDef) {
         super(type, ARTIFACT_PREFIX, customDef);
 

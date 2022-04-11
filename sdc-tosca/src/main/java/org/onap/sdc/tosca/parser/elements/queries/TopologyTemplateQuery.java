@@ -66,7 +66,7 @@ public class TopologyTemplateQuery {
     }
 
     public Boolean isMatchingSearchCriteria(NodeTemplate nodeTemplate) {
-        boolean isMatched = Objects.nonNull(nodeTemplate.getMetaData()) && isSearchedTemplate(nodeTemplate.getMetaData());
+        boolean isMatched = Objects.nonNull(nodeTemplate.getMetadata()) && isSearchedTemplate(nodeTemplate.getMetadata());
         if(logger.isDebugEnabled()) {
             logger.debug("Node template {} is{} matching search criteria", nodeTemplate.getName(), isMatched ? "" : " not");
         }
