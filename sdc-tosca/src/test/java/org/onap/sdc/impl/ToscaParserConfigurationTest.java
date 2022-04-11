@@ -20,16 +20,18 @@
 
 package org.onap.sdc.impl;
 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.sdc.tosca.parser.config.ErrorConfiguration;
 import org.onap.sdc.tosca.parser.config.JtoscaValidationIssueConfiguration;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.tosca.parser.config.Configuration;
 import org.onap.sdc.tosca.parser.config.ConfigurationManager;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ToscaParserConfigurationTest extends SdcToscaParserBasicTest {
+@ExtendWith({SdcToscaParserBasicTest.class})
+ class ToscaParserConfigurationTest extends SdcToscaParserBasicTest {
 
     @Test
     public void testConfigurationConformanceLevel()  {

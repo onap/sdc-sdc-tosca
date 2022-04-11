@@ -20,12 +20,14 @@
 
 package org.onap.sdc.impl;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.sdc.tosca.parser.utils.GeneralUtility;
 
-import static org.testng.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ToscaParserGeneralUtilTest extends SdcToscaParserBasicTest {
+@ExtendWith({SdcToscaParserBasicTest.class})
+ class ToscaParserGeneralUtilTest extends SdcToscaParserBasicTest {
 
     @Test
     public void testVersionCompare() {

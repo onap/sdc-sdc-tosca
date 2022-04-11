@@ -20,16 +20,21 @@
 
 package org.onap.sdc.impl;
 
-import org.testng.annotations.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.onap.sdc.toscaparser.api.Group;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
 
 import java.util.List;
 
-import static org.testng.Assert.*;
-
-public class ToscaParserGroupTest extends SdcToscaParserBasicTest{
+@ExtendWith({SdcToscaParserBasicTest.class})
+ class ToscaParserGroupTest extends SdcToscaParserBasicTest{
 
     //region getVfModulesByVf
     @Test
