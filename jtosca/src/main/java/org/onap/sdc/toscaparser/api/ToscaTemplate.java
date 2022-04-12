@@ -36,12 +36,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
-
 import org.onap.sdc.toscaparser.api.common.JToscaException;
 import org.onap.sdc.toscaparser.api.common.JToscaValidationIssue;
 import org.onap.sdc.toscaparser.api.common.ValidationIssueCollector;
-import org.onap.sdc.toscaparser.api.elements.EntityType;
 import org.onap.sdc.toscaparser.api.elements.DataType;
+import org.onap.sdc.toscaparser.api.elements.EntityType;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
 import org.onap.sdc.toscaparser.api.extensions.ExtTools;
 import org.onap.sdc.toscaparser.api.parameters.Input;
@@ -56,8 +55,7 @@ import org.yaml.snakeyaml.Yaml;
 public class ToscaTemplate extends Object {
 
     public static final int MAX_LEVELS = 20;
-    private static Logger log = LoggerFactory.getLogger(ToscaTemplate.class.getName());
-
+    private static final Logger log = LoggerFactory.getLogger(ToscaTemplate.class.getName());
     // TOSCA template key names
     private static final String DEFINITION_VERSION = "tosca_definitions_version";
     private static final String DEFAULT_NAMESPACE = "tosca_default_namespace";
@@ -78,18 +76,16 @@ public class ToscaTemplate extends Object {
     private static final String POLICY_TYPES = "policy_types";
     private static final String GROUP_TYPES = "group_types";
     private static final String REPOSITORIES = "repositories";
-
-    private static String SECTIONS[] = {
-            DEFINITION_VERSION, DEFAULT_NAMESPACE, TEMPLATE_NAME,
-            TOPOLOGY_TEMPLATE, TEMPLATE_AUTHOR, TEMPLATE_VERSION,
-            DESCRIPTION, IMPORTS, DSL_DEFINITIONS, NODE_TYPES,
-            RELATIONSHIP_TYPES, RELATIONSHIP_TEMPLATES,
-            CAPABILITY_TYPES, ARTIFACT_TYPES, DATA_TYPES,
-            INTERFACE_TYPES, POLICY_TYPES, GROUP_TYPES, REPOSITORIES
-    };
-
     // Sections that are specific to individual template definitions
     private static final String METADATA = "metadata";
+    private static String SECTIONS[] = {
+        DEFINITION_VERSION, DEFAULT_NAMESPACE, TEMPLATE_NAME,
+        TOPOLOGY_TEMPLATE, TEMPLATE_AUTHOR, TEMPLATE_VERSION,
+        DESCRIPTION, IMPORTS, DSL_DEFINITIONS, NODE_TYPES,
+        RELATIONSHIP_TYPES, RELATIONSHIP_TEMPLATES,
+        CAPABILITY_TYPES, ARTIFACT_TYPES, DATA_TYPES,
+        INTERFACE_TYPES, POLICY_TYPES, GROUP_TYPES, REPOSITORIES
+    };
     private static ArrayList<String> SPECIAL_SECTIONS;
 
     private ExtTools exttools = new ExtTools();
@@ -152,16 +148,17 @@ public class ToscaTemplate extends Object {
         VALID_TEMPLATE_VERSIONS = new ArrayList<>();
         VALID_TEMPLATE_VERSIONS.add("tosca_simple_yaml_1_0");
         VALID_TEMPLATE_VERSIONS.add("tosca_simple_yaml_1_1");
+        VALID_TEMPLATE_VERSIONS.add("tosca_simple_yaml_1_2");
+        VALID_TEMPLATE_VERSIONS.add("tosca_simple_yaml_1_3");
         VALID_TEMPLATE_VERSIONS.addAll(exttools.getVersions());
         ADDITIONAL_SECTIONS = new LinkedHashMap<>();
         SPECIAL_SECTIONS = new ArrayList<>();
         SPECIAL_SECTIONS.add(METADATA);
         ADDITIONAL_SECTIONS.put("tosca_simple_yaml_1_0", SPECIAL_SECTIONS);
         ADDITIONAL_SECTIONS.put("tosca_simple_yaml_1_1", SPECIAL_SECTIONS);
+        ADDITIONAL_SECTIONS.put("tosca_simple_yaml_1_2", SPECIAL_SECTIONS);
+        ADDITIONAL_SECTIONS.put("tosca_simple_yaml_1_3", SPECIAL_SECTIONS);
         ADDITIONAL_SECTIONS.putAll(exttools.getSections());
-
-        //long startTime = System.nanoTime();
-
 
         isFile = aFile;
         inputPath = null;
@@ -182,7 +179,7 @@ public class ToscaTemplate extends Object {
             if (path != null && !path.isEmpty()) {
                 try (InputStream input = new FileInputStream(new File(path));) {
                     //System.out.println("Loading YAML file " + path);
-                    log.debug("ToscaTemplate Loading YAMEL file {}", path);
+                    log.debug("ToscaTemplate Loading YAML file {}", path);
                     Yaml yaml = new Yaml();
                     Object data = yaml.load(input);
                     this.tpl = (LinkedHashMap<String, Object>) data;
@@ -190,13 +187,13 @@ public class ToscaTemplate extends Object {
                     log.error("ToscaTemplate - Exception loading yaml: {}", e.getMessage());
                     log.error("Exception", e);
                     ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE275",
-                            "ToscaTemplate - Exception loading yaml: -> " + e.getMessage()));
+                        "ToscaTemplate - Exception loading yaml: -> " + e.getMessage()));
                     return;
                 } catch (Exception e) {
                     log.error("ToscaTemplate - Error loading yaml, aborting -> ", e.getMessage());
                     log.error("Exception", e);
                     ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE275",
-                            "ToscaTemplate - Error loading yaml, aborting -> " + e.getMessage()));
+                        "ToscaTemplate - Error loading yaml, aborting -> " + e.getMessage()));
                     return;
                 }
 
@@ -215,7 +212,7 @@ public class ToscaTemplate extends Object {
                 tpl = yamlDictTpl;
             } else {
                 ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE244",
-                        "ValueError: No path or yaml_dict_tpl was provided. There is nothing to parse"));
+                    "ValueError: No path or yaml_dict_tpl was provided. There is nothing to parse"));
                 log.debug("ToscaTemplate ValueError: No path or yaml_dict_tpl was provided. There is nothing to parse");
 
             }
@@ -264,12 +261,12 @@ public class ToscaTemplate extends Object {
 
     private TopologyTemplate _topologyTemplate() {
         return new TopologyTemplate(
-                _tplTopologyTemplate(),
-                _getAllCustomDefs(imports),
-                relationshipTypes,
-                parsedParams,
-                null,
-                resolveGetInput);
+            _tplTopologyTemplate(),
+            _getAllCustomDefs(imports),
+            relationshipTypes,
+            parsedParams,
+            null,
+            resolveGetInput);
     }
 
     private ArrayList<Input> _inputs() {
@@ -314,7 +311,7 @@ public class ToscaTemplate extends Object {
     @SuppressWarnings("unchecked")
     private ArrayList<Repository> _tplRepositories() {
         LinkedHashMap<String, Object> repositories =
-                (LinkedHashMap<String, Object>) tpl.get(REPOSITORIES);
+            (LinkedHashMap<String, Object>) tpl.get(REPOSITORIES);
         ArrayList<Repository> reposit = new ArrayList<>();
         if (repositories != null) {
             for (Map.Entry<String, Object> me : repositories.entrySet()) {
@@ -350,7 +347,7 @@ public class ToscaTemplate extends Object {
     @SuppressWarnings("unchecked")
     private HashSet<DataType> getTopologyDataTypes() {
         LinkedHashMap<String, Object> value =
-                (LinkedHashMap<String, Object>) tpl.get(DATA_TYPES);
+            (LinkedHashMap<String, Object>) tpl.get(DATA_TYPES);
         HashSet<DataType> datatypes = new HashSet<>();
         if (value != null) {
             customDefsFinal.putAll(value);
@@ -359,7 +356,6 @@ public class ToscaTemplate extends Object {
                 datatypes.add(datatype);
             }
         }
-
 
         return datatypes;
     }
@@ -380,10 +376,9 @@ public class ToscaTemplate extends Object {
     @SuppressWarnings("unchecked")
     private LinkedHashMap<String, Object> _getAllCustomDefs(Object alImports) {
 
-
         String types[] = {
-                IMPORTS, NODE_TYPES, CAPABILITY_TYPES, RELATIONSHIP_TYPES,
-                DATA_TYPES, INTERFACE_TYPES, POLICY_TYPES, GROUP_TYPES
+            IMPORTS, NODE_TYPES, CAPABILITY_TYPES, RELATIONSHIP_TYPES, ARTIFACT_TYPES,
+            DATA_TYPES, INTERFACE_TYPES, POLICY_TYPES, GROUP_TYPES
         };
 
         List<Map<String, Object>> imports = (List<Map<String, Object>>) alImports;
@@ -480,12 +475,13 @@ public class ToscaTemplate extends Object {
      */
     private String getPath(String path, String importFileName) {
         String tempFullPath = (Paths.get(path).toAbsolutePath().getParent()
-                .toString() + File.separator + importFileName.replace("../", "")).replace('\\', '/');
+            .toString() + File.separator + importFileName.replace("../", "")).replace('\\', '/');
         String tempPartialPath = (Paths.get(path).toAbsolutePath().getParent().toString()).replace('\\', '/');
-        if (Files.exists(Paths.get(tempFullPath)))
+        if (Files.exists(Paths.get(tempFullPath))) {
             return tempFullPath;
-        else
+        } else {
             return getPath(tempPartialPath, importFileName);
+        }
     }
 
     /**
@@ -507,10 +503,10 @@ public class ToscaTemplate extends Object {
                     Map.Entry<String, String> val = it.next();
                     if (val.getValue().contains("/")) {
                         importFileName = (Paths.get(rootPath).toAbsolutePath().getParent().toString() + File
-                                .separator + val.getValue().replace("../", "")).replace('\\', '/');
+                            .separator + val.getValue().replace("../", "")).replace('\\', '/');
                     } else {
                         importFileName = (Paths.get(path).toAbsolutePath().getParent().toString() + File
-                                .separator + val.getValue().replace("../", "")).replace('\\', '/');
+                            .separator + val.getValue().replace("../", "")).replace('\\', '/');
                     }
                     retMap.put("importFileName", importFileName);
                     retMap.put("importRelativeName", val.getValue());
@@ -530,8 +526,8 @@ public class ToscaTemplate extends Object {
      * @return the list containing filtered imports
      */
     private List<Map<String, Object>> filterImportsForRecursion(List<Map<String, Object>>
-                                                                        customImports, Map<String,
-            String> importNameDetails) {
+                                                                    customImports, Map<String,
+        String> importNameDetails) {
         for (Map<String, Object> map1 : customImports) {
             for (Map.Entry<String, Object> entry : map1.entrySet()) {
                 Map innerMostMap = (Map) entry.getValue();
@@ -627,27 +623,27 @@ public class ToscaTemplate extends Object {
         this.processedImports = new HashSet<>();
         for (Map.Entry<String, Object> me : nestedToscaTplsWithTopology.entrySet()) {
             LinkedHashMap<String, Object> toscaTpl =
-                    (LinkedHashMap<String, Object>) me.getValue();
+                (LinkedHashMap<String, Object>) me.getValue();
             for (NodeTemplate nt : tt.getNodeTemplates()) {
                 if (_isSubMappedNode(nt, toscaTpl)) {
                     parsedParams = _getParamsForNestedTemplate(nt);
                     ArrayList<Object> alim = (ArrayList<Object>) toscaTpl.get(IMPORTS);
                     LinkedHashMap<String, Object> topologyTpl =
-                            (LinkedHashMap<String, Object>) toscaTpl.get(TOPOLOGY_TEMPLATE);
+                        (LinkedHashMap<String, Object>) toscaTpl.get(TOPOLOGY_TEMPLATE);
                     TopologyTemplate topologyWithSubMapping =
-                            new TopologyTemplate(topologyTpl,
-                                    _getAllCustomDefs(alim),
-                                    relationshipTypes,
-                                    parsedParams,
-                                    nt,
-                                    resolveGetInput);
+                        new TopologyTemplate(topologyTpl,
+                            _getAllCustomDefs(alim),
+                            relationshipTypes,
+                            parsedParams,
+                            nt,
+                            resolveGetInput);
                     nt.setOriginComponentTemplate(topologyWithSubMapping);
                     if (topologyWithSubMapping.getSubstitutionMappings() != null) {
                         // Record nested topology templates in top level template
                         //nestedToscaTemplatesWithTopology.add(topologyWithSubMapping);
                         // Set substitution mapping object for mapped node
                         nt.setSubMappingToscaTemplate(
-                                topologyWithSubMapping.getSubstitutionMappings());
+                            topologyWithSubMapping.getSubstitutionMappings());
                         _handleNestedToscaTemplatesWithTopology(topologyWithSubMapping);
                     }
                 }
@@ -689,7 +685,7 @@ public class ToscaTemplate extends Object {
         String sVersion = _tplVersion();
         if (sVersion == null) {
             ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE245", String.format(
-                    "MissingRequiredField: Template is missing required field \"%s\"", DEFINITION_VERSION)));
+                "MissingRequiredField: Template is missing required field \"%s\"", DEFINITION_VERSION)));
         } else {
             _validateVersion(sVersion);
             this.version = sVersion;
@@ -706,14 +702,14 @@ public class ToscaTemplate extends Object {
             // check ADDITIONAL_SECTIONS
             if (!bFound) {
                 if (ADDITIONAL_SECTIONS.get(version) != null &&
-                        ADDITIONAL_SECTIONS.get(version).contains(sKey)) {
+                    ADDITIONAL_SECTIONS.get(version).contains(sKey)) {
                     bFound = true;
                 }
             }
             if (!bFound) {
                 ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE246", String.format(
-                        "UnknownFieldError: Template contains unknown field \"%s\"",
-                        sKey)));
+                    "UnknownFieldError: Template contains unknown field \"%s\"",
+                    sKey)));
             }
         }
     }
@@ -728,11 +724,9 @@ public class ToscaTemplate extends Object {
         }
         if (!bFound) {
             ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE247", String.format(
-                    "InvalidTemplateVersion: \"%s\" is invalid. Valid versions are %s",
-                    sVersion, VALID_TEMPLATE_VERSIONS.toString())));
-        } else if ((!sVersion.equals("tosca_simple_yaml_1_0") && !sVersion.equals("tosca_simple_yaml_1_1"))) {
+                "InvalidTemplateVersion: \"%s\" is invalid. Valid versions are %s", sVersion, VALID_TEMPLATE_VERSIONS.toString())));
+        } else if (!sVersion.startsWith("tosca_simple_yaml_1_")) {
             EntityType.updateDefinitions(sVersion);
-
         }
     }
 
@@ -756,7 +750,8 @@ public class ToscaTemplate extends Object {
                 return csar.getTempDir() + File.separator + csar.getMainTemplate();
             }
         } else {
-            ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE248", "ValueError: " + _path + " is not a valid file"));
+            ThreadLocalsHolder.getCollector()
+                .appendValidationIssue(new JToscaValidationIssue("JE248", "ValueError: " + _path + " is not a valid file"));
             return null;
         }
         return null;
@@ -768,7 +763,8 @@ public class ToscaTemplate extends Object {
         if (validationIssuesCaught > 0) {
             List<String> validationIssueStrings = ThreadLocalsHolder.getCollector().getValidationIssueReport();
             log.trace("####################################################################################################");
-            log.trace("ToscaTemplate - verifyTemplate - {} Parsing Critical{} occurred...", validationIssuesCaught, (validationIssuesCaught > 1 ? "s" : ""));
+            log.trace("ToscaTemplate - verifyTemplate - {} Parsing Critical{} occurred...", validationIssuesCaught,
+                (validationIssuesCaught > 1 ? "s" : ""));
             for (String s : validationIssueStrings) {
                 log.trace("{}. CSAR name - {}", s, inputPath);
             }
@@ -837,8 +833,8 @@ public class ToscaTemplate extends Object {
     private boolean _isSubMappedNode(NodeTemplate nt, LinkedHashMap<String, Object> toscaTpl) {
         // Return True if the nodetemple is substituted
         if (nt != null && nt.getSubMappingToscaTemplate() == null &&
-                getSubMappingNodeType(toscaTpl).equals(nt.getType()) &&
-                nt.getInterfaces().size() < 1) {
+            getSubMappingNodeType(toscaTpl).equals(nt.getType()) &&
+            nt.getInterfaces().size() < 1) {
             return true;
         }
         return false;
@@ -865,7 +861,7 @@ public class ToscaTemplate extends Object {
         // Return substitution mappings node type
         if (toscaTpl != null) {
             return TopologyTemplate.getSubMappingNodeType(
-                    (LinkedHashMap<String, Object>) toscaTpl.get(TOPOLOGY_TEMPLATE));
+                (LinkedHashMap<String, Object>) toscaTpl.get(TOPOLOGY_TEMPLATE));
         }
         return null;
     }
@@ -873,7 +869,7 @@ public class ToscaTemplate extends Object {
     public boolean hasNestedTemplates() {
         // Return True if the tosca template has nested templates
         return nestedToscaTemplatesWithTopology != null &&
-                nestedToscaTemplatesWithTopology.size() >= 1;
+            nestedToscaTemplatesWithTopology.size() >= 1;
 
     }
 
@@ -897,33 +893,33 @@ public class ToscaTemplate extends Object {
     @Override
     public String toString() {
         return "ToscaTemplate{" +
-                "exttools=" + exttools +
-                ", VALID_TEMPLATE_VERSIONS=" + VALID_TEMPLATE_VERSIONS +
-                ", ADDITIONAL_SECTIONS=" + ADDITIONAL_SECTIONS +
-                ", isFile=" + isFile +
-                ", path='" + path + '\'' +
-                ", inputPath='" + inputPath + '\'' +
-                ", parsedParams=" + parsedParams +
-                ", tpl=" + tpl +
-                ", version='" + version + '\'' +
-                ", imports=" + imports +
-                ", relationshipTypes=" + relationshipTypes +
-                ", metaData=" + metaData +
-                ", description='" + description + '\'' +
-                ", topologyTemplate=" + topologyTemplate +
-                ", repositories=" + repositories +
-                ", inputs=" + inputs +
-                ", relationshipTemplates=" + relationshipTemplates +
-                ", nodeTemplates=" + nodeTemplates +
-                ", outputs=" + outputs +
-                ", policies=" + policies +
-                ", nestedToscaTplsWithTopology=" + nestedToscaTplsWithTopology +
-                ", nestedToscaTemplatesWithTopology=" + nestedToscaTemplatesWithTopology +
-                ", graph=" + graph +
-                ", csarTempDir='" + csarTempDir + '\'' +
-                ", nestingLoopCounter=" + nestingLoopCounter +
-                ", dataTypes=" + dataTypes +
-                '}';
+            "exttools=" + exttools +
+            ", VALID_TEMPLATE_VERSIONS=" + VALID_TEMPLATE_VERSIONS +
+            ", ADDITIONAL_SECTIONS=" + ADDITIONAL_SECTIONS +
+            ", isFile=" + isFile +
+            ", path='" + path + '\'' +
+            ", inputPath='" + inputPath + '\'' +
+            ", parsedParams=" + parsedParams +
+            ", tpl=" + tpl +
+            ", version='" + version + '\'' +
+            ", imports=" + imports +
+            ", relationshipTypes=" + relationshipTypes +
+            ", metaData=" + metaData +
+            ", description='" + description + '\'' +
+            ", topologyTemplate=" + topologyTemplate +
+            ", repositories=" + repositories +
+            ", inputs=" + inputs +
+            ", relationshipTemplates=" + relationshipTemplates +
+            ", nodeTemplates=" + nodeTemplates +
+            ", outputs=" + outputs +
+            ", policies=" + policies +
+            ", nestedToscaTplsWithTopology=" + nestedToscaTplsWithTopology +
+            ", nestedToscaTemplatesWithTopology=" + nestedToscaTemplatesWithTopology +
+            ", graph=" + graph +
+            ", csarTempDir='" + csarTempDir + '\'' +
+            ", nestingLoopCounter=" + nestingLoopCounter +
+            ", dataTypes=" + dataTypes +
+            '}';
     }
 
     public List<Input> getInputs(boolean annotationsRequired) {

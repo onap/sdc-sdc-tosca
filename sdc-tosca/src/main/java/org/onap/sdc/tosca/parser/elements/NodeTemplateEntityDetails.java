@@ -45,7 +45,7 @@ public class NodeTemplateEntityDetails extends EntityDetails {
 
     @Override
     public Metadata getMetadata() {
-        return nodeTemplate.getMetaData();
+        return nodeTemplate.getMetadata();
     }
 
     @Override

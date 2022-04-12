@@ -79,9 +79,9 @@ public class NodeTemplateEntityQuery extends EntityQuery {
 
     private Stream<NodeTemplate> filter(final List<NodeTemplate> nodeTemplateList) {
         return nodeTemplateList.stream()
-            .filter(nt -> isSearchCriteriaMatched(nt.getMetaData(), nt.getType()))
+            .filter(nt -> isSearchCriteriaMatched(nt.getMetadata(), nt.getType()))
             .filter(nt -> getNodeTemplateType() == null ||
-                isStringMatchingOrNull(nt.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE),
+                isStringMatchingOrNull(nt.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE),
                     getNodeTemplateType().getValue()));
     }
 
