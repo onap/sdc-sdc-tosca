@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "829f8520_3c42a130",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2022-04-12T17:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d686a2c_28d9ebdb",
+      "range": {
+        "startLine": 7,
+        "startChar": 38,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "4ce0835fe1966a55b8ee42e3bd1e2b244f530bb0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12fd796b_c649a6a0",
         "filename": "jtosca/src/main/java/org/onap/sdc/toscaparser/api/NodeTemplate.java",
         "patchSetId": 2
