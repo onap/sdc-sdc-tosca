@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,12 +20,14 @@
 
 package org.onap.sdc.tosca.parser.impl;
 
+
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.enums.PropertySchemaType;
 import org.onap.sdc.tosca.parser.utils.PropertyUtils;
@@ -37,21 +39,20 @@ import org.onap.sdc.toscaparser.api.elements.Metadata;
 import java.util.LinkedHashMap;
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ToscaParserNodeTemplateMockTest {
+
     @Mock
     private NodeTemplate nodeTemplate;
-
     @Mock
     private Metadata metadata;
-
     @Mock
     private ToscaTemplate toscaTemplate;
-
     @Mock
     private Property property;
 
@@ -60,11 +61,12 @@ public class ToscaParserNodeTemplateMockTest {
     private static final String dataTypeD = String.format(".%s.ddd", PropertySchemaType.DATATYPE.getSchemaTypeName());
     private static final String dataTypeR = String.format(".%s.rrr", PropertySchemaType.DATATYPE.getSchemaTypeName());
 
-    @Before
-    public void setUp() {
-        when(property.getType()).thenReturn(dataTypeA);
+    @BeforeEach
+    public void setUp(TestInfo info) {
+        if (!info.getDisplayName().equals("verifyNodeTypeIsNotSupported()")) {
+            when(property.getType()).thenReturn(dataTypeA);
+        }
     }
-
 
     @Test
     public void verifyCorrectPropertyPath() {
@@ -74,9 +76,9 @@ public class ToscaParserNodeTemplateMockTest {
         LinkedHashMap<String, Object> dProp = fillDataTypeEntry(dataTypeD, "q", PropertySchemaType.STRING.getSchemaTypeName());
 
         when(nodeTemplate.getCustomDef())
-                .thenReturn(bProp)
-                .thenReturn(cProp)
-                .thenReturn(dProp);
+            .thenReturn(bProp)
+            .thenReturn(cProp)
+            .thenReturn(dProp);
 
         assertTrue(PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property));
     }
@@ -86,12 +88,13 @@ public class ToscaParserNodeTemplateMockTest {
         String[] path = String.format("%s#%s#%s#%s", "x", "y", "z", "q").split("#");
         LinkedHashMap<String, Object> bProp = fillDataTypeEntry(dataTypeA, "y", dataTypeB);
         LinkedHashMap<String, Object> cProp = fillDataTypeEntry(dataTypeB, "z", PropertySchemaType.MAP.getSchemaTypeName());
-        LinkedHashMap<String, Object> dProp = fillDataTypeEntry(PropertySchemaType.MAP.getSchemaTypeName(), "q", PropertySchemaType.STRING.getSchemaTypeName());
+        LinkedHashMap<String, Object> dProp = fillDataTypeEntry(PropertySchemaType.MAP.getSchemaTypeName(), "q",
+            PropertySchemaType.STRING.getSchemaTypeName());
 
         when(nodeTemplate.getCustomDef())
-                .thenReturn(bProp)
-                .thenReturn(cProp)
-                .thenReturn(dProp);
+            .thenReturn(bProp)
+            .thenReturn(cProp)
+            .thenReturn(dProp);
 
         assertTrue(PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property));
     }
@@ -103,8 +106,8 @@ public class ToscaParserNodeTemplateMockTest {
         LinkedHashMap<String, Object> cProp = fillDataTypeEntry(dataTypeB, "z", PropertySchemaType.MAP.getSchemaTypeName());
 
         when(nodeTemplate.getCustomDef())
-                .thenReturn(bProp)
-                .thenReturn(cProp);
+            .thenReturn(bProp)
+            .thenReturn(cProp);
 
         assertFalse(PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property));
     }
@@ -118,9 +121,9 @@ public class ToscaParserNodeTemplateMockTest {
         LinkedHashMap<String, Object> dProp = fillDataTypeEntry(dataTypeD, "m", PropertySchemaType.LIST.getSchemaTypeName(), dataTypeR);
 
         when(nodeTemplate.getCustomDef())
-                .thenReturn(bProp)
-                .thenReturn(cProp)
-                .thenReturn(dProp);
+            .thenReturn(bProp)
+            .thenReturn(cProp)
+            .thenReturn(dProp);
 
         assertFalse(PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property));
     }
@@ -130,12 +133,13 @@ public class ToscaParserNodeTemplateMockTest {
         String[] path = String.format("%s#%s#%s#%s", "x", "y", "z", "m").split("#");
         LinkedHashMap<String, Object> bProp = fillDataTypeEntry(dataTypeA, "y", dataTypeB);
         LinkedHashMap<String, Object> cProp = fillDataTypeEntry(dataTypeB, "z", dataTypeD);
-        LinkedHashMap<String, Object> dProp = fillDataTypeEntry(dataTypeD, "m", PropertySchemaType.LIST.getSchemaTypeName(), PropertySchemaType.INTEGER.getSchemaTypeName());
+        LinkedHashMap<String, Object> dProp = fillDataTypeEntry(dataTypeD, "m", PropertySchemaType.LIST.getSchemaTypeName(),
+            PropertySchemaType.INTEGER.getSchemaTypeName());
 
         when(nodeTemplate.getCustomDef())
-                .thenReturn(bProp)
-                .thenReturn(cProp)
-                .thenReturn(dProp);
+            .thenReturn(bProp)
+            .thenReturn(cProp)
+            .thenReturn(dProp);
 
         assertTrue(PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property));
     }
@@ -147,33 +151,36 @@ public class ToscaParserNodeTemplateMockTest {
         LinkedHashMap<String, Object> dProp = fillDataTypeEntry(dataTypeB, "z", PropertySchemaType.STRING.getSchemaTypeName());
 
         when(nodeTemplate.getCustomDef())
-                .thenReturn(bProp)
-                .thenReturn(dProp);
+            .thenReturn(bProp)
+            .thenReturn(dProp);
 
         assertFalse(PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void propertyPathIsRejectedAsLongerThanExpected() {
         String[] path = String.format("%s#%s#%s#%s", "x", "y", "z", "q").split("#");
         LinkedHashMap<String, Object> bProp = fillDataTypeEntry(dataTypeA, "y", dataTypeB);
         LinkedHashMap<String, Object> dProp = fillDataTypeEntry(dataTypeB, "z", PropertySchemaType.STRING.getSchemaTypeName());
 
         when(nodeTemplate.getCustomDef())
-                .thenReturn(bProp)
-                .thenReturn(dProp);
+            .thenReturn(bProp)
+            .thenReturn(dProp);
 
-        PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property);
+        assertThrows(NoSuchElementException.class, () -> {
+            PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property);
+        });
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void propertyPathIsRejectedAsPropertyIsNotFound() {
         String[] path = String.format("%s#%s", "x", "y").split("#");
         LinkedHashMap<String, Object> bProp = fillDataTypeEntry(dataTypeA, "t", dataTypeB);
-        when(nodeTemplate.getCustomDef())
-                .thenReturn(bProp);
+        when(nodeTemplate.getCustomDef()).thenReturn(bProp);
 
-        assertFalse(PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property));
+        assertThrows(NoSuchElementException.class, () -> {
+            assertFalse(PropertyUtils.isPropertyTypeSimpleOrListOfSimpleTypes(nodeTemplate, path, property));
+        });
     }
 
     @Test
@@ -201,17 +208,16 @@ public class ToscaParserNodeTemplateMockTest {
         PropertySchemaType propertySchemaType = PropertySchemaType.getEnumByValue(type);
 
         if (!StringUtils.isEmpty(entrySchemaType) &&
-                (propertySchemaType.getSchemaTypeComplexity() == PropertySchemaType.PropertySchemaComplexity.Complex)) {
+            (propertySchemaType.getSchemaTypeComplexity() == PropertySchemaType.PropertySchemaComplexity.Complex)) {
             LinkedHashMap<String, Object> entry_schema = new LinkedHashMap<>();
             entry_schema.put(SdcPropertyNames.PROPERTY_NAME_TYPE, entrySchemaType);
             property.put(SdcPropertyNames.PROPERTY_NAME_ENTRY_SCHEMA, entry_schema);
         }
         properties.put(propertyName, property);
-        dataType.put(SdcPropertyNames.PROPERTY_NAME_PROPERTIES,  properties);
+        dataType.put(SdcPropertyNames.PROPERTY_NAME_PROPERTIES, properties);
         dataTypes.put(dataTypeName, dataType);
         return dataTypes;
     }
-
 
 
 }

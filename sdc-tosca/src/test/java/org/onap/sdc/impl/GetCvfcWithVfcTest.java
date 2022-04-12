@@ -18,7 +18,7 @@
  * ============LICENSE_END=========================================================
  */
 package org.onap.sdc.impl;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;

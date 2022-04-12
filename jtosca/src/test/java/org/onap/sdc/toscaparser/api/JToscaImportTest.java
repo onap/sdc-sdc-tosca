@@ -19,7 +19,7 @@
  */
 package org.onap.sdc.toscaparser.api;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.toscaparser.api.common.JToscaException;
 import org.onap.sdc.toscaparser.api.elements.DataType;
 import org.onap.sdc.toscaparser.api.elements.PropertyDef;
@@ -34,8 +34,9 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class JToscaImportTest {
 

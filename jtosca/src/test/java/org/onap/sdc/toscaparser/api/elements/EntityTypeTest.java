@@ -20,14 +20,14 @@
 
 package org.onap.sdc.toscaparser.api.elements;
 
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EntityTypeTest {
 
@@ -67,7 +67,7 @@ public class EntityTypeTest {
 
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         EntityType.TOSCA_DEF = (LinkedHashMap<String, Object>) origMap;
     }

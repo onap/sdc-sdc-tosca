@@ -42,12 +42,6 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Enables any legacy JUnit 3 and JUnit 4 tests you may have. Not needed for JUnit 5 tests. -->
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <reporting>

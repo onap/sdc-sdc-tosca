@@ -20,20 +20,20 @@
 
 package org.onap.sdc.tosca.parser.elements.queries;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
 import org.onap.sdc.tosca.parser.impl.SdcPropertyNames;
 import org.onap.sdc.toscaparser.api.elements.Metadata;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.eq;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EntityQueryTest {
     @Mock
     private Metadata metadata;

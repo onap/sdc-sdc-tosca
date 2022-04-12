@@ -17,7 +17,7 @@
  */
 package org.onap.sdc.toscaparser.api.functions;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.toscaparser.api.*;
 import org.onap.sdc.toscaparser.api.common.JToscaException;
 import org.onap.sdc.toscaparser.api.elements.constraints.Schema;
@@ -31,7 +31,8 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GetInputTest {
 

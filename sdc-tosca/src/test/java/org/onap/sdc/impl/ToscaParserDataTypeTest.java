@@ -19,8 +19,8 @@
 
 package org.onap.sdc.impl;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory;
@@ -32,7 +32,7 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 
@@ -48,7 +48,7 @@ public class ToscaParserDataTypeTest {
     private static final String TEST_DATATYPE_PROPERTY_TYPE = "type";
     private static final String TEST_DATATYPE_PROPERTY_ENTRY_SCHEMA = "entry_schema";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             URL resource = GetEntityPortMirroringTest.class.getClassLoader()
