@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9de35e85_53d704fc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2022-04-12T09:59:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2359a617_2c45c77c",
+      "range": {
+        "startLine": 7,
+        "startChar": 38,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "4ce0835fe1966a55b8ee42e3bd1e2b244f530bb0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12fd796b_c649a6a0",
         "filename": "jtosca/src/main/java/org/onap/sdc/toscaparser/api/NodeTemplate.java",
         "patchSetId": 2
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "223cb1a9_57af9083",
+        "filename": "jtosca/src/main/java/org/onap/sdc/toscaparser/api/NodeTemplate.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2022-04-12T09:59:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12fd796b_c649a6a0",
+      "range": {
+        "startLine": 94,
+        "startChar": 41,
+        "endLine": 94,
+        "endChar": 50
+      },
+      "revId": "4ce0835fe1966a55b8ee42e3bd1e2b244f530bb0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44f95b42_97012ee5",
         "filename": "jtosca/src/main/java/org/onap/sdc/toscaparser/api/NodeTemplate.java",
         "patchSetId": 2
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "4a9a4037_2363b8de",
+        "filename": "jtosca/src/main/java/org/onap/sdc/toscaparser/api/NodeTemplate.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2022-04-12T09:59:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44f95b42_97012ee5",
+      "range": {
+        "startLine": 101,
+        "startChar": 10,
+        "endLine": 101,
+        "endChar": 14
+      },
+      "revId": "4ce0835fe1966a55b8ee42e3bd1e2b244f530bb0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7927f0b_da9dd2f6",
         "filename": "jtosca/src/main/java/org/onap/sdc/toscaparser/api/NodeTemplate.java",
         "patchSetId": 2
@@ -114,6 +186,30 @@
       "revId": "4ce0835fe1966a55b8ee42e3bd1e2b244f530bb0",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19ec651e_7d652d38",
+        "filename": "jtosca/src/main/java/org/onap/sdc/toscaparser/api/NodeTemplate.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2022-04-12T09:59:03Z",
+      "side": 1,
+      "message": "agree in general, not for this case\nempty map means NodeTemplate has artifacts, but does not",
+      "parentUuid": "b7927f0b_da9dd2f6",
+      "range": {
+        "startLine": 102,
+        "startChar": 19,
+        "endLine": 102,
+        "endChar": 23
+      },
+      "revId": "4ce0835fe1966a55b8ee42e3bd1e2b244f530bb0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
