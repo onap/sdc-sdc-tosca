@@ -17,21 +17,24 @@
  */
 package org.onap.sdc.toscaparser.api.functions;
 
-import org.junit.Test;
-import org.onap.sdc.toscaparser.api.*;
-import org.onap.sdc.toscaparser.api.common.JToscaException;
-import org.onap.sdc.toscaparser.api.elements.constraints.Schema;
-import org.onap.sdc.toscaparser.api.parameters.Input;
-import org.onap.sdc.toscaparser.api.utils.ThreadLocalsHolder;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import org.onap.sdc.toscaparser.api.JToscaImportTest;
+import org.onap.sdc.toscaparser.api.NodeTemplate;
+import org.onap.sdc.toscaparser.api.Property;
+import org.onap.sdc.toscaparser.api.ToscaTemplate;
+import org.onap.sdc.toscaparser.api.common.JToscaException;
+import org.onap.sdc.toscaparser.api.elements.constraints.Schema;
+import org.onap.sdc.toscaparser.api.parameters.Input;
+import org.onap.sdc.toscaparser.api.utils.ThreadLocalsHolder;
 
 public class GetInputTest {
 

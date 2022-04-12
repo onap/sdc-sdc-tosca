@@ -23,18 +23,17 @@ package org.onap.sdc.toscaparser.api;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.toscaparser.api.common.JToscaException;
 import org.onap.sdc.toscaparser.api.common.JToscaValidationIssue;
 import org.onap.sdc.toscaparser.api.utils.JToscaErrorCodes;
@@ -120,7 +119,7 @@ public class JToscaMetadataParse {
 
     private File loadCsar(final String csarFilePath) {
         final URL resourceUrl = JToscaMetadataParse.class.getClassLoader().getResource(csarFilePath);
-        assertNotNull(String.format("Could not load CSAR file '%s'", csarFilePath), resourceUrl);
+        assertNotNull(resourceUrl, String.format("Could not load CSAR file '%s'", csarFilePath));
 
         return new File(resourceUrl.getFile());
     }

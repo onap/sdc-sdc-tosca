@@ -20,8 +20,8 @@
 
 package org.onap.sdc.impl;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.elements.queries.EntityQuery;
@@ -38,8 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GetEntityPortMirroringTest {
 
@@ -47,7 +47,7 @@ public class GetEntityPortMirroringTest {
     private final static String cap1 = "radcomfnvlbavf11_3_3vepdg0.abstract_vlbagentbase_eph_aff.port_mirroring_vlbagentbase_eph_aff_vlbagentbase_eph_aff_int_pktmirror_1_port";
     private static ISdcCsarHelper helper = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             URL resource = GetEntityPortMirroringTest.class.getClassLoader()

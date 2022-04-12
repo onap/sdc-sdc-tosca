@@ -20,8 +20,8 @@
 
 package org.onap.sdc.impl;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.elements.queries.EntityQuery;
@@ -34,13 +34,13 @@ import org.onap.sdc.toscaparser.api.RequirementAssignment;
 import java.net.URL;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CapReqWithSameNamesTest {
 
     private static ISdcCsarHelper helper = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         try {
             URL resource = GetEntityPortMirroringTest.class.getClassLoader()

@@ -19,7 +19,24 @@
  */
 package org.onap.sdc.toscaparser.api;
 
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.toscaparser.api.common.JToscaException;
 import org.onap.sdc.toscaparser.api.elements.DataType;
 import org.onap.sdc.toscaparser.api.elements.PropertyDef;
@@ -28,25 +45,16 @@ import org.onap.sdc.toscaparser.api.parameters.Annotation;
 import org.onap.sdc.toscaparser.api.parameters.Input;
 import org.onap.sdc.toscaparser.api.utils.ThreadLocalsHolder;
 
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
-
 public class JToscaImportTest {
 
     @Test
     public void testNoMissingTypeValidationError() throws JToscaException {
         String fileStr = JToscaImportTest.class.getClassLoader().getResource("csars/sdc-onboarding_csar.csar")
-                .getFile();
+            .getFile();
         File file = new File(fileStr);
         new ToscaTemplate(file.getAbsolutePath(), null, true, null);
         List<String> missingTypeErrors = ThreadLocalsHolder.getCollector().getValidationIssueReport().stream()
-                .filter(s -> s.contains("JE136")).collect(Collectors.toList());
+            .filter(s -> s.contains("JE136")).collect(Collectors.toList());
         assertEquals(0, missingTypeErrors.size());
     }
 
@@ -55,7 +63,7 @@ public class JToscaImportTest {
         Exception jte = null;
         try {
             String fileStr = JToscaImportTest.class.getClassLoader().getResource("csars/sdc-onboarding_csar.csar")
-                    .getFile();
+                .getFile();
             File file = new File(fileStr);
             new ToscaTemplate(file.getAbsolutePath(), null, true, null);
         } catch (Exception e) {
@@ -76,7 +84,7 @@ public class JToscaImportTest {
             File file = new File(fileStr);
             new ToscaTemplate(file.getAbsolutePath(), null, true, null);
             List<String> invalidImportErrors = ThreadLocalsHolder.getCollector().getValidationIssueReport().stream()
-                    .filter(s -> s.contains("JE195")).collect(Collectors.toList());
+                .filter(s -> s.contains("JE195")).collect(Collectors.toList());
             assertEquals(0, invalidImportErrors.size());
         }
     }
@@ -200,7 +208,7 @@ public class JToscaImportTest {
 
     private void validateInputsAnnotations(List<Input> inputs) {
         List<Input> inputsWithAnnotations = inputs.stream().filter(i -> i.getAnnotations() != null)
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
         assertTrue(!inputs.isEmpty());
         inputsWithAnnotations.stream().forEach(i -> validateAnnotations(i));
     }
@@ -213,7 +221,7 @@ public class JToscaImportTest {
         assertEquals(annotation.getType().toLowerCase(), "org.openecomp.annotations.source");
         assertNotNull(annotation.getProperties());
         Optional<Property> source_type = annotation.getProperties().stream()
-                .filter(p -> p.getName().equals("source_type")).findFirst();
+            .filter(p -> p.getName().equals("source_type")).findFirst();
         assertTrue(source_type.isPresent());
         assertEquals(source_type.get().getValue(), "HEAT");
     }
@@ -260,8 +268,10 @@ public class JToscaImportTest {
                 assertThat(property.getSchema().get(TEST_DATATYPE_PROPERTY_TYPE), is(Schema.LIST));
                 assertThat(property.getSchema().get(TEST_DATATYPE_PROPERTY_ENTRY_SCHEMA), is(TEST_DATATYPE_TEST1));
 
-                assertThat((LinkedHashMap<String, Object>) toscaTemplate.getTopologyTemplate().getCustomDefs().get(TEST_DATATYPE_TEST1), notNullValue());
-                assertThat((LinkedHashMap<String, Object>) toscaTemplate.getTopologyTemplate().getCustomDefs().get(TEST_DATATYPE_TEST2), notNullValue());
+                assertThat((LinkedHashMap<String, Object>) toscaTemplate.getTopologyTemplate().getCustomDefs().get(TEST_DATATYPE_TEST1),
+                    notNullValue());
+                assertThat((LinkedHashMap<String, Object>) toscaTemplate.getTopologyTemplate().getCustomDefs().get(TEST_DATATYPE_TEST2),
+                    notNullValue());
                 assertThat(toscaTemplate.toString(), containsString(TEST_DATATYPE_TOSTRING));
             }
         }
@@ -300,8 +310,10 @@ public class JToscaImportTest {
                 assertThat(property.getSchema().get(TEST_DATATYPE_PROPERTY_TYPE), is(Schema.LIST));
                 assertThat(property.getSchema().get(TEST_DATATYPE_PROPERTY_ENTRY_SCHEMA), is(TEST_DATATYPE_TEST1));
 
-                assertThat((LinkedHashMap<String, Object>) toscaTemplate.getTopologyTemplate().getCustomDefs().get(TEST_DATATYPE_TEST1), notNullValue());
-                assertThat((LinkedHashMap<String, Object>) toscaTemplate.getTopologyTemplate().getCustomDefs().get(TEST_DATATYPE_TEST2), notNullValue());
+                assertThat((LinkedHashMap<String, Object>) toscaTemplate.getTopologyTemplate().getCustomDefs().get(TEST_DATATYPE_TEST1),
+                    notNullValue());
+                assertThat((LinkedHashMap<String, Object>) toscaTemplate.getTopologyTemplate().getCustomDefs().get(TEST_DATATYPE_TEST2),
+                    notNullValue());
                 assertThat(toscaTemplate.toString(), containsString(TEST_DATATYPE_TOSTRING));
             }
         }

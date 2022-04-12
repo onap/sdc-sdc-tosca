@@ -18,7 +18,15 @@
  * ============LICENSE_END=========================================================
  */
 package org.onap.sdc.impl;
-import org.junit.Test;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.tosca.parser.api.IEntityDetails;
 import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
@@ -26,14 +34,9 @@ import org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URL;
-import java.util.*;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static org.assertj.core.api.Assertions.assertThat;
-
 
 public class GetCvfcWithVfcTest {
+
     private static final String SERVICE_WITH_SINGLE_VF_CSAR = "csars/service-JennyVtsbcVlanSvc-csar.csar";
     private static final String SERVICE_WITH_DOUBLE_VF_CSAR = "csars/service-Metaswitch1-csar.csar";
     private static final String ABSTRACT_RTP_MSC = "abstract_rtp_msc";
@@ -45,7 +48,7 @@ public class GetCvfcWithVfcTest {
     private ISdcCsarHelper helper;
     private static Logger log = LoggerFactory.getLogger(GetCvfcWithVfcTest.class.getName());
 
-    public  void setUp(String path) {
+    public void setUp(String path) {
         try {
             URL resource = GetCvfcWithVfcTest.class.getClassLoader().getResource(path);
             if (resource != null) {
@@ -58,7 +61,7 @@ public class GetCvfcWithVfcTest {
     }
 
     @Test
-    public void getCvfcsWithVfcsFromServiceWithSingleVfTest(){
+    public void getCvfcsWithVfcsFromServiceWithSingleVfTest() {
         setUp(SERVICE_WITH_SINGLE_VF_CSAR);
         List<IEntityDetails> entities = helper.getVFModule();
         List<String> actualMembersList = newArrayList();
@@ -69,7 +72,7 @@ public class GetCvfcWithVfcTest {
     }
 
     @Test
-    public void getCvfcsWithVfcsFromVfiSingleVfTest(){
+    public void getCvfcsWithVfcsFromVfiSingleVfTest() {
         setUp(SERVICE_WITH_SINGLE_VF_CSAR);
         List<IEntityDetails> entities = helper.getVFModule("05e77410-a1d8-44fe-8440-b9410c8f98ee");
         List<String> actualMembersList = newArrayList();
@@ -80,7 +83,7 @@ public class GetCvfcWithVfcTest {
     }
 
     @Test
-    public void getCvfcsWithVfcsFromServiceWithDuplicateVfTest(){
+    public void getCvfcsWithVfcsFromServiceWithDuplicateVfTest() {
         setUp(SERVICE_WITH_DOUBLE_VF_CSAR);
         List<IEntityDetails> entities = helper.getVFModule();
         List<String> actualMembersList = newArrayList();
@@ -96,7 +99,7 @@ public class GetCvfcWithVfcTest {
 
 
     @Test
-    public void getCvfcsWithVfcsFromVfiOnServiceWithDuplicateVfTest(){
+    public void getCvfcsWithVfcsFromVfiOnServiceWithDuplicateVfTest() {
         setUp(SERVICE_WITH_DOUBLE_VF_CSAR);
         List<IEntityDetails> entities = helper.getVFModule("2b5f00de-8816-465c-b7bc-c36e26775e1e");
         List<String> actualMembersList = newArrayList();

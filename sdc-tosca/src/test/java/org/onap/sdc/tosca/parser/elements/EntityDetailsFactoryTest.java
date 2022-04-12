@@ -20,20 +20,21 @@
 
 package org.onap.sdc.tosca.parser.elements;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.onap.sdc.tosca.parser.enums.EntityTemplateType;
 import org.onap.sdc.toscaparser.api.Group;
 import org.onap.sdc.toscaparser.api.NodeTemplate;
 import org.onap.sdc.toscaparser.api.Policy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EntityDetailsFactoryTest {
 
     @Mock
@@ -112,9 +113,11 @@ public class EntityDetailsFactoryTest {
         assertEquals(null, EntityDetailsFactory.createEntityDetails(EntityTemplateType.POLICY, null));
     }
 
-    @Test(expected = ClassCastException.class)
+    @Test
     public void createWrongEntityDetails() {
-        EntityDetailsFactory.createEntityDetails(EntityTemplateType.POLICY, group);
+        assertThrows(ClassCastException.class, () -> {
+            EntityDetailsFactory.createEntityDetails(EntityTemplateType.POLICY, group);
+        });
     }
 
 

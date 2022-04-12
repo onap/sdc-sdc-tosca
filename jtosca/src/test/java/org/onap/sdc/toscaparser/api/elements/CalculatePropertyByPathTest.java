@@ -20,8 +20,8 @@
 
 package org.onap.sdc.toscaparser.api.elements;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.onap.sdc.toscaparser.api.JToscaImportTest;
 import org.onap.sdc.toscaparser.api.NodeTemplate;
 import org.onap.sdc.toscaparser.api.Property;
@@ -32,13 +32,13 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CalculatePropertyByPathTest {
     private static ToscaTemplate toscaTemplate;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws JToscaException {
         URL scarUrl = JToscaImportTest.class.getClassLoader().getResource("csars/service-NetworkCloudVnfServiceMock-csar.csar");
         if (scarUrl != null) {
