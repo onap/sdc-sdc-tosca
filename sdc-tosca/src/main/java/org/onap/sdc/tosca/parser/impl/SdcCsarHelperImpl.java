@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,20 +20,20 @@
 
 package org.onap.sdc.tosca.parser.impl;
 
-import java.util.List;
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.Optional;
-import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toList;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -74,9 +74,9 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     private static final String PATH_DELIMITER = "#";
     private static final String CUSTOMIZATION_UUID = "customizationUUID";
     private static final String GROUPS_VF_MODULE = "org.openecomp.groups.VfModule";
+    private static final Logger log = LoggerFactory.getLogger(SdcCsarHelperImpl.class.getName());
     private ToscaTemplate toscaTemplate;
     private ConfigurationManager configurationManager;
-    private static Logger log = LoggerFactory.getLogger(SdcCsarHelperImpl.class.getName());
 
     public SdcCsarHelperImpl(ToscaTemplate toscaTemplate) {
         this.toscaTemplate = toscaTemplate;
@@ -86,137 +86,144 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         this.toscaTemplate = toscaTemplate;
         this.configurationManager = configurationManager;
     }
-    
+
     @Override
     public List<Policy> getPoliciesOfTarget(NodeTemplate nodeTemplate) {
-    	return getPoliciesOfNodeTemplate(nodeTemplate.getName())
-    	.stream()
-    	.sorted(Policy::compareTo)
-    	.collect(toList());
+        return getPoliciesOfNodeTemplate(nodeTemplate.getName())
+            .stream()
+            .sorted(Policy::compareTo)
+            .collect(toList());
     }
-    
+
     @Override
-	public List<Policy> getPoliciesOfOriginOfNodeTemplate(NodeTemplate nodeTemplate) {
-    	if(StringUtils.isNotEmpty(nodeTemplate.getName())){
-    		return getNodeTemplateByName(nodeTemplate.getName()).getOriginComponentTemplate().getPolicies();
-    	}
-    	return new ArrayList<>();
+    public List<Policy> getPoliciesOfOriginOfNodeTemplate(NodeTemplate nodeTemplate) {
+        if (StringUtils.isNotEmpty(nodeTemplate.getName())) {
+            return getNodeTemplateByName(nodeTemplate.getName()).getOriginComponentTemplate().getPolicies();
+        }
+        return new ArrayList<>();
     }
-    
+
     @Override
     public List<Policy> getPoliciesOfTargetByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName) {
-    	return getPoliciesOfNodeTemplate(nodeTemplate.getName())
-    	.stream()
-    	.filter(p->p.getType().equals(policyTypeName))
-    	.sorted(Policy::compareTo)
-    	.collect(toList());
+        return getPoliciesOfNodeTemplate(nodeTemplate.getName())
+            .stream()
+            .filter(p -> p.getType().equals(policyTypeName))
+            .sorted(Policy::compareTo)
+            .collect(toList());
     }
-    
+
     @Override
     public List<Policy> getPoliciesOfOriginOfNodeTemplateByToscaPolicyType(NodeTemplate nodeTemplate, String policyTypeName) {
-    	return getPoliciesOfOriginOfNodeTemplate(nodeTemplate)
-    	.stream()
-    	.filter(p->p.getType().equals(policyTypeName))
-    	.sorted(Policy::compareTo)
-    	.collect(toList());
+        return getPoliciesOfOriginOfNodeTemplate(nodeTemplate)
+            .stream()
+            .filter(p -> p.getType().equals(policyTypeName))
+            .sorted(Policy::compareTo)
+            .collect(toList());
     }
 
     @Override
     public List<NodeTemplate> getPolicyTargetsFromTopologyTemplate(String policyName) {
-    	if(toscaTemplate.getNodeTemplates() == null){
-    		return new ArrayList<>();
-    	}
-    	List<String> targetNames = getPolicyTargets(policyName);
-    	return toscaTemplate.getNodeTemplates().stream()
-    			.filter(nt->targetNames.contains(nt.getName()))
-    			.collect(toList());
+        if (toscaTemplate.getNodeTemplates() == null) {
+            return new ArrayList<>();
+        }
+        List<String> targetNames = getPolicyTargets(policyName);
+        return toscaTemplate.getNodeTemplates().stream()
+            .filter(nt -> targetNames.contains(nt.getName()))
+            .collect(toList());
     }
-	
-	@Override
-	public List<NodeTemplate> getPolicyTargetsFromOrigin(NodeTemplate nodeTemplate, String policyName) {
-    	if(StringUtils.isNotEmpty(nodeTemplate.getName())){
+
+    @Override
+    public List<NodeTemplate> getPolicyTargetsFromOrigin(NodeTemplate nodeTemplate, String policyName) {
+        if (StringUtils.isNotEmpty(nodeTemplate.getName())) {
             Optional<Policy> policyOpt = getNodeTemplateByName(nodeTemplate.getName())
-                    .getOriginComponentTemplate()
-                    .getPolicies()
-                    .stream()
-                    .filter(p -> p.getName()
-                            .equals(policyName))
-                    .findFirst();
-            if(policyOpt.isPresent()){
+                .getOriginComponentTemplate()
+                .getPolicies()
+                .stream()
+                .filter(p -> p.getName()
+                    .equals(policyName))
+                .findFirst();
+            if (policyOpt.isPresent()) {
                 List<String> targets = policyOpt.get().getTargets();
                 if (targets != null) {
                     return nodeTemplate.getOriginComponentTemplate().getNodeTemplates()
-                            .stream()
-                            .filter(nt -> targets.contains(nt.getName())).collect(Collectors.toList());
+                        .stream()
+                        .filter(nt -> targets.contains(nt.getName())).collect(Collectors.toList());
                 }
             }
-    	}
-    	return new ArrayList<>();
+        }
+        return new ArrayList<>();
     }
-	
-	@Override
-	public List<Policy> getPoliciesOfTopologyTemplate(){
-    	if(toscaTemplate.getPolicies() == null)
-    		return new ArrayList<>();
-    	return toscaTemplate.getPolicies()
-    	.stream()
-    	.sorted(Policy::compareTo)
-    	.collect(toList());
-	}
-	
-	@Override
-	public List<Policy> getPoliciesOfTopologyTemplateByToscaPolicyType(String policyTypeName){
-    	if(toscaTemplate.getPolicies() == null)
-    		return new ArrayList<>();
-    	return toscaTemplate.getPolicies()
-    	.stream()
-    	.filter(p->p.getType().equals(policyTypeName))
-    	.sorted(Policy::compareTo)
-    	.collect(toList());
-	}
-	
+
+    @Override
+    public List<Policy> getPoliciesOfTopologyTemplate() {
+        if (toscaTemplate.getPolicies() == null) {
+            return new ArrayList<>();
+        }
+        return toscaTemplate.getPolicies()
+            .stream()
+            .sorted(Policy::compareTo)
+            .collect(toList());
+    }
+
+    @Override
+    public List<Policy> getPoliciesOfTopologyTemplateByToscaPolicyType(String policyTypeName) {
+        if (toscaTemplate.getPolicies() == null) {
+            return new ArrayList<>();
+        }
+        return toscaTemplate.getPolicies()
+            .stream()
+            .filter(p -> p.getType().equals(policyTypeName))
+            .sorted(Policy::compareTo)
+            .collect(toList());
+    }
+
+    @Override
     public NodeTemplate getNodeTemplateByName(String nodeTemplateName) {
-    	if(toscaTemplate.getNodeTemplates() == null)
-    		return null;
-    	return toscaTemplate.getNodeTemplates()
-    	.stream()
-    	.filter(nt -> nt.getName().equals(nodeTemplateName))
-    	.findFirst().orElse(null);
+        if (toscaTemplate.getNodeTemplates() == null) {
+            return null;
+        }
+        return toscaTemplate.getNodeTemplates()
+            .stream()
+            .filter(nt -> nt.getName().equals(nodeTemplateName))
+            .findFirst().orElse(null);
     }
-    
+
     private List<Policy> getPoliciesOfNodeTemplate(String nodeTemplateName) {
-    	if(toscaTemplate.getPolicies() == null)
-    		return new ArrayList<>();
-    	return toscaTemplate.getPolicies()
-    	.stream()
-    	.filter(p -> p.getTargets()!= null && p.getTargets().contains(nodeTemplateName))
-    	.collect(toList());
+        if (toscaTemplate.getPolicies() == null) {
+            return new ArrayList<>();
+        }
+        return toscaTemplate.getPolicies()
+            .stream()
+            .filter(p -> p.getTargets() != null && p.getTargets().contains(nodeTemplateName))
+            .collect(toList());
     }
-    
+
     private List<String> getPolicyTargets(String policyName) {
-    	return getPolicyByName(policyName).map(Policy::getTargets).orElse(new ArrayList<>());
+        return getPolicyByName(policyName).map(Policy::getTargets).orElse(new ArrayList<>());
     }
-    
+
     private List<String> getGroupMembers(String groupName) {
-    	return getGroupByName(groupName).map(Group::getMembers).orElse(new ArrayList<>());
+        return getGroupByName(groupName).map(Group::getMembers).orElse(new ArrayList<>());
     }
-    
+
     private Optional<Policy> getPolicyByName(String policyName) {
-    	if(toscaTemplate.getPolicies() == null)
-    		return Optional.empty();
-    	return toscaTemplate.getPolicies()
-    	.stream()
-    	.filter(p -> p.getName().equals(policyName)).findFirst();
+        if (toscaTemplate.getPolicies() == null) {
+            return Optional.empty();
+        }
+        return toscaTemplate.getPolicies()
+            .stream()
+            .filter(p -> p.getName().equals(policyName)).findFirst();
     }
-    
+
     private Optional<Group> getGroupByName(String groupName) {
-    	if(toscaTemplate.getGroups() == null)
-    		return Optional.empty();
-    	return toscaTemplate.getGroups()
-    	.stream()
-    	.filter(g -> g.getName().equals(groupName)).findFirst();
+        if (toscaTemplate.getGroups() == null) {
+            return Optional.empty();
+        }
+        return toscaTemplate.getGroups()
+            .stream()
+            .filter(g -> g.getName().equals(groupName)).findFirst();
     }
-    
+
     @Override
     //Sunny flow  - covered with UT, flat and nested
     public String getNodeTemplatePropertyLeafValue(NodeTemplate nodeTemplate, String leafValuePath) {
@@ -238,7 +245,8 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         LinkedHashMap<String, Property> properties = nodeTemplate.getProperties();
         return PropertyUtils.processProperties(split, properties);
     }
-    
+
+    @Override
     public Map<String, Map<String, Object>> getCpPropertiesFromVfcAsObject(NodeTemplate vfc) {
         if (vfc == null) {
             log.error("getCpPropertiesFromVfc - vfc is null");
@@ -264,21 +272,22 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return cps;
     }
 
-	private void findPutAllPortsProperties(Map<String, Map<String, Object>> cps, Map<String, Property> props) {
-		if (!cps.isEmpty()) {
-		    for (Entry<String, Map<String, Object>> port : cps.entrySet()) {
-		        for (Map.Entry<String, Property> property: props.entrySet()) {
-		            if (property.getKey().startsWith(port.getKey())) {
-		                String portProperty = property.getKey().replaceFirst(port.getKey() + "_", "");
-		                if (property.getValue() != null) {
-		                    cps.get(port.getKey()).put(portProperty, property.getValue().getValue());
-		                }
-		            }
-		        }
-		    }
-		}
-	}
+    private void findPutAllPortsProperties(Map<String, Map<String, Object>> cps, Map<String, Property> props) {
+        if (!cps.isEmpty()) {
+            for (Entry<String, Map<String, Object>> port : cps.entrySet()) {
+                for (Map.Entry<String, Property> property : props.entrySet()) {
+                    if (property.getKey().startsWith(port.getKey())) {
+                        String portProperty = property.getKey().replaceFirst(port.getKey() + "_", "");
+                        if (property.getValue() != null) {
+                            cps.get(port.getKey()).put(portProperty, property.getValue().getValue());
+                        }
+                    }
+                }
+            }
+        }
+    }
 
+    @Override
     public Map<String, Map<String, Object>> getCpPropertiesFromVfc(NodeTemplate vfc) {
 
         if (vfc == null) {
@@ -304,20 +313,20 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return cps;
     }
 
-	private void findBuildPutAllPortsProperties(Map<String, Map<String, Object>> cps, Map<String, Property> props) {
-		if (!cps.isEmpty()) {
-		    for (Entry<String, Map<String, Object>> port : cps.entrySet()) {
-		        for (Map.Entry<String, Property> property: props.entrySet()) {
-		            if (property.getKey().startsWith(port.getKey())) {
-		                Map<String, Object> portPaths = new HashMap<>();
-		                String portProperty = property.getKey().replaceFirst(port.getKey() + "_", "");
-		                buildPathMappedToValue(portProperty, property.getValue().getValue(), portPaths);
-		                cps.get(port.getKey()).putAll(portPaths);
-		            }
-		        }
-		    }
-		}
-	}
+    private void findBuildPutAllPortsProperties(Map<String, Map<String, Object>> cps, Map<String, Property> props) {
+        if (!cps.isEmpty()) {
+            for (Entry<String, Map<String, Object>> port : cps.entrySet()) {
+                for (Map.Entry<String, Property> property : props.entrySet()) {
+                    if (property.getKey().startsWith(port.getKey())) {
+                        Map<String, Object> portPaths = new HashMap<>();
+                        String portProperty = property.getKey().replaceFirst(port.getKey() + "_", "");
+                        buildPathMappedToValue(portProperty, property.getValue().getValue(), portPaths);
+                        cps.get(port.getKey()).putAll(portPaths);
+                    }
+                }
+            }
+        }
+    }
 
     @SuppressWarnings("unchecked")
     private void buildPathMappedToValue(String path, Object property, Map<String, Object> pathsMap) {
@@ -330,7 +339,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
                 }
             }
         } else if (property instanceof List) {
-            for (Object item: (List<Object>)property) {
+            for (Object item : (List<Object>) property) {
                 buildPathMappedToValue(path, item, pathsMap);
             }
         } else {
@@ -365,7 +374,6 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         return metadata.getValue(metadataPropertyName);
     }
 
-
     @Override
     //Sunny flow - covered with UT
     public List<NodeTemplate> getServiceNodeTemplatesByType(String nodeType) {
@@ -384,7 +392,6 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         return res;
     }
-
 
     @Override
     public List<NodeTemplate> getServiceNodeTemplates() {
@@ -416,12 +423,14 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             String name = nodeTemplateByCustomizationUuid.getName();
             String normaliseComponentInstanceName = SdcToscaUtility.normaliseComponentInstanceName(name);
             List<Group> serviceLevelGroups = toscaTemplate.getTopologyTemplate().getGroups();
-            log.debug("getVfModulesByVf - VF node template name {}, normalized name {}. Searching groups on service level starting with VF normalized name...", name, normaliseComponentInstanceName);
+            log.debug(
+                "getVfModulesByVf - VF node template name {}, normalized name {}. Searching groups on service level starting with VF normalized name...",
+                name, normaliseComponentInstanceName);
             if (serviceLevelGroups != null) {
                 return serviceLevelGroups
-                        .stream()
-                        .filter(x -> GROUPS_VF_MODULE.equals(x.getTypeDefinition().getType()) && x.getName().startsWith(normaliseComponentInstanceName))
-                        .collect(toList());
+                    .stream()
+                    .filter(x -> GROUPS_VF_MODULE.equals(x.getTypeDefinition().getType()) && x.getName().startsWith(normaliseComponentInstanceName))
+                    .collect(toList());
             }
         }
         return new ArrayList<>();
@@ -448,7 +457,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
                 Input input = findFirst.get();
                 Object current = input.getDefault();
                 Object property = PropertyUtils.iterateProcessPath(2, current, split);
-                return property == null || property instanceof Function? null : String.valueOf(property);
+                return property == null || property instanceof Function ? null : String.valueOf(property);
             }
         }
         log.error("getServiceInputLeafValue - value not found");
@@ -464,7 +473,8 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         String[] split = getSplittedPath(inputLeafValuePath);
         if (split.length < 2 || !split[1].equals("default")) {
-            log.error("getServiceInputLeafValueOfDefaultAsObject - inputLeafValuePath should be of format <input name>#default[optionally #<rest of path>] ");
+            log.error(
+                "getServiceInputLeafValueOfDefaultAsObject - inputLeafValuePath should be of format <input name>#default[optionally #<rest of path>] ");
             return null;
         }
 
@@ -484,7 +494,6 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     private String[] getSplittedPath(String leafValuePath) {
         return leafValuePath.split(PATH_DELIMITER);
     }
-
 
     @Override
     //Sunny flow - covered with UT
@@ -513,7 +522,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     @Override
     //Sunny flow - covered with UT
     public Map<String, Object> getServiceMetadataProperties() {
-        if (toscaTemplate.getMetaData() == null){
+        if (toscaTemplate.getMetaData() == null) {
             return null;
         }
         return new HashMap<>(toscaTemplate.getMetaData().getAllProperties());
@@ -521,7 +530,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     @Override
     public Map<String, String> getServiceMetadataAllProperties() {
-        if (toscaTemplate.getMetaData() == null){
+        if (toscaTemplate.getMetaData() == null) {
             return null;
         }
         return toscaTemplate.getMetaData().getAllProperties();
@@ -549,7 +558,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         String[] split = getSplittedPath(leafValuePath);
         LinkedHashMap<String, Property> properties = group.getProperties();
         Object property = PropertyUtils.processProperties(split, properties);
-        return property == null || property instanceof Function? null : String.valueOf(property);
+        return property == null || property instanceof Function ? null : String.valueOf(property);
     }
 
     @Override
@@ -589,8 +598,9 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             return cpList;
         }
         cpList = getNodeTemplateBySdcType(vfInstance, SdcTypes.CP);
-        if (cpList == null || cpList.isEmpty())
+        if (cpList == null || cpList.isEmpty()) {
             log.debug("getCpListByVf cps not exist for vfCustomizationId {}", vfCustomizationId);
+        }
         return cpList;
     }
 
@@ -602,19 +612,22 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             return new ArrayList<>();
         }
 
-        if (serviceLevelVfModule == null || serviceLevelVfModule.getMetadata() == null || serviceLevelVfModule.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_VFMODULEMODELINVARIANTUUID) == null) {
-            log.error("getMembersOfVfModule - vfModule or its metadata is null. Cannot match a VF group based on invariantUuid from missing metadata.");
+        if (serviceLevelVfModule == null || serviceLevelVfModule.getMetadata() == null
+            || serviceLevelVfModule.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_VFMODULEMODELINVARIANTUUID) == null) {
+            log.error(
+                "getMembersOfVfModule - vfModule or its metadata is null. Cannot match a VF group based on invariantUuid from missing metadata.");
             return new ArrayList<>();
         }
-
 
         SubstitutionMappings substitutionMappings = vf.getSubMappingToscaTemplate();
         if (substitutionMappings != null) {
             List<Group> groups = substitutionMappings.getGroups();
             if (groups != null) {
                 Optional<Group> findFirst = groups
-                        .stream()
-                        .filter(x -> (x.getMetadata() != null && serviceLevelVfModule.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_VFMODULEMODELINVARIANTUUID).equals(x.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_VFMODULEMODELINVARIANTUUID)))).findFirst();
+                    .stream()
+                    .filter(x -> (x.getMetadata() != null && serviceLevelVfModule.getMetadata()
+                        .getValue(SdcPropertyNames.PROPERTY_NAME_VFMODULEMODELINVARIANTUUID)
+                        .equals(x.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_VFMODULEMODELINVARIANTUUID)))).findFirst();
                 if (findFirst.isPresent()) {
                     List<String> members = findFirst.get().getMembers();
                     if (members != null) {
@@ -628,7 +641,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     @Override
     public List<Pair<NodeTemplate, NodeTemplate>> getNodeTemplatePairsByReqName(
-            List<NodeTemplate> listOfReqNodeTemplates, List<NodeTemplate> listOfCapNodeTemplates, String reqName) {
+        List<NodeTemplate> listOfReqNodeTemplates, List<NodeTemplate> listOfCapNodeTemplates, String reqName) {
 
         if (listOfReqNodeTemplates == null) {
             log.error("getNodeTemplatePairsByReqName - listOfReqNodeTemplates is null");
@@ -672,8 +685,8 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             log.error("getAllottedResources nodeTemplates not exist");
         }
         nodeTemplates = nodeTemplates.stream().filter(
-                x -> x.getMetaData() != null && x.getMetaData().getValue("category").equals("Allotted Resource"))
-                .collect(toList());
+                x -> x.getMetadata() != null && x.getMetadata().getValue("category").equals("Allotted Resource"))
+            .collect(toList());
         if (nodeTemplates.isEmpty()) {
             log.debug("getAllottedResources -  allotted resources not exist");
         }
@@ -700,58 +713,60 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
      */
     @Override
     public String getConformanceLevel() {
-      LinkedHashMap<String, Object> csarMeta = toscaTemplate.getMetaProperties("csar.meta");
-      if (csarMeta == null){
-        log.warn("No csar.meta file is found in CSAR - this file should hold the conformance level of the CSAR. This might be OK for older CSARs.");
-        if (configurationManager != null && !configurationManager.getErrorConfiguration()
-            .getErrorInfo("CONFORMANCE_LEVEL_ERROR").getFailOnError()){
-          String csarConLevel = configurationManager.getConfiguration().getConformanceLevel().getMaxVersion();
-          log.warn("csarConformanceLevel is not found in input csar; defaulting to max version {}" , csarConLevel);
-          return csarConLevel;
+        LinkedHashMap<String, Object> csarMeta = toscaTemplate.getMetaProperties("csar.meta");
+        if (csarMeta == null) {
+            log.warn(
+                "No csar.meta file is found in CSAR - this file should hold the conformance level of the CSAR. This might be OK for older CSARs.");
+            if (configurationManager != null && !configurationManager.getErrorConfiguration()
+                .getErrorInfo("CONFORMANCE_LEVEL_ERROR").getFailOnError()) {
+                String csarConLevel = configurationManager.getConfiguration().getConformanceLevel().getMaxVersion();
+                log.warn("csarConformanceLevel is not found in input csar; defaulting to max version {}", csarConLevel);
+                return csarConLevel;
+            } else {
+                log.warn("csarConformanceLevel is not found in input csar; returning null as no defaults defined in error configuration");
+                return null;
+            }
         }
-        else {
-          log.warn("csarConformanceLevel is not found in input csar; returning null as no defaults defined in error configuration");
-          return null;
-        }
-      }
 
-      Object conformanceLevel = csarMeta.get("SDC-TOSCA-Definitions-Version");
-      if (conformanceLevel != null){
-        String confLevelStr = conformanceLevel.toString();
-        log.debug("CSAR conformance level is {}", confLevelStr);
-        return confLevelStr;
-      } else {
-        log.error("Invalid csar.meta file - no entry found for SDC-TOSCA-Definitions-Version key. This entry should hold the conformance level.");
-        return null;
-      }
+        Object conformanceLevel = csarMeta.get("SDC-TOSCA-Definitions-Version");
+        if (conformanceLevel != null) {
+            String confLevelStr = conformanceLevel.toString();
+            log.debug("CSAR conformance level is {}", confLevelStr);
+            return confLevelStr;
+        } else {
+            log.error("Invalid csar.meta file - no entry found for SDC-TOSCA-Definitions-Version key. This entry should hold the conformance level.");
+            return null;
+        }
     }
-	
-	
-	@Override
-	public String getNodeTemplateCustomizationUuid(NodeTemplate nt) {
-		String res = null;
-		if (nt != null && nt.getMetaData() != null){
-			res = nt.getMetaData().getValue(CUSTOMIZATION_UUID);
-		} else {
-			log.error("Node template or its metadata is null");
-		}
-		return res;
-	}
 
+
+    @Override
+    public String getNodeTemplateCustomizationUuid(NodeTemplate nt) {
+        String res = null;
+        if (nt != null && nt.getMetadata() != null) {
+            res = nt.getMetadata().getValue(CUSTOMIZATION_UUID);
+        } else {
+            log.error("Node template or its metadata is null");
+        }
+        return res;
+    }
+
+    @Override
     public List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType) {
-    	return getNodeTemplateBySdcType(parentNodeTemplate, sdcType, false); 
+        return getNodeTemplateBySdcType(parentNodeTemplate, sdcType, false);
     }
 
+    @Override
     public boolean isNodeTypeSupported(NodeTemplate nodeTemplate) {
         SdcTypes[] supportedTypes = SdcTypes.values();
         return Arrays.stream(supportedTypes)
-                .anyMatch(v->nodeTemplate.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)
-                        .equals(v.getValue()));
+            .anyMatch(v -> nodeTemplate.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)
+                .equals(v.getValue()));
     }
-    
-    private List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType, boolean isVNF)  {
-    	
-    	if (parentNodeTemplate == null) {
+
+    private List<NodeTemplate> getNodeTemplateBySdcType(NodeTemplate parentNodeTemplate, SdcTypes sdcType, boolean isVNF) {
+
+        if (parentNodeTemplate == null) {
             log.error("getNodeTemplateBySdcType - nodeTemplate is null or empty");
             return new ArrayList<>();
         }
@@ -766,24 +781,23 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         if (substitutionMappings != null) {
             List<NodeTemplate> nodeTemplates = substitutionMappings.getNodeTemplates();
             if (nodeTemplates != null && !nodeTemplates.isEmpty()) {
-            	if (sdcType.equals(SdcTypes.VFC) && isVNF)  {
-            		return nodeTemplates.stream()
-                    		.filter(x -> (x.getMetaData() != null &&
-                    			sdcType.getValue().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  isVNFType(x))
-                    		.collect(toList());
-            	}
-            	else {
+                if (sdcType.equals(SdcTypes.VFC) && isVNF) {
                     return nodeTemplates.stream()
-                    		.filter(x -> (x.getMetaData() != null &&
-                    			sdcType.getValue().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) &&  !isVNFType(x))
-                    		.collect(toList());
-            	}
-            }
-            else {
+                        .filter(x -> (x.getMetadata() != null &&
+                            sdcType.getValue().equals(x.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) && isVNFType(x))
+                        .collect(toList());
+                } else {
+                    return nodeTemplates.stream()
+                        .filter(x -> (x.getMetadata() != null &&
+                            sdcType.getValue().equals(x.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))) && !isVNFType(x))
+                        .collect(toList());
+                }
+            } else {
                 log.debug("getNodeTemplateBySdcType - SubstitutionMappings' node Templates not exist");
             }
-        } else
+        } else {
             log.debug("getNodeTemplateBySdcType - SubstitutionMappings not exist");
+        }
 
         return new ArrayList<>();
     }
@@ -821,10 +835,10 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         return filterMap;
     }
-    
-	public NodeTemplate getVnfConfig(String vfCustomizationUuid) {
-		
-		if (GeneralUtility.isEmptyString(vfCustomizationUuid)) {
+
+    public NodeTemplate getVnfConfig(String vfCustomizationUuid) {
+
+        if (GeneralUtility.isEmptyString(vfCustomizationUuid)) {
             log.error("getVnfConfig - vfCustomizationId - is null or empty");
             return null;
         }
@@ -832,7 +846,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         List<NodeTemplate> serviceVfList = getServiceVfList();
         NodeTemplate vfInstance = getNodeTemplateByCustomizationUuid(serviceVfList, vfCustomizationUuid);
         return getNodeTemplateBySdcType(vfInstance, SdcTypes.VFC, true).stream().findAny().orElse(null);
-	}
+    }
 
     @Override
     public boolean hasTopology(NodeTemplate nodeTemplate) {
@@ -841,8 +855,8 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             return false;
         }
 
-        if (nodeTemplate.getMetaData() != null) {
-            String type = nodeTemplate.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE);
+        if (nodeTemplate.getMetadata() != null) {
+            String type = nodeTemplate.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE);
             log.debug("hasTopology - node template {} is a {} type", nodeTemplate.getName(), type);
             return SdcTypes.isComplex(type);
         }
@@ -863,14 +877,14 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             if (nodeTemplates != null && !nodeTemplates.isEmpty()) {
 
                 return nodeTemplates.stream()
-                        .filter(x -> !isVNFType(x))
-                        .collect(toList());
-            }
-            else {
+                    .filter(x -> !isVNFType(x))
+                    .collect(toList());
+            } else {
                 log.debug("getNodeTemplateChildren - SubstitutionMappings' node Templates not exist");
             }
-        } else
+        } else {
             log.debug("getNodeTemplateChildren - SubstitutionMappings not exist");
+        }
 
         return new ArrayList<>();
     }
@@ -883,7 +897,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         }
 
         List<NodeTemplate> nodeTemplates = getServiceNodeTemplates();
-        Optional<NodeTemplate> findFirst =  nodeTemplates.stream().filter(nt -> nt.getName().equals(nodeName)).findFirst();
+        Optional<NodeTemplate> findFirst = nodeTemplates.stream().filter(nt -> nt.getName().equals(nodeName)).findFirst();
 
         return findFirst.isPresent() ? findFirst.get() : null;
     }
@@ -895,7 +909,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             return null;
         }
 
-        return nt.getMetaData();
+        return nt.getMetadata();
     }
 
     @Override
@@ -935,77 +949,79 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         Object property = PropertyUtils.processProperties(split, properties);
         return property == null || property instanceof Function ? null : String.valueOf(property);
     }
-    
+
     @Override
     public ArrayList<Group> getGroupsOfOriginOfNodeTemplate(NodeTemplate nodeTemplate) {
-    	if(StringUtils.isNotEmpty(nodeTemplate.getName())){
-    		return getNodeTemplateByName(nodeTemplate.getName()).getSubMappingToscaTemplate().getGroups();
-    	}
-    	return new ArrayList<>();
+        if (StringUtils.isNotEmpty(nodeTemplate.getName())) {
+            return getNodeTemplateByName(nodeTemplate.getName()).getSubMappingToscaTemplate().getGroups();
+        }
+        return new ArrayList<>();
     }
 
     @Override
     public ArrayList<Group> getGroupsOfTopologyTemplateByToscaGroupType(String groupType) {
-       	if(toscaTemplate.getGroups() == null)
-       		return new ArrayList<>();
-       	return (ArrayList<Group>) toscaTemplate.getGroups()
-       	.stream()
-       	.filter(g->g.getType().equals(groupType))
-       	.sorted(Group::compareTo)
-       	.collect(toList());
+        if (toscaTemplate.getGroups() == null) {
+            return new ArrayList<>();
+        }
+        return (ArrayList<Group>) toscaTemplate.getGroups()
+            .stream()
+            .filter(g -> g.getType().equals(groupType))
+            .sorted(Group::compareTo)
+            .collect(toList());
     }
-    
+
     @Override
     public ArrayList<Group> getGroupsOfTopologyTemplate() {
-    	return toscaTemplate.getGroups() == null ? new ArrayList<>() : toscaTemplate.getGroups();
+        return toscaTemplate.getGroups() == null ? new ArrayList<>() : toscaTemplate.getGroups();
     }
-    
+
     @Override
     public ArrayList<Group> getGroupsOfOriginOfNodeTemplateByToscaGroupType(NodeTemplate nodeTemplate, String groupType) {
-    	return (ArrayList<Group>) getGroupsOfOriginOfNodeTemplate(nodeTemplate)
-    	.stream()
-    	.filter(g->g.getType().equals(groupType))
-    	.sorted(Group::compareTo)
-    	.collect(toList());
+        return (ArrayList<Group>) getGroupsOfOriginOfNodeTemplate(nodeTemplate)
+            .stream()
+            .filter(g -> g.getType().equals(groupType))
+            .sorted(Group::compareTo)
+            .collect(toList());
     }
 
     @Override
     public List<NodeTemplate> getGroupMembersFromTopologyTemplate(String groupName) {
-       	if(toscaTemplate.getNodeTemplates() == null){
-       		return new ArrayList<>();
-       	}
-       	List<String> membersNames = getGroupMembers(groupName);
-       	return toscaTemplate.getNodeTemplates().stream()
-      			.filter(nt->membersNames.contains(nt.getName()))
-     			.collect(toList());
+        if (toscaTemplate.getNodeTemplates() == null) {
+            return new ArrayList<>();
+        }
+        List<String> membersNames = getGroupMembers(groupName);
+        return toscaTemplate.getNodeTemplates().stream()
+            .filter(nt -> membersNames.contains(nt.getName()))
+            .collect(toList());
     }
-    
+
 
     @Override
     public List<NodeTemplate> getGroupMembersOfOriginOfNodeTemplate(NodeTemplate nodeTemplate, String groupName) {
-		ArrayList<Group> groups = getGroupsOfOriginOfNodeTemplate(nodeTemplate);
-		if(!groups.isEmpty()){
-			Optional<Group> group = groups.stream().filter(g -> g.getName().equals(groupName)).findFirst();
-			if(group.isPresent()){
-				return nodeTemplate.getSubMappingToscaTemplate().getNodeTemplates().stream()
-				.filter(nt -> group.get().getMembers().contains(nt.getName()))
-				.collect(toList());
-			}
-		}
-		return new ArrayList<>();
-    }
-    
-    public List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType) {
-    	if (sdcType == null) {
-    		log.error("getServiceNodeTemplateBySdcType - sdcType is null or empty");
-    		return new ArrayList<>();
-    	}
-    	
-    	TopologyTemplate topologyTemplate = toscaTemplate.getTopologyTemplate();
-    	return getNodeTemplateBySdcType(topologyTemplate, sdcType);
+        ArrayList<Group> groups = getGroupsOfOriginOfNodeTemplate(nodeTemplate);
+        if (!groups.isEmpty()) {
+            Optional<Group> group = groups.stream().filter(g -> g.getName().equals(groupName)).findFirst();
+            if (group.isPresent()) {
+                return nodeTemplate.getSubMappingToscaTemplate().getNodeTemplates().stream()
+                    .filter(nt -> group.get().getMembers().contains(nt.getName()))
+                    .collect(toList());
+            }
+        }
+        return new ArrayList<>();
     }
 
-	/************************************* helper functions ***********************************/
+    @Override
+    public List<NodeTemplate> getServiceNodeTemplateBySdcType(SdcTypes sdcType) {
+        if (sdcType == null) {
+            log.error("getServiceNodeTemplateBySdcType - sdcType is null or empty");
+            return new ArrayList<>();
+        }
+
+        TopologyTemplate topologyTemplate = toscaTemplate.getTopologyTemplate();
+        return getNodeTemplateBySdcType(topologyTemplate, sdcType);
+    }
+
+    /************************************* helper functions ***********************************/
     private boolean isVNFType(NodeTemplate nt) {
         return nt.getType().endsWith("VnfConfiguration");
     }
@@ -1014,12 +1030,12 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     private Map<String, String> filterProperties(Object property, String path, FilterType filterType, String pattern, Map<String, String> filterMap) {
 
         if (property instanceof Map) {
-            for (Map.Entry<String, Object> item: ((Map<String, Object>) property).entrySet()) {
+            for (Map.Entry<String, Object> item : ((Map<String, Object>) property).entrySet()) {
                 String itemPath = path + PATH_DELIMITER + item.getKey();
                 filterProperties(item.getValue(), itemPath, filterType, pattern, filterMap);
             }
         } else if (property instanceof List) {
-            for (Object item: (List<Object>)property) {
+            for (Object item : (List<Object>) property) {
                 filterProperties(item, path, filterType, pattern, filterMap);
             }
         } else {
@@ -1030,7 +1046,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         return filterMap;
     }
- 
+
     /************************************* helper functions ***********************************/
     private List<NodeTemplate> getNodeTemplateBySdcType(TopologyTemplate topologyTemplate, SdcTypes sdcType) {
         if (sdcType == null) {
@@ -1045,8 +1061,11 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         List<NodeTemplate> nodeTemplates = topologyTemplate.getNodeTemplates();
 
-        if (nodeTemplates != null && !nodeTemplates.isEmpty())
-            return nodeTemplates.stream().filter(x -> (x.getMetaData() != null && sdcType.getValue().equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)))).collect(toList());
+        if (nodeTemplates != null && !nodeTemplates.isEmpty()) {
+            return nodeTemplates.stream()
+                .filter(x -> (x.getMetadata() != null && sdcType.getValue().equals(x.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))))
+                .collect(toList());
+        }
 
         log.debug("getNodeTemplateBySdcType - topologyTemplate's nodeTemplates not exist");
         return new ArrayList<>();
@@ -1054,103 +1073,98 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     //Assumed to be unique property for the list
     private NodeTemplate getNodeTemplateByCustomizationUuid(List<NodeTemplate> nodeTemplates, String customizationId) {
-       if (customizationId != null) {
-            Optional<NodeTemplate> findFirst = nodeTemplates.stream().filter(x -> (x.getMetaData() != null && customizationId.equals(x.getMetaData().getValue(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID)))).findFirst();
+        if (customizationId != null) {
+            Optional<NodeTemplate> findFirst = nodeTemplates.stream().filter(
+                    x -> (x.getMetadata() != null && customizationId.equals(x.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID))))
+                .findFirst();
             return findFirst.isPresent() ? findFirst.get() : null;
-        }
-        else {
+        } else {
             log.error("getNodeTemplateByCustomizationUuid - customizationId is null");
             return null;
         }
     }
 
-  @Override
-  public Map<String, List<InterfacesDef>> getInterfacesOf(NodeTemplate nt){
-    if (nt == null) {
-      return null;
+    @Override
+    public Map<String, List<InterfacesDef>> getInterfacesOf(NodeTemplate nt) {
+        if (nt == null) {
+            return null;
+        }
+        return nt.getAllInterfaceDetailsForNodeType();
     }
-    return nt.getAllInterfaceDetailsForNodeType();
-  }
 
-  @Override
-  public List<String> getInterfaces(NodeTemplate nt){
-    Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
-    return new ArrayList<>(interfaceDetails.keySet());
-  }
-
-  @Override
-  public List<InterfacesDef> getInterfaceDetails(NodeTemplate nt, String interfaceName){
-    Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
-    return interfaceDetails.get(interfaceName);
-  }
-
-  @Override
-  public List<String> getAllInterfaceOperations(NodeTemplate nt, String interfaceName){
-    Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
-    return interfaceDetails.values().stream().flatMap(List::stream).map(val -> val.getOperationName()).collect(
-        Collectors.toList());
-  }
-
-  @Override
-  public InterfacesDef getInterfaceOperationDetails(NodeTemplate nt, String interfaceName, String operationName){
-    Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
-    if(!interfaceDetails.isEmpty()){
-      List<InterfacesDef> interfaceDefs = interfaceDetails.get(interfaceName);
-      return interfaceDefs.stream().filter(val -> val.getOperationName().equals(operationName)).findFirst().orElse(null);
+    @Override
+    public List<String> getInterfaces(NodeTemplate nt) {
+        Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
+        return new ArrayList<>(interfaceDetails.keySet());
     }
-    return null;
-  }
+
+    @Override
+    public List<InterfacesDef> getInterfaceDetails(NodeTemplate nt, String interfaceName) {
+        Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
+        return interfaceDetails.get(interfaceName);
+    }
+
+    @Override
+    public List<String> getAllInterfaceOperations(NodeTemplate nt, String interfaceName) {
+        Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
+        return interfaceDetails.values().stream().flatMap(List::stream).map(val -> val.getOperationName()).collect(
+            Collectors.toList());
+    }
+
+    @Override
+    public InterfacesDef getInterfaceOperationDetails(NodeTemplate nt, String interfaceName, String operationName) {
+        Map<String, List<InterfacesDef>> interfaceDetails = nt.getAllInterfaceDetailsForNodeType();
+        if (!interfaceDetails.isEmpty()) {
+            List<InterfacesDef> interfaceDefs = interfaceDetails.get(interfaceName);
+            return interfaceDefs.stream().filter(val -> val.getOperationName().equals(operationName)).findFirst().orElse(null);
+        }
+        return null;
+    }
 
     @Override
     public List<String> getPropertyLeafValueByPropertyNamePathAndNodeTemplatePath(String propertyNamePath, String nodeTemplatePath) {
         log.info("A new request is received: property path is [{}], node template path is [{}]",
-                propertyNamePath, nodeTemplatePath);
+            propertyNamePath, nodeTemplatePath);
 
         List<String> propertyValuesList;
 
         if (StringUtils.isEmpty(nodeTemplatePath) || StringUtils.isEmpty(propertyNamePath)) {
             log.error("One of parameters is empty or null: property path is [{}], node template path is [{}]",
-                    propertyNamePath, nodeTemplatePath);
+                propertyNamePath, nodeTemplatePath);
             propertyValuesList = Collections.emptyList();
-        }
-        else {
+        } else {
             String[] nodeTemplates = getSplittedPath(nodeTemplatePath);
             propertyValuesList = getPropertyFromInternalNodeTemplate(getNodeTemplateByName(nodeTemplates[0]), 1, nodeTemplates, propertyNamePath);
             log.info("Found property value {} by path [{}] for node template [{}]",
-                    propertyValuesList, propertyNamePath, nodeTemplatePath);
+                propertyValuesList, propertyNamePath, nodeTemplatePath);
         }
         return propertyValuesList;
     }
 
     private List<String> getPropertyFromInternalNodeTemplate(NodeTemplate parent, int index,
-                                                       String[] nodeTemplatePath, String propertyPath) {
+                                                             String[] nodeTemplatePath, String propertyPath) {
         List<String> propertyValuesList;
         if (parent == null) {
             log.error("Node template {} is not found, the request will be rejected", nodeTemplatePath[index]);
             propertyValuesList = Collections.emptyList();
-        }
-        else if (nodeTemplatePath.length <= index) {
+        } else if (nodeTemplatePath.length <= index) {
             log.debug("Stop NODE TEMPLATE searching");
             propertyValuesList = getSimpleOrListPropertyValue(parent, propertyPath);
-        }
-        else {
+        } else {
             log.debug("Node template {} is found with name {}", nodeTemplatePath[index], parent.getName());
             NodeTemplate childNT = getChildNodeTemplateByName(parent, nodeTemplatePath[index]);
 
             if (childNT == null || !isNodeTypeSupported(childNT)) {
                 log.error("Unsupported or not found node template named {}, the request will be rejected",
-                        nodeTemplatePath[index]);
+                    nodeTemplatePath[index]);
                 propertyValuesList = Collections.emptyList();
-            }
-            else {
+            } else {
                 propertyValuesList = getPropertyFromInternalNodeTemplate(childNT, index + 1, nodeTemplatePath,
-                        propertyPath);
+                    propertyPath);
             }
         }
         return propertyValuesList;
     }
-
-
 
     private List<String> getSimpleOrListPropertyValue(NodeTemplate nodeTemplate, String propertyPath) {
         List<String> propertyValueList;
@@ -1161,51 +1175,48 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
             //the requested property type is either simple or list of simple types
             PropertySchemaType propertyType = PropertySchemaType.getEnumByValue(property.getType());
             if (propertyType == PropertySchemaType.LIST &&
-                        PropertyUtils.isDataPropertyType((String)property.getEntrySchema()
-                                .get(SdcPropertyNames.PROPERTY_NAME_TYPE))) {
+                PropertyUtils.isDataPropertyType((String) property.getEntrySchema()
+                    .get(SdcPropertyNames.PROPERTY_NAME_TYPE))) {
                 //cover the case when a type of property "path[0]' is list of data types
                 // and the requested property is an internal simple property of this data type
                 propertyValueList = calculatePropertyValue(getNodeTemplatePropertyValueAsObject(nodeTemplate, path[0]), path, nodeTemplate.getName());
-            }
-            else {
+            } else {
                 //the requested property is simple type or list of simple types
-                propertyValueList = calculatePropertyValue(getNodeTemplatePropertyValueAsObject(nodeTemplate, propertyPath), null, nodeTemplate.getName());
+                propertyValueList = calculatePropertyValue(getNodeTemplatePropertyValueAsObject(nodeTemplate, propertyPath), null,
+                    nodeTemplate.getName());
             }
-        }
-        else {
+        } else {
             log.error("The type of property {} on node {} is neither simple nor list of simple objects, the request will be rejected",
-                    propertyPath, nodeTemplate.getName());
+                propertyPath, nodeTemplate.getName());
             propertyValueList = Collections.emptyList();
         }
         return propertyValueList;
     }
 
-    private List<String> calculatePropertyValue(Object valueAsObject, String path[], String nodeName) {
+    private List<String> calculatePropertyValue(Object valueAsObject, String[] path, String nodeName) {
         if (valueAsObject == null || valueAsObject instanceof Map) {
-            log.error("The property {} either is not found on node template [{}], or it is data type, or it is not resolved get_input", path, nodeName);
+            log.error("The property {} either is not found on node template [{}], or it is data type, or it is not resolved get_input", path,
+                nodeName);
             return Collections.emptyList();
         }
         if (path != null) {
-            return PropertyUtils.findSimplePropertyValueInListOfDataTypes((List<Object>)valueAsObject, path);
+            return PropertyUtils.findSimplePropertyValueInListOfDataTypes((List<Object>) valueAsObject, path);
         }
         return PropertyUtils.buildSimplePropertValueOrList(valueAsObject);
     }
 
-
-
-
     private Property getNodeTemplatePropertyObjectByName(NodeTemplate nodeTemplate, String propertyName) {
         return nodeTemplate.getPropertiesObjects()
-                .stream()
-                .filter(p->p.getName().equals(propertyName))
-                .findFirst()
-                .orElse(null);
+            .stream()
+            .filter(p -> p.getName().equals(propertyName))
+            .findFirst()
+            .orElse(null);
     }
 
     private NodeTemplate getChildNodeTemplateByName(NodeTemplate parent, String nodeTemplateName) {
         return getNodeTemplateChildren(parent)
             .stream()
-            .filter(nt->nt.getName().equals(nodeTemplateName))
+            .filter(nt -> nt.getName().equals(nodeTemplateName))
             .findFirst().orElse(null);
     }
 
@@ -1219,7 +1230,7 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
         if (log.isDebugEnabled()) {
             log.debug("getEntity request: EntityQuery <{}>, TopologyTemplateQuery <{}>,  isRecursive<{}>",
-                    entityQuery, topologyTemplateQuery, isRecursive);
+                entityQuery, topologyTemplateQuery, isRecursive);
         }
         return new QueryProcessor(toscaTemplate, entityQuery, topologyTemplateQuery, isRecursive).doQuery();
     }
@@ -1230,12 +1241,12 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
     }
 
     @Override
-    public List<IEntityDetails> getVFModule(String cuuid){
+    public List<IEntityDetails> getVFModule(String cuuid) {
         String normalisedComponentInstanceName = SdcToscaUtility.normaliseComponentInstanceName(getVfiNameByCuuid(cuuid));
         List<IEntityDetails> vfModulesFromVf = getVfModulesFromVf(cuuid);
         List<IEntityDetails> vfModulesFromService = getVfModulesFromService().stream()
-                .filter(v->v.getName().startsWith(normalisedComponentInstanceName))
-                .collect(toList());
+            .filter(v -> v.getName().startsWith(normalisedComponentInstanceName))
+            .collect(toList());
         addMembersToVfModuleInstances(vfModulesFromVf, vfModulesFromService);
         return vfModulesFromService;
     }
@@ -1246,29 +1257,29 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
         List<IEntityDetails> vfModuleInstances = new ArrayList<>();
 
         getVfModulesFromVf().forEach(vfmodule -> {
-            if (Objects.isNull(vfmodule.getParent())){
+            if (Objects.isNull(vfmodule.getParent())) {
                 vfModuleInstances.add(vfmodule);
             } else {
                 vfModules.add(vfmodule);
             }
         });
 
-        addMembersToVfModuleInstances(vfModules,vfModuleInstances);
+        addMembersToVfModuleInstances(vfModules, vfModuleInstances);
         return vfModuleInstances;
     }
 
     private void addMembersToVfModuleInstances(List<IEntityDetails> vfModules, List<IEntityDetails> vfModuleInstances) {
-        for(IEntityDetails vfModuleInstance : vfModuleInstances){
+        for (IEntityDetails vfModuleInstance : vfModuleInstances) {
             String origGroupName = getOriginalGroupName(vfModuleInstance);
             setVFModuleMembers(vfModules, vfModuleInstance, origGroupName);
         }
     }
 
     private void setVFModuleMembers(List<IEntityDetails> vfModules, IEntityDetails vfModuleInstance, String origGroupName) {
-        for (IEntityDetails vfModule : vfModules){
-            if (vfModuleInstance instanceof GroupEntityDetails && vfModule.getName().equals(origGroupName)){
+        for (IEntityDetails vfModule : vfModules) {
+            if (vfModuleInstance instanceof GroupEntityDetails && vfModule.getName().equals(origGroupName)) {
                 List<IEntityDetails> memberNodes = vfModule.getMemberNodes();
-                ((GroupEntityDetails)vfModuleInstance).setMemberNodes(memberNodes);
+                ((GroupEntityDetails) vfModuleInstance).setMemberNodes(memberNodes);
             }
         }
     }
@@ -1280,36 +1291,36 @@ public class SdcCsarHelperImpl implements ISdcCsarHelper {
 
     private List<IEntityDetails> getVfModulesFromService() {
         EntityQuery entityQuery = EntityQuery.newBuilder(GROUPS_VF_MODULE)
-                .build();
+            .build();
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
-                .build();
+            .build();
         return getEntity(entityQuery, topologyTemplateQuery, false);
     }
 
     private List<IEntityDetails> getVfModulesFromVf(String cuuid) {
         EntityQuery entityQuery = EntityQuery.newBuilder(GROUPS_VF_MODULE)
-                .build();
+            .build();
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.VF)
-                .customizationUUID(cuuid)
-                .build();
+            .customizationUUID(cuuid)
+            .build();
         return getEntity(entityQuery, topologyTemplateQuery, false);
     }
 
     private List<IEntityDetails> getVfModulesFromVf() {
         EntityQuery entityQuery = EntityQuery.newBuilder(GROUPS_VF_MODULE)
-                .build();
+            .build();
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
-                .build();
+            .build();
         return getEntity(entityQuery, topologyTemplateQuery, true);
     }
 
     private String getVfiNameByCuuid(String cuuid) {
         EntityQuery entityQuery = EntityQuery.newBuilder(SdcTypes.VF)
-                .customizationUUID(cuuid)
-                .build();
+            .customizationUUID(cuuid)
+            .build();
         TopologyTemplateQuery topologyTemplateQuery = TopologyTemplateQuery.newBuilder(SdcTypes.SERVICE)
-                .build();
+            .build();
         return getEntity(entityQuery, topologyTemplateQuery, true).get(0).getName();
     }
 
- }
+}
