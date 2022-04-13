@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5693f2c0_3a988298",
+        "filename": "jtosca/src/test/java/org/onap/sdc/toscaparser/api/JToscaImportTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2022-04-13T09:47:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdb679b4_2751cc2f",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 49
+      },
+      "revId": "8b2537988300ef059744f078241335d823eac08b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c83430f3_ef624fee",
         "filename": "jtosca/src/test/java/org/onap/sdc/toscaparser/api/functions/GetInputTest.java",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "32bd99d5_76977cd7",
+        "filename": "jtosca/src/test/java/org/onap/sdc/toscaparser/api/functions/GetInputTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2022-04-13T09:47:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c83430f3_ef624fee",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 49
+      },
+      "revId": "8b2537988300ef059744f078241335d823eac08b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "282cb8c9_d1659e9c",
         "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "8b2537988300ef059744f078241335d823eac08b",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d813f0b_3fbb1c62",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2022-04-13T09:47:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "282cb8c9_d1659e9c",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 19
+      },
+      "revId": "8b2537988300ef059744f078241335d823eac08b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
