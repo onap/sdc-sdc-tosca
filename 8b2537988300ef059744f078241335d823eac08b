@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdb679b4_2751cc2f",
+        "filename": "jtosca/src/test/java/org/onap/sdc/toscaparser/api/JToscaImportTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 5565
+      },
+      "writtenOn": "2022-04-13T08:29:18Z",
+      "side": 1,
+      "message": "if possible, remove the wildcard imports",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 49
+      },
+      "revId": "8b2537988300ef059744f078241335d823eac08b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c83430f3_ef624fee",
+        "filename": "jtosca/src/test/java/org/onap/sdc/toscaparser/api/functions/GetInputTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 5565
+      },
+      "writtenOn": "2022-04-13T08:29:18Z",
+      "side": 1,
+      "message": "if possible, remove the wildcard imports",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 49
+      },
+      "revId": "8b2537988300ef059744f078241335d823eac08b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "282cb8c9_d1659e9c",
+        "filename": "sdc-tosca/src/test/java/org/onap/sdc/impl/GetCvfcWithVfcTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 5565
+      },
+      "writtenOn": "2022-04-13T08:29:18Z",
+      "side": 1,
+      "message": "if possible, remove the wildcard imports",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 19
+      },
+      "revId": "8b2537988300ef059744f078241335d823eac08b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
