@@ -29,7 +29,6 @@ import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
 import org.onap.sdc.tosca.parser.impl.SdcToscaParserFactory;
 
-
 public class SdcToscaParserBasicTest extends BaseSetupExtension {
 
     public static final String VF_CUSTOMIZATION_UUID = "56179cd8-de4a-4c38-919b-bbc4452d2d73";
@@ -60,7 +59,7 @@ public class SdcToscaParserBasicTest extends BaseSetupExtension {
     static ISdcCsarHelper csarHelperServiceAnnotations;
     static ISdcCsarHelper csarHelperServiceAdiodAnnotations;
     static ISdcCsarHelper csarHelperServiceNetworkCloud;
-    static Map<String, HashMap<String, List<String>>> fdntCsarHelper_Data;
+    static Map<String, Map<String, List<String>>> fdntCsarHelper_Data;
 
     @Override
     void setup() throws SdcToscaParserException {
@@ -94,9 +93,7 @@ public class SdcToscaParserBasicTest extends BaseSetupExtension {
 
         fdntCsarHelper_Data = new HashMap<>() {
             {
-                HashMap<String, List<String>> FDNT;
-
-                FDNT = new HashMap<>();
+                final Map<String, List<String>> FDNT = new HashMap<>();
                 FDNT.put("VF Name", Arrays.asList("FDNT 1"));
                 FDNT.put("capabilities", Arrays.asList(
                     "dnt_fw_rhrg.binding_DNT_FW_INT_DNS_TRUSTED_RVMI",
@@ -155,19 +152,13 @@ public class SdcToscaParserBasicTest extends BaseSetupExtension {
     }
 
     protected ISdcCsarHelper getCsarHelper(String path) throws SdcToscaParserException {
-        System.out.println("Parsing CSAR " + path + "...");
-        String fileStr1 = SdcToscaParserBasicTest.class.getClassLoader().getResource(path).getFile();
-        File file1 = new File(fileStr1);
-        ISdcCsarHelper sdcCsarHelper = factory.getSdcCsarHelper(file1.getAbsolutePath());
-        return sdcCsarHelper;
+        return getCsarHelper(path, true);
     }
 
     protected ISdcCsarHelper getCsarHelper(String path, boolean resolveGetInput) throws SdcToscaParserException {
         System.out.println("Parsing CSAR " + path + "...");
-        String fileStr1 = SdcToscaParserBasicTest.class.getClassLoader().getResource(path).getFile();
-        File file1 = new File(fileStr1);
-        ISdcCsarHelper sdcCsarHelper = factory.getSdcCsarHelper(file1.getAbsolutePath(), resolveGetInput);
-        return sdcCsarHelper;
+        return factory.getSdcCsarHelper(new File(SdcToscaParserBasicTest.class.getClassLoader().getResource(path).getFile()).getAbsolutePath(),
+            resolveGetInput);
     }
 
     @Override
