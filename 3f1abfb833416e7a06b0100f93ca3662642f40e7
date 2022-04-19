@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab4db8b2_ff609362",
+        "filename": "jtosca/src/main/java/org/onap/sdc/toscaparser/api/elements/StatefulEntityType.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 5269
+      },
+      "writtenOn": "2022-04-19T14:47:41Z",
+      "side": 1,
+      "message": "Dont think this is needed anymore after switching from ArtifactTypeDef to ArtifactDef",
+      "range": {
+        "startLine": 63,
+        "startChar": 10,
+        "endLine": 64,
+        "endChar": 65
+      },
+      "revId": "3f1abfb833416e7a06b0100f93ca3662642f40e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
