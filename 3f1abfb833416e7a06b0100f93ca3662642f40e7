@@ -22,6 +22,30 @@
       "revId": "3f1abfb833416e7a06b0100f93ca3662642f40e7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4924218_652e1fb5",
+        "filename": "jtosca/src/main/java/org/onap/sdc/toscaparser/api/elements/StatefulEntityType.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2022-04-19T16:14:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab4db8b2_ff609362",
+      "range": {
+        "startLine": 63,
+        "startChar": 10,
+        "endLine": 64,
+        "endChar": 65
+      },
+      "revId": "3f1abfb833416e7a06b0100f93ca3662642f40e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
