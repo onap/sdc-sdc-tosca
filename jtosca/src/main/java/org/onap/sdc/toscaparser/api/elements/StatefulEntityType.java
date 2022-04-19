@@ -20,23 +20,22 @@
 
 package org.onap.sdc.toscaparser.api.elements;
 
-import org.onap.sdc.toscaparser.api.UnsupportedType;
-import org.onap.sdc.toscaparser.api.common.JToscaValidationIssue;
-import org.onap.sdc.toscaparser.api.utils.ThreadLocalsHolder;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.onap.sdc.toscaparser.api.UnsupportedType;
+import org.onap.sdc.toscaparser.api.common.JToscaValidationIssue;
+import org.onap.sdc.toscaparser.api.utils.ThreadLocalsHolder;
 
 
 public class StatefulEntityType extends EntityType {
     // Class representing TOSCA states
 
     public static final String[] INTERFACE_NODE_LIFECYCLE_OPERATIONS = {
-            "create", "configure", "start", "stop", "delete"};
+        "create", "configure", "start", "stop", "delete"};
 
     public static final String[] INTERFACE_RELATIONSHIP_CONFIGURE_OPERATIONS = {
-            "post_configure_source", "post_configure_target", "add_target", "remove_target"};
+        "post_configure_source", "post_configure_target", "add_target", "remove_target"};
 
     public StatefulEntityType() {
         // void constructor for subclasses that don't want super
@@ -61,10 +60,12 @@ public class StatefulEntityType extends EntityType {
                 entityType = entireEntityType;
             } else if (customDef != null && customDef.get(entityType) != null) {
                 defs = (LinkedHashMap<String, Object>) customDef.get(entityType);
+            } else if (customDef != null && customDef.containsValue(entityType)) {
+                defs = (LinkedHashMap<String, Object>) customDef;
             } else {
                 defs = null;
                 ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE136", String.format(
-                        "InvalidTypeError: \"%s\" is not a valid type", entityType)));
+                    "InvalidTypeError: \"%s\" is not a valid type", entityType)));
             }
         }
         type = entityType;
@@ -82,7 +83,7 @@ public class StatefulEntityType extends EntityType {
                 if (to == null || !(to instanceof LinkedHashMap)) {
                     String s = to == null ? "null" : to.getClass().getSimpleName();
                     ThreadLocalsHolder.getCollector().appendValidationIssue(new JToscaValidationIssue("JE137", String.format(
-                            "Unexpected type error: property \"%s\" has type \"%s\" (expected dict)", pdname, s)));
+                        "Unexpected type error: property \"%s\" has type \"%s\" (expected dict)", pdname, s)));
                     continue;
                 }
                 LinkedHashMap<String, Object> pdschema = (LinkedHashMap<String, Object>) to;

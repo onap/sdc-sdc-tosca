@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,36 +22,39 @@ package org.onap.sdc.tosca.parser.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.onap.sdc.tosca.parser.api.ConformanceLevel;
+import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.config.ConfigurationManager;
 import org.onap.sdc.tosca.parser.config.ErrorInfo;
 import org.onap.sdc.tosca.parser.config.JToscaValidationIssueInfo;
 import org.onap.sdc.tosca.parser.config.SdcToscaParserErrors;
 import org.onap.sdc.tosca.parser.enums.JToscaValidationIssueType;
-import org.onap.sdc.tosca.parser.utils.GeneralUtility;
-import org.onap.sdc.tosca.parser.api.ISdcCsarHelper;
 import org.onap.sdc.tosca.parser.exceptions.SdcToscaParserException;
+import org.onap.sdc.tosca.parser.utils.GeneralUtility;
 import org.onap.sdc.toscaparser.api.ToscaTemplate;
-import org.onap.sdc.toscaparser.api.common.JToscaValidationIssue;
 import org.onap.sdc.toscaparser.api.common.JToscaException;
+import org.onap.sdc.toscaparser.api.common.JToscaValidationIssue;
 import org.onap.sdc.toscaparser.api.utils.JToscaErrorCodes;
 import org.onap.sdc.toscaparser.api.utils.ThreadLocalsHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SdcToscaParserFactory {
-	private static Logger log = LoggerFactory.getLogger(SdcToscaParserFactory.class.getName());
+
+    private static Logger log = LoggerFactory.getLogger(SdcToscaParserFactory.class.getName());
 
     private static ConfigurationManager configurationManager;
     private static volatile SdcToscaParserFactory instance;
     private List<JToscaValidationIssue> criticalExceptions = new ArrayList<>();
     private List<JToscaValidationIssue> warningExceptions = new ArrayList<>();
     private List<JToscaValidationIssue> notAnalyzadExceptions = new ArrayList<>();
-    private SdcToscaParserFactory() {}
+
+    private SdcToscaParserFactory() {
+    }
 
     /**
      * Get an SdcToscaParserFactory instance.
+     *
      * @return SdcToscaParserFactory instance.
      */
     public static SdcToscaParserFactory getInstance() {
@@ -84,7 +87,7 @@ public class SdcToscaParserFactory {
     /**
      * Get an ISdcCsarHelper object for this CSAR file.
      *
-     * @param csarPath - the absolute path to CSAR file.
+     * @param csarPath        - the absolute path to CSAR file.
      * @param resolveGetInput - resolve get_input properties
      * @return ISdcCsarHelper object.
      * @throws SdcToscaParserException - in case the path or CSAR are invalid.
@@ -106,25 +109,25 @@ public class SdcToscaParserFactory {
             validateCsarVersion(cSarConformanceLevel);
             try {
                 handleErrorsByTypes(csarPath, cSarConformanceLevel);
-			} catch (JToscaException e) {
+            } catch (JToscaException e) {
                 throwSdcToscaParserException(e);
-			}
+            }
             return sdcCsarHelperImpl;
         }
     }
 
     private void handleErrorsByTypes(String csarPath, String cSarConformanceLevel) throws JToscaException {
         clearValidationIssuesLists();
-    	for(JToscaValidationIssue toscaValidationIssue : ThreadLocalsHolder.getCollector().getValidationIssues().values()){
-            List<JToscaValidationIssueInfo> issueInfos = configurationManager.getJtoscaValidationIssueConfiguration().getValidationIssues().get(toscaValidationIssue.getCode());
-    		if(issueInfos != null && !issueInfos.isEmpty()){
-                JToscaValidationIssueInfo issueInfo = null;
-    			issueInfo = issueInfos.stream()
-                    .filter(i-> isMatchConformanceLevel(cSarConformanceLevel,i.getSinceCsarConformanceLevel()))
-                    .max((i1,i2) -> GeneralUtility.conformanceLevelCompare(i1.getSinceCsarConformanceLevel(), i2.getSinceCsarConformanceLevel()) )
+        for (JToscaValidationIssue toscaValidationIssue : ThreadLocalsHolder.getCollector().getValidationIssues().values()) {
+            List<JToscaValidationIssueInfo> issueInfos = configurationManager.getJtoscaValidationIssueConfiguration().getValidationIssues()
+                .get(toscaValidationIssue.getCode());
+            if (issueInfos != null && !issueInfos.isEmpty()) {
+                final JToscaValidationIssueInfo issueInfo = issueInfos.stream()
+                    .filter(i -> isMatchConformanceLevel(cSarConformanceLevel, i.getSinceCsarConformanceLevel()))
+                    .max((i1, i2) -> GeneralUtility.conformanceLevelCompare(i1.getSinceCsarConformanceLevel(), i2.getSinceCsarConformanceLevel()))
                     .orElse(null);
 
-    			if(issueInfo != null){
+                if (issueInfo != null) {
                     switch (JToscaValidationIssueType.valueOf(issueInfo.getIssueType())) {
                         case CRITICAL:
                             criticalExceptions.add(toscaValidationIssue);
@@ -135,59 +138,61 @@ public class SdcToscaParserFactory {
                         default:
                             break;
                     }
-                }else{
+                } else {
                     notAnalyzadExceptions.add(toscaValidationIssue);
                 }
-            }else{//notAnalyzed
+            } else {//notAnalyzed
                 notAnalyzadExceptions.add(toscaValidationIssue);
             }
-    	}
-    	logErrors(csarPath);
+        }
+        logErrors(csarPath);
     }
 
-    private void clearValidationIssuesLists(){
+    private void clearValidationIssuesLists() {
         notAnalyzadExceptions.clear();
         criticalExceptions.clear();
         warningExceptions.clear();
     }
 
-    private void logErrors(String inputPath) throws JToscaException{
-		//Warnings
-		int warningsCount = warningExceptions.size();
-		if (warningsCount > 0) {
-			log.warn("####################################################################################################");
-			log.warn("CSAR Warnings found! CSAR name - {}", inputPath);
-			log.warn("ToscaTemplate - verifyTemplate - {} Parsing Warning{} occurred...", warningsCount, (warningsCount > 1 ? "s" : ""));
-			for (JToscaValidationIssue info : warningExceptions) {
-				log.warn("JTosca Exception [{}]: {}. CSAR name - {}", info.getCode(),info.getMessage(), inputPath);
-			}
-			log.warn("####################################################################################################");
-		}
-		//Criticals
-		int criticalsCount = criticalExceptions.size();
-		if (criticalsCount > 0) {
-			log.error("####################################################################################################");
-			log.error("ToscaTemplate - verifyTemplate - {} Parsing Critical{} occurred...", criticalsCount, (criticalsCount > 1 ? "s" : ""));
-			for (JToscaValidationIssue info : criticalExceptions) {
-				log.error("JTosca Exception [{}]: {}. CSAR name - {}", info.getCode(),info.getMessage(), inputPath);
-			}
-			throw new JToscaException(String.format("CSAR Validation Failed. CSAR name - {}. Please check logs for details.", inputPath), JToscaErrorCodes.CSAR_TOSCA_VALIDATION_ERROR.getValue());
-		}
+    private void logErrors(String inputPath) throws JToscaException {
+        //Warnings
+        int warningsCount = warningExceptions.size();
+        if (warningsCount > 0) {
+            log.warn("####################################################################################################");
+            log.warn("CSAR Warnings found! CSAR name - {}", inputPath);
+            log.warn("ToscaTemplate - verifyTemplate - {} Parsing Warning{} occurred...", warningsCount, (warningsCount > 1 ? "s" : ""));
+            for (JToscaValidationIssue info : warningExceptions) {
+                log.warn("JTosca Exception [{}]: {}. CSAR name - {}", info.getCode(), info.getMessage(), inputPath);
+            }
+            log.warn("####################################################################################################");
+        }
+        //Criticals
+        int criticalsCount = criticalExceptions.size();
+        if (criticalsCount > 0) {
+            log.error("####################################################################################################");
+            log.error("ToscaTemplate - verifyTemplate - {} Parsing Critical{} occurred...", criticalsCount, (criticalsCount > 1 ? "s" : ""));
+            for (JToscaValidationIssue info : criticalExceptions) {
+                log.error("JTosca Exception [{}]: {}. CSAR name - {}", info.getCode(), info.getMessage(), inputPath);
+            }
+            throw new JToscaException(String.format("CSAR Validation Failed. CSAR name - {}. Please check logs for details.", inputPath),
+                JToscaErrorCodes.CSAR_TOSCA_VALIDATION_ERROR.getValue());
+        }
     }
+
     public List<JToscaValidationIssue> getCriticalExceptions() {
-		return criticalExceptions;
-	}
+        return criticalExceptions;
+    }
 
-	public List<JToscaValidationIssue> getWarningExceptions() {
-		return warningExceptions;
-	}
+    public List<JToscaValidationIssue> getWarningExceptions() {
+        return warningExceptions;
+    }
 
-	public List<JToscaValidationIssue> getNotAnalyzadExceptions() {
-		return notAnalyzadExceptions;
-	}
+    public List<JToscaValidationIssue> getNotAnalyzadExceptions() {
+        return notAnalyzadExceptions;
+    }
 
 
-	private void validateCsarVersion(String cSarVersion) throws SdcToscaParserException {
+    private void validateCsarVersion(String cSarVersion) throws SdcToscaParserException {
         ConformanceLevel level = configurationManager.getConfiguration().getConformanceLevel();
         String minVersion = level.getMinVersion();
         if (cSarVersion != null) {
@@ -199,7 +204,7 @@ public class SdcToscaParserFactory {
         }
     }
 
-    private boolean isMatchConformanceLevel(String ValidationIssueVersion, String cSarVersion){
+    private boolean isMatchConformanceLevel(String ValidationIssueVersion, String cSarVersion) {
         if (ValidationIssueVersion != null && cSarVersion != null) {
             if ((GeneralUtility.conformanceLevelCompare(ValidationIssueVersion, cSarVersion) >= 0)) {
                 return true;
@@ -207,16 +212,17 @@ public class SdcToscaParserFactory {
         }
         return false;
     }
+
     private void throwConformanceLevelException(String minVersion) throws SdcToscaParserException {
         ErrorInfo errorInfo = configurationManager.getErrorConfiguration().getErrorInfo(SdcToscaParserErrors.CONFORMANCE_LEVEL_ERROR.toString());
         throw new SdcToscaParserException(String.format(errorInfo.getMessage(), minVersion), errorInfo.getCode());
     }
 
     private void throwSdcToscaParserException(JToscaException e) throws SdcToscaParserException {
-        ErrorInfo errorInfo = configurationManager.getErrorConfiguration().getErrorInfo(SdcToscaParserErrors.getSdcErrorByJToscaError(JToscaErrorCodes.getByCode(e.getCode())).toString());
+        ErrorInfo errorInfo = configurationManager.getErrorConfiguration()
+            .getErrorInfo(SdcToscaParserErrors.getSdcErrorByJToscaError(JToscaErrorCodes.getByCode(e.getCode())).toString());
         throw new SdcToscaParserException(errorInfo.getMessage(), errorInfo.getCode());
     }
-
 
 
 }
