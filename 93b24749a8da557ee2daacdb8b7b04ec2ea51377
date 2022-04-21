@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffeb07fd_25dc0605",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 5269
+      },
+      "writtenOn": "2022-04-21T10:31:30Z",
+      "side": 1,
+      "message": "why step to 1.11.0? 1.7.0 would seem more logical",
+      "range": {
+        "startLine": 11,
+        "startChar": 13,
+        "endLine": 11,
+        "endChar": 28
+      },
+      "revId": "93b24749a8da557ee2daacdb8b7b04ec2ea51377",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
