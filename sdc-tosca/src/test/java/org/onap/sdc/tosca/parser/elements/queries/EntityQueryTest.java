@@ -128,7 +128,6 @@ public class EntityQueryTest {
                 .uUID("7890")
                 .build();
         when(metadata.getValue(eq(SdcPropertyNames.PROPERTY_NAME_UUID))).thenReturn("123");
-        when(metadata.getValue(eq(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID))).thenReturn("12345");
 
         assertFalse(entityQuery.isSearchCriteriaMatched(metadata, ""));
     }
@@ -176,7 +175,6 @@ public class EntityQueryTest {
                 .customizationUUID("345")
                 .build();
         when(metadata.getValue(eq(SdcPropertyNames.PROPERTY_NAME_UUID))).thenReturn("12345");
-        when(metadata.getValue(eq(SdcPropertyNames.PROPERTY_NAME_CUSTOMIZATIONUUID))).thenReturn("3456");
 
         assertFalse(entityQuery.isSearchCriteriaMatched(metadata, "a.groups.b"));
     }

@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@
 
 package org.onap.sdc.tosca.parser.impl;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * Performs search for entity templates inside node template according to query criteria
  */
 class QueryProcessor {
+
     private static final Logger logger = LoggerFactory.getLogger(QueryProcessor.class.getName());
 
     private final EntityQuery entityQuery;
@@ -53,7 +54,7 @@ class QueryProcessor {
     }
 
     List<IEntityDetails> doQuery() {
-        final List<IEntityDetails> entityDetailsList = Collections.emptyList();
+        final List<IEntityDetails> entityDetailsList = new ArrayList<>();
         if (isServiceSearch()) {
             //search for entities inside the service
             if (logger.isDebugEnabled()) {
@@ -75,15 +76,15 @@ class QueryProcessor {
             // and search for instances of the same type
             //if the queried topology template is "SERVICE",  search for all instances of templates in the service
             List<NodeTemplate> internalTopologyTemplates = foundTopologyTemplates.stream()
-                    .filter(nt->nt.getSubMappingToscaTemplate() != null)
-                    .map(nt->getInternalTopologyTemplates(nt.getSubMappingToscaTemplate().getNodeTemplates(), true))
-                    .flatMap(List::stream)
-                    .collect(Collectors.toList());
+                .filter(nt -> nt.getSubMappingToscaTemplate() != null)
+                .map(nt -> getInternalTopologyTemplates(nt.getSubMappingToscaTemplate().getNodeTemplates(), true))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
             foundTopologyTemplates.addAll(internalTopologyTemplates);
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Found topology templates {} matching following query criteria: {}",
-                    foundTopologyTemplates, topologyTemplateQuery);
+                foundTopologyTemplates, topologyTemplateQuery);
         }
         //go over all node templates found according to query criteria and recursive flag and
         // search for the requested entities.
@@ -95,16 +96,16 @@ class QueryProcessor {
     private Map<String, NodeTemplate> convertListToMap(List<NodeTemplate> nodeTemplateList) {
         // we use map to avoid duplicate search through same node templates
         return nodeTemplateList.stream()
-                .collect(Collectors.toMap(NodeTemplate::getName, nt->nt, (nt1, nt2)->nt1));
+            .collect(Collectors.toMap(NodeTemplate::getName, nt -> nt, (nt1, nt2) -> nt1));
     }
 
     private List<IEntityDetails> searchEntitiesInsideTopologyTemplates(List<NodeTemplate> foundTopologyTemplates) {
         return convertListToMap(foundTopologyTemplates)
-                .values()
-                .stream()
-                .map(entityQuery::getEntitiesFromTopologyTemplate)
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
+            .values()
+            .stream()
+            .map(entityQuery::getEntitiesFromTopologyTemplate)
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
     }
 
     private boolean isServiceSearch() {
@@ -119,15 +120,15 @@ class QueryProcessor {
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
         }
-        return Collections.emptyList();
+        return new ArrayList<>();
     }
 
     private List<NodeTemplate> getTopologyTemplatesByQuery(NodeTemplate current, boolean isRecursive) {
-        final List<NodeTemplate> topologyTemplateList = Collections.emptyList();
+        final List<NodeTemplate> topologyTemplateList = new ArrayList<>();
 
         boolean isTopologyTemplateFound = isRecursive ?
-                SdcTypes.isComplex(current.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))
-                : topologyTemplateQuery.isMatchingSearchCriteria(current);
+            SdcTypes.isComplex(current.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE))
+            : topologyTemplateQuery.isMatchingSearchCriteria(current);
         if (isTopologyTemplateFound) {
             topologyTemplateList.add(current);
             if (!isRecursive) {
@@ -136,13 +137,13 @@ class QueryProcessor {
             }
         }
         if (SdcTypes.isComplex(current.getMetadata().getValue(SdcPropertyNames.PROPERTY_NAME_TYPE)) &&
-               current.getSubMappingToscaTemplate() != null) {
-           //search the node template inside a given topology template
+            current.getSubMappingToscaTemplate() != null) {
+            //search the node template inside a given topology template
             topologyTemplateList.addAll(current.getSubMappingToscaTemplate().getNodeTemplates()
-                    .stream()
-                    .map(nt->getTopologyTemplatesByQuery(nt, isRecursive))
-                    .flatMap(List::stream)
-                    .collect(Collectors.toList()));
+                .stream()
+                .map(nt -> getTopologyTemplatesByQuery(nt, isRecursive))
+                .flatMap(List::stream)
+                .collect(Collectors.toList()));
         }
         return topologyTemplateList;
     }

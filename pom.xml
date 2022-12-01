@@ -43,16 +43,19 @@
         <releases.path>releases</releases.path>
 
         <!-- Sonar properties -->
-        <sonar.language>java</sonar.language>
-        <sonar.coverage.jacoco.xmlReportPaths>
-            ${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml
-        </sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.sourceEncoding>${project.build.sourceEncoding}</sonar.sourceEncoding>
-        <sonar.projectBaseDir>${project.basedir}</sonar.projectBaseDir>
-        <sonar.sources>.</sonar.sources>
+        <sonar.coverage.exclusions>pom.xml,src/test</sonar.coverage.exclusions>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco-ut/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.exclusions>**/scripts/**/*</sonar.exclusions>
-        <sonar.test.exclusions>**/test/**/*,**/tests/**/*</sonar.test.exclusions>
         <sonar.inclusions>app/**/*.js,server-mock/**/*.js,src/**/*.js,src/main/**/*.java</sonar.inclusions>
+        <sonar.javascript.lcov.reportPaths>${project.build.directory}/code-coverage/lcov.info</sonar.javascript.lcov.reportPaths>
+        <sonar.language>java</sonar.language>
+        <sonar.nodejs.executable>${project.basedir}/node/node</sonar.nodejs.executable>
+        <sonar.projectBaseDir>${project.basedir}</sonar.projectBaseDir>
+        <sonar.projectVersion>${project.version}</sonar.projectVersion>
+        <sonar.sourceEncoding>${project.build.sourceEncoding}</sonar.sourceEncoding>
+        <sonar.sources>.</sonar.sources>
+        <sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
+        <sonar.test.exclusions>**/test/**/*,**/tests/**/*</sonar.test.exclusions>
 
         <lombok.version>1.18.20</lombok.version>
         <!--TESTING-->
@@ -60,6 +63,8 @@
         <mockitoJupiter.version>${mockito.version}</mockitoJupiter.version>
         <junit.platform.version>1.8.2</junit.platform.version>
         <junitJupiter.version>5.8.2</junitJupiter.version>
+        <!--jacoco-->
+        <jacoco.version>0.8.8</jacoco.version>
     </properties>
 
     <dependencyManagement>
@@ -89,6 +94,14 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <!-- must be on the classpath -->
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.agent</artifactId>
+            <classifier>runtime</classifier>
+            <version>${jacoco.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -149,6 +162,11 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.10.1</version>
@@ -204,22 +222,35 @@
                 <configuration>
                     <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
                     <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
 
+            <!-- Java Code Coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <inherited>false</inherited>
                 <executions>
-                    <!-- Unit-Tests -->
                     <execution>
-                        <id>prepare-agent</id>
+                        <id>default-instrument</id>
                         <goals>
-                            <goal>prepare-agent</goal>
+                            <goal>instrument</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-restore-instrumented-classes</id>
+                        <goals>
+                            <goal>restore-instrumented-classes</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <goals>
+                            <goal>report</goal>
                         </goals>
                         <configuration>
-                            <destFile>${sonar.jacoco.reportPath}</destFile>
+                            <dataFile>${project.build.directory}/jacoco.exec</dataFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -243,15 +274,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit-platform</artifactId>
+                        <version>2.22.2</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <argLine>${argLine} -Xmx2048m</argLine>
+                    <printSummary>false</printSummary>
+                    <systemPropertyVariables>
+                        <jacoco-agent.destfile>${project.build.directory}/jacoco.exec</jacoco-agent.destfile>
+                    </systemPropertyVariables>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.7.0.1746</version>
             </plugin>
 
             <plugin>
