@@ -356,4 +356,25 @@
             <url>dav:${nexus.proxy}${sitePath}</url>
         </site>
     </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>fast-build</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <skipYamlJsonValidator>true</skipYamlJsonValidator>
+                <checkstyle.skip>true</checkstyle.skip>
+                <jacoco.skip>true</jacoco.skip>
+                <maven.antrun.skip>true</maven.antrun.skip>
+                <swagger.skip>true</swagger.skip>
+            </properties>
+            <modules>
+                <module>sdc-tosca</module>
+                <module>jtosca</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
