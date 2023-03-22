@@ -22,6 +22,30 @@
       "revId": "674d50814dfbc91492c055389865b754e6efca07",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "875bcca7_5a453b59",
+        "filename": "jtosca/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 5562
+      },
+      "writtenOn": "2023-03-22T14:22:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "71a07f0b_d57ec4c1",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 41
+      },
+      "revId": "674d50814dfbc91492c055389865b754e6efca07",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
