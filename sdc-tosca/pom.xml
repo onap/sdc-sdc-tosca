@@ -16,7 +16,7 @@
     </parent>
 
     <properties>
-        <com.fasterxml.jackson.core.version>2.14.2</com.fasterxml.jackson.core.version>
+        <com.fasterxml.jackson.core.version>2.15.2</com.fasterxml.jackson.core.version>
     </properties>
 
     <dependencies>
