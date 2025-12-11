@@ -1,0 +1,9 @@
+Code-Review+2: Byung-Woo Jun <byung-woo.jun@est.tech>
+Verified+1: ONAP Required GHA <releng+onap.required.gha@linuxfoundation.org>
+Verified+1: ONAP Bypass GHA <releng+onap.bypass.gha@linuxfoundation.org>
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Submitted-by: Byung-Woo Jun <byung-woo.jun@est.tech>
+Submitted-at: Thu, 11 Dec 2025 15:51:32 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/sdc/sdc-tosca/+/142083
+Project: sdc/sdc-tosca
+Branch: refs/heads/master
